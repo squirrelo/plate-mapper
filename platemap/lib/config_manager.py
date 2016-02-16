@@ -10,11 +10,8 @@ from os.path import join, dirname, abspath, isfile
 from os import environ
 from functools import partial
 import warnings
-
-from future import standard_library
-with standard_library.hooks():
-    from configparser import (ConfigParser, NoOptionError,
-                              Error as ConfigParser_Error)
+from configparser import (ConfigParser, NoOptionError,
+                          Error as ConfigParser_Error)
 
 
 class MissingConfigSection(ConfigParser_Error):
@@ -95,7 +92,7 @@ class ConfigurationManager(object):
         with open(conf_fp, 'U') as conf_file:
             config.readfp(conf_file)
 
-        _expected_sections = {'main', 'postgres', 'email', 'thirdparty'}
+        _expected_sections = {'main', 'postgres', 'email'}
 
         missing = _expected_sections - set(config.sections())
         if missing:
@@ -120,7 +117,7 @@ class ConfigurationManager(object):
     def _get_main(self, config):
         """Get the configuration of the main section"""
         expected_options = {'test_environment', 'cookie_secret', 'error_email'}
-        _warn_on_extra(set(config.options('main')) - expected_options -
+        _warn_on_extra(set(config.options('main')) - expected_options,
                        'main section option(s)')
 
         get = partial(config.get, 'main')
@@ -133,7 +130,7 @@ class ConfigurationManager(object):
     def _get_postgres(self, config):
         """Get the configuration of the postgres section"""
         expected_options = {'user', 'password', 'database', 'host', 'port'}
-        _warn_on_extra(set(config.options('postgres')) - expected_options -
+        _warn_on_extra(set(config.options('postgres')) - expected_options,
                        'postgres section option(s)')
 
         get = partial(config.get, 'postgres')
@@ -162,4 +159,4 @@ class ConfigurationManager(object):
         self.smtp_user = get('USERNAME')
         self.smtp_password = get('PASSWORD')
 
-PM_CONFIG = ConfigurationManager()
+pm_config = ConfigurationManager()

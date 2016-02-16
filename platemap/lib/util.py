@@ -106,11 +106,20 @@ def check_barcode_assigned(barcode):
     -------
     bool
         Barcode is already assigned (True) or not (False)
+
+    Raises
+    ------
+    ValueError
+        Barcode does not exist in database
     """
-    sql = """SELECT EXISTS(
-        SELECT assigned_on FROM barcodes.barcode WHERE barcode = %s
-        AND assigned_on IS NOT NULL
+    sql = """SELECT barcode, assigned_on
+        FROM barcodes.barcode
+        WHERE barcode = %s
         """
     with TRN:
         TRN.add(sql)
-        return TRN.execute_fetchlast()
+        barcode_info = TRN.execute_fetchindex()
+        if barcode_info is None:
+            raise ValueError('Barcode %s does not exist in the DB' % barcode)
+        # Check if assigned on date is set or not
+        return False if barcode_info['assigned_on'] is None else True

@@ -92,7 +92,7 @@ class Sample(PMObject):
                          WHERE barcode = %s
                       """
         with TRN:
-            if exists(external_name, barcode):
+            if cls.exists(external_name, barcode):
                 raise DuplicateError(external_name, 'samples')
 
             TRN.add(sample_sql, [external_name, barcode, sample_type,
@@ -110,13 +110,16 @@ class Sample(PMObject):
 
     @staticmethod
     def exists(external_name, barcode=None):
+        pass
 
     @staticmethod
     def delete(id_):
+        pass
 
     # ----------Properties---------------
     @property
     def name(self):
+        pass
 
     @property
     def barcode(self):
@@ -133,7 +136,7 @@ class Sample(PMObject):
             return TRN.execute_fetchlast()
 
 
-    @property.setter()
+    @barcode.setter
     def barcode(self, barcode):
         """Sets barcode for sample if allowed
 
@@ -170,27 +173,35 @@ class Sample(PMObject):
 
     @property
     def projects(self):
+        pass
 
     @property
     def sample_type(self):
+        pass
 
     @property
     def sample_location(self):
+        pass
 
     @property
     def biomass_remaining(self):
+        pass
 
     @property
     def created_on(self):
+        pass
 
     @property
     def created_by(self):
+        pass
 
     @property
     def last_scanned(self):
+        pass
 
     @property
     def last_scanned_by(self):
+        pass
 
     @property
     def plates(self):
@@ -210,6 +221,7 @@ class Sample(PMObject):
 
 # ---------------Functions---------------
 def add_project(self, project):
+    pass
 
 def remove_project(self, project):
-
+    pass

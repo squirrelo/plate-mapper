@@ -12,13 +12,13 @@ CREATE TABLE barcodes.barcode (
 	barcode              varchar(9)  NOT NULL,
 	obsolete             varchar(1)  ,
 	assigned_on          timestamp  ,
-	create_date_time     timestamp DEFAULT current_timestamp NOT NULL,
+	create_timestamp     timestamp DEFAULT current_timestamp NOT NULL,
 	CONSTRAINT barcode_pkey PRIMARY KEY ( barcode )
  );
 
 COMMENT ON COLUMN barcodes.barcode.assigned_on IS 'date barcode assigned to a project';
 
-COMMENT ON COLUMN barcodes.barcode.create_date_time IS 'Date barcode created on the system';
+COMMENT ON COLUMN barcodes.barcode.create_timestamp IS 'Date barcode created on the system';
 
 CREATE TABLE barcodes.barcode_exceptions ( 
 	barcode              varchar(100)  NOT NULL,
@@ -65,10 +65,10 @@ CREATE TABLE barcodes.primers (
 
 CREATE TABLE barcodes.primers_lots ( 
 	primer_id            bigint  NOT NULL,
-	lot_number           varchar  ,
+	lot                  varchar  ,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	person_id            bigint  NOT NULL,
-	CONSTRAINT pk_primers_lots UNIQUE ( lot_number ) ,
+	CONSTRAINT pk_primers_lots UNIQUE ( lot ) ,
 	CONSTRAINT fk_primers_lots FOREIGN KEY ( primer_id ) REFERENCES barcodes.primers( primer_id )    ,
 	CONSTRAINT fk_primers_lots_0 FOREIGN KEY ( person_id ) REFERENCES barcodes.people( person_id )    
  );
@@ -88,14 +88,6 @@ CREATE TABLE barcodes.project (
  );
 
 COMMENT ON COLUMN barcodes.project.pi IS 'primary investigator on the study';
-
-CREATE TABLE barcodes.project_barcode ( 
-	project_id           bigint  NOT NULL,
-	barcode              char(9)  NOT NULL,
-	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id, barcode ),
-	CONSTRAINT fk_pb_to_barcode FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
-	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
- );
 
 CREATE TABLE barcodes.run ( 
 	run_id               bigserial  NOT NULL,
@@ -127,6 +119,7 @@ CREATE TABLE barcodes.samples (
 	last_scanned         timestamp DEFAULT current_timestamp NOT NULL,
 	last_scanned_by      bigint  NOT NULL,
 	CONSTRAINT pk_samples PRIMARY KEY ( sample_id ),
+	CONSTRAINT pk_samples_0 UNIQUE ( external_name ) ,
 	CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.people( person_id )    ,
 	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.people( person_id )    ,
@@ -198,6 +191,16 @@ CREATE INDEX idx_pool_1 ON barcodes.pool ( finalized_by );
 
 COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane for sequencing';
 
+CREATE TABLE barcodes.project_external_name ( 
+	project_id           bigint  NOT NULL,
+	external_name        varchar(100)  NOT NULL,
+	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id, external_name ),
+	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
+	CONSTRAINT fk_project_external_name FOREIGN KEY ( external_name ) REFERENCES barcodes.samples( external_name )    
+ );
+
+CREATE INDEX idx_project_external_name ON barcodes.project_external_name ( external_name );
+
 CREATE TABLE barcodes.protocol_settings ( 
 	protocol_settings_id bigserial  NOT NULL,
 	protocol_id          integer  ,
@@ -217,25 +220,32 @@ CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_barcode )
 
 CREATE INDEX idx_protocol_runs_2 ON barcodes.protocol_settings ( sample_id );
 
-CREATE TABLE barcodes.hardcode_settings ( 
-	protocol_settings_id bigint  NOT NULL,
+CREATE TABLE barcodes.extraction_settings ( 
 	extractionkit_lot    varchar(40)  NOT NULL,
 	extraction_robot     varchar(40)  NOT NULL,
 	tm1000_8_tool        varchar(40)  NOT NULL,
-	primer_lot_number    varchar  NOT NULL,
-	primer_plate         varchar  NOT NULL,
-	mastermix_lot        varchar(40)  ,
+	CONSTRAINT fk_extraction_settings FOREIGN KEY (  ) REFERENCES barcodes.protocol_settings(  )    
+ );
+
+CREATE TABLE barcodes.pcr_settings ( 
+	protocol_settings_id bigint  NOT NULL,
+	extraction_protocol_settings_id bigint  ,
+	primer_lot           varchar  NOT NULL,
+	mastermix_lot        varchar(40)  NOT NULL,
 	water_lot            varchar(40)  NOT NULL,
 	processing_robot     varchar(40)  NOT NULL,
 	tm300_8_tool         varchar(40)  NOT NULL,
 	tm50_8_tool          varchar(40)  NOT NULL,
 	CONSTRAINT pk_hardcode_settings UNIQUE ( protocol_settings_id ) ,
 	CONSTRAINT pk_hardcode_settings_0 PRIMARY KEY ( protocol_settings_id ),
-	CONSTRAINT fk_hardcode_settings FOREIGN KEY ( primer_lot_number ) REFERENCES barcodes.primers_lots( lot_number )    ,
-	CONSTRAINT fk_hardcode_settings_0 FOREIGN KEY ( protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    
+	CONSTRAINT fk_hardcode_settings FOREIGN KEY ( primer_lot ) REFERENCES barcodes.primers_lots( lot )    ,
+	CONSTRAINT fk_hardcode_settings_0 FOREIGN KEY ( protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    ,
+	CONSTRAINT fk_pcr_settings FOREIGN KEY ( extraction_protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    
  );
 
-CREATE INDEX idx_hardcode_settings ON barcodes.hardcode_settings ( primer_lot_number );
+CREATE INDEX idx_hardcode_settings ON barcodes.pcr_settings ( primer_lot );
+
+CREATE INDEX idx_pcr_settings ON barcodes.pcr_settings ( extraction_protocol_settings_id );
 
 CREATE TABLE barcodes.pool_samples ( 
 	pool_id              bigint  NOT NULL,

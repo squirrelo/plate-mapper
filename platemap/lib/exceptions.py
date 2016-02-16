@@ -6,6 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 
+
 class PlateMapperError(Exception):
     """Base class for all plate mapper exceptions"""
     pass

@@ -64,3 +64,6 @@ target/
 
 #DBSchema
 *.dbs.bak
+
+# config file
+platemap_config.txt

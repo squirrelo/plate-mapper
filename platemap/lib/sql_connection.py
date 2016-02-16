@@ -5,7 +5,6 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from __future__ import division
 from contextlib import contextmanager
 from itertools import chain
 from functools import wraps
@@ -15,7 +14,7 @@ from psycopg2 import (connect, ProgrammingError, Error as PostgresError,
 from psycopg2.extras import DictCursor
 from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 
-from platemap.lib.config_manager import AMGUT_CONFIG
+from platemap.lib.config_manager import pm_config
 
 
 def _checker(func):
@@ -60,11 +59,11 @@ class Transaction(object):
             return
 
         try:
-            self._connection = connect(user=AMGUT_CONFIG.user,
-                                       password=AMGUT_CONFIG.password,
-                                       database=AMGUT_CONFIG.database,
-                                       host=AMGUT_CONFIG.host,
-                                       port=AMGUT_CONFIG.port)
+            self._connection = connect(user=pm_config.user,
+                                       password=pm_config.password,
+                                       database=pm_config.database,
+                                       host=pm_config.host,
+                                       port=pm_config.port)
         except OperationalError as e:
             # catch three known common exceptions and raise runtime errors
             try:
@@ -75,12 +74,12 @@ class Transaction(object):
             if etype == 'database':
                 etext = ('This is likely because the database `%s` has not '
                          'been created or has been dropped.' %
-                         AMGUT_CONFIG.database)
+                         pm_config.database)
             elif etype == 'role':
                 etext = ('This is likely because the user string `%s` '
                          'supplied in your configuration file `%s` is '
                          'incorrect or not an authorized postgres user.' %
-                         (AMGUT_CONFIG.user, AMGUT_CONFIG.conf_fp))
+                         (pm_config.user, pm_config.conf_fp))
             elif etype == 'Connection':
                 etext = ('This is likely because postgres isn\'t '
                          'running. Check that postgres is correctly '
