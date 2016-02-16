@@ -1,0 +1,55 @@
+# WARNING!!!! DO NOT MODIFY THIS FILE
+# IF YOU NEED TO PROVIDE YOUR OWN CONFIGURATION, COPY THIS FILE AND EDIT THE COPY
+
+# ------------------------------ Main settings --------------------------------
+[main]
+# Change to FALSE in a production system
+TEST_ENVIRONMENT = TRUE
+
+# The URL where the site is served from
+BASE_URL = http://localhost:8888
+
+# The value used to secure cookies used for user sessions. A suitable value can
+# be generated with:
+#
+# python -c "from base64 import b64encode;\
+#   from uuid import uuid4;\
+#   print b64encode(uuid4().bytes + uuid4().bytes)"
+COOKIE_SECRET = SECRET
+
+# The email address where error reports are sent to
+ERROR_EMAIL =
+
+# ----------------------------- Postgres settings -----------------------------
+[postgres]
+# The user name to connect to the database
+USER = postgres
+
+#The password of the user.
+PASSWORD =
+
+# The database to connect to
+DATABASE = platemap_test
+
+# The host where the database lives on
+HOST = localhost
+
+# The port to connect to the database
+PORT = 5432
+
+# ----------------------------- Email settings -----------------------------
+[email]
+# SMTP Host
+HOST = localhost
+
+#SMTP port to connect
+PORT = 25
+
+# SSL connection required
+SSL = False
+
+# Username to connect to server
+USERNAME = 
+
+# Password for username
+PASSWORD =
