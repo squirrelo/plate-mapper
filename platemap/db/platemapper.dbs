@@ -228,18 +228,21 @@
 				<column name="project_id" />
 			</index>
 		</table>
-		<table name="project_barcode" >
+		<table name="project_external_name" >
 			<column name="project_id" type="bigint" length="19" jt="-5" mandatory="y" />
-			<column name="barcode" type="char" length="9" jt="1" mandatory="y" />
+			<column name="external_name" type="varchar" length="100" jt="12" mandatory="y" />
 			<index name="project_barcode_pkey" unique="PRIMARY_KEY" >
 				<column name="project_id" />
-				<column name="barcode" />
+				<column name="external_name" />
 			</index>
-			<fk name="fk_pb_to_barcode" to_schema="barcodes" to_table="barcode" >
-				<fk_column name="barcode" pk="barcode" />
-			</fk>
+			<index name="idx_project_external_name" unique="NORMAL" >
+				<column name="external_name" />
+			</index>
 			<fk name="fk_pb_to_project" to_schema="barcodes" to_table="project" >
 				<fk_column name="project_id" pk="project_id" />
+			</fk>
+			<fk name="fk_project_external_name" to_schema="barcodes" to_table="samples" >
+				<fk_column name="external_name" pk="external_name" />
 			</fk>
 		</table>
 		<table name="protocol_settings" >
@@ -337,6 +340,9 @@
 			</index>
 			<index name="idx_samples_2" unique="NORMAL" >
 				<column name="created_by" />
+			</index>
+			<index name="pk_samples_0" unique="UNIQUE" >
+				<column name="external_name" />
 			</index>
 			<fk name="fk_samples" to_schema="barcodes" to_table="barcode" >
 				<fk_column name="barcode" pk="barcode" />
@@ -22027,10 +22033,8 @@ AS $function$xpath_exists$function$
 	<layout id="Layout_21c92c9f" name="barcodes" joined_routing="y" show_column_type="y" show_relation_columns="y" >
 		<entity schema="barcodes" name="people" color="b7c8e3" x="510" y="465" />
 		<entity schema="barcodes" name="barcode_exceptions" color="b7c8e3" x="360" y="45" />
-		<entity schema="barcodes" name="project" color="b7c8e3" x="105" y="285" />
 		<entity schema="barcodes" name="pool" color="b7c8e3" x="1320" y="105" />
 		<entity schema="barcodes" name="run" color="b7c8e3" x="1320" y="270" />
-		<entity schema="barcodes" name="project_barcode" color="b7c8e3" x="135" y="195" />
 		<entity schema="barcodes" name="plates" color="b7c8e3" x="870" y="165" />
 		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="645" y="165" />
 		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="1110" y="105" />
@@ -22041,7 +22045,9 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="users" color="b7c8e3" x="720" y="465" />
 		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="900" y="465" />
 		<entity schema="barcodes" name="barcode" color="b7c8e3" x="45" y="75" />
+		<entity schema="barcodes" name="project_external_name" color="b7c8e3" x="105" y="195" />
 		<entity schema="barcodes" name="samples" color="b7c8e3" x="360" y="180" />
+		<entity schema="barcodes" name="project" color="b7c8e3" x="105" y="300" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plates" />
