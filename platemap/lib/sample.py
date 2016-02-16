@@ -117,9 +117,16 @@ class Sample(PMObject):
         pass
 
     # ----------Properties---------------
+    def _get_property(self, column):
+        sql = "Select {} from barcodes.samples WHERE sample_id = %s".format(
+            column)
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchlast()
+
     @property
     def name(self):
-        pass
+        return self._get_property('external_name')
 
     @property
     def barcode(self):
@@ -130,11 +137,7 @@ class Sample(PMObject):
         str or None
             Barcode if assigned, else None
         """
-        sql = "Select barcode from barcodes.samples WHERE sample_id = %s"
-        with TRN:
-            TRN.add(sql, [self.id])
-            return TRN.execute_fetchlast()
-
+        return self._get_property('barcode')
 
     @barcode.setter
     def barcode(self, barcode):
@@ -173,39 +176,61 @@ class Sample(PMObject):
 
     @property
     def projects(self):
-        pass
+        """Returns list of projects this sample is associated with
+
+        Returns
+        -------
+        list of str
+            Projects the sample is associated with
+        """
+        sql = """SELECT DISTINCT project
+                 FROM barcodes.samples
+                 LEFT JOIN barcodes.project_sample USING (sample_id)
+                 LEFT JOIN barcodes.projects USING (project_id)
+                 WHERE sample_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchflatten()
+
 
     @property
     def sample_type(self):
-        pass
+        return self._get_property('sample_type')
 
     @property
     def sample_location(self):
-        pass
+        return self._get_property('sample_location')
 
     @property
     def biomass_remaining(self):
-        pass
+        return self._get_property('biomass_remaining')
 
     @property
     def created_on(self):
-        pass
+        return self._get_property('created_on')
 
     @property
     def created_by(self):
-        pass
+        return self._get_property('created_by')
 
     @property
     def last_scanned(self):
-        pass
+        return self._get_property('last_scanned')
 
     @property
     def last_scanned_by(self):
-        pass
+        return self._get_property('last_scanned_by')
 
     @property
     def plates(self):
-        raise NotImplementedError()
+        sql = """SELECT plate_barcode
+                 FROM barcodes.plates_samples
+                 WHERE sample_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchflatten()
 
     @property
     def protocols(self):
@@ -219,9 +244,23 @@ class Sample(PMObject):
     def runs(self):
         raise NotImplementedError()
 
-# ---------------Functions---------------
-def add_project(self, project):
-    pass
+    # ---------------Functions---------------
+    def add_project(self, project):
+        sql = """INSERT INTO barcodes.project_sample (project_id, sample_id)
+                 VALUES (%s, %s)
+              """
+        with TRN:
+            if project in self.projects:
+                return
+            pid = convert_to_id(project, 'barcodes.project')
+            TRN.add(sql, [pid, self.id])
+            TRN.execute()
 
-def remove_project(self, project):
-    pass
+    def remove_project(self, project):
+        sql = """DELETE FROM barcodes.project_sample
+                 WHERE project_id = %s AND sample_id = %s
+              """
+        with TRN:
+            pid = convert_to_id(project, 'barcodes.project')
+            TRN.add(sql, [pid, self.id])
+            TRN.execute()

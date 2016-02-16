@@ -237,7 +237,8 @@
 				<column name="project_id" />
 			</index>
 		</table>
-		<table name="project_external_name" >
+		<table name="project_sample" >
+			<column name="sample_id" type="bigint" jt="-5" mandatory="y" />
 			<column name="project_id" type="bigint" length="19" jt="-5" mandatory="y" />
 			<column name="external_name" type="varchar" length="100" jt="12" mandatory="y" />
 			<index name="project_barcode_pkey" unique="PRIMARY_KEY" >
@@ -247,11 +248,17 @@
 			<index name="idx_project_external_name" unique="NORMAL" >
 				<column name="external_name" />
 			</index>
+			<index name="pk_project_sample" unique="UNIQUE" >
+				<column name="sample_id" />
+			</index>
 			<fk name="fk_pb_to_project" to_schema="barcodes" to_table="project" >
 				<fk_column name="project_id" pk="project_id" />
 			</fk>
 			<fk name="fk_project_external_name" to_schema="barcodes" to_table="samples" >
 				<fk_column name="external_name" pk="external_name" />
+			</fk>
+			<fk name="fk_project_sample" to_schema="barcodes" to_table="samples" >
+				<fk_column name="sample_id" pk="sample_id" />
 			</fk>
 		</table>
 		<table name="protocol_settings" >
@@ -22049,8 +22056,6 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="primers" color="b7c8e3" x="735" y="675" />
 		<entity schema="barcodes" name="users" color="b7c8e3" x="720" y="465" />
 		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="900" y="465" />
-		<entity schema="barcodes" name="project_external_name" color="b7c8e3" x="105" y="195" />
-		<entity schema="barcodes" name="samples" color="b7c8e3" x="360" y="180" />
 		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="1110" y="105" />
 		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1185" y="480" />
 		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1185" y="630" />
@@ -22058,6 +22063,8 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="project" color="b7c8e3" x="105" y="300" />
 		<entity schema="barcodes" name="barcode" color="b7c8e3" x="45" y="75" />
 		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1185" y="735" />
+		<entity schema="barcodes" name="samples" color="b7c8e3" x="360" y="180" />
+		<entity schema="barcodes" name="project_sample" color="b7c8e3" x="45" y="195" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plates" />

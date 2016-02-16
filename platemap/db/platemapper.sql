@@ -191,15 +191,18 @@ CREATE INDEX idx_pool_1 ON barcodes.pool ( finalized_by );
 
 COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane for sequencing';
 
-CREATE TABLE barcodes.project_external_name ( 
+CREATE TABLE barcodes.project_sample ( 
+	sample_id            bigint  NOT NULL,
 	project_id           bigint  NOT NULL,
 	external_name        varchar(100)  NOT NULL,
 	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id, external_name ),
+	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
 	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
-	CONSTRAINT fk_project_external_name FOREIGN KEY ( external_name ) REFERENCES barcodes.samples( external_name )    
+	CONSTRAINT fk_project_external_name FOREIGN KEY ( external_name ) REFERENCES barcodes.samples( external_name )    ,
+	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    
  );
 
-CREATE INDEX idx_project_external_name ON barcodes.project_external_name ( external_name );
+CREATE INDEX idx_project_external_name ON barcodes.project_sample ( external_name );
 
 CREATE TABLE barcodes.protocol_settings ( 
 	protocol_settings_id bigserial  NOT NULL,
