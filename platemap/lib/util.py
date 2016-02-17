@@ -5,6 +5,8 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
+from functools import wraps
+
 from .sql_connection import TRN
 
 
@@ -123,3 +125,12 @@ def check_barcode_assigned(barcode):
             raise ValueError('Barcode %s does not exist in the DB' % barcode)
         # Check if assigned on date is set or not
         return False if barcode_info['assigned_on'] is None else True
+
+
+def rollback_transaction(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        with TRN:
+                f(*args, **kwargs)
+                TRN.rollback()
+    return inner
