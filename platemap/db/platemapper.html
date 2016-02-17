@@ -874,12 +874,11 @@ bigint</title></a>
 <path d='M 360.50 199.50 L 360.50 180.50 Q 360.50 173.50 367.50 173.50 L 547.50 173.50 Q 554.50 173.50 554.50 180.50 L 554.50 199.50 L360.50 199.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
 <a xlink:href='#samples'><text x='432' y='191'>samples</text><title>Table barcodes.samples</title></a>
   <use id='nn' x='362' y='207' xlink:href='#nn'/><a xlink:href='#samples.sample_id'><use id='pk' x='362' y='206' xlink:href='#pk'/><title>Pk pk_samples ( sample_id ) </title></a>
-<a xlink:href='#samples.sample_id'><text id='barcodes.samples.sample_id' x='378' y='217' onmouseover="hghl(['plates_samples_fk_plate_samples','protocol_settings_fk_protocol_runs_2','project_sample_fk_project_sample','project_sample_fk_project_sample'])" onmouseout="uhghl(['plates_samples_fk_plate_samples','protocol_settings_fk_protocol_runs_2','project_sample_fk_project_sample','project_sample_fk_project_sample'])">sample_id</text><text x='540' y='217' text-anchor='end' class='colType'>bigserial</text><title>sample_id
+<a xlink:href='#samples.sample_id'><text id='barcodes.samples.sample_id' x='378' y='217' onmouseover="hghl(['plates_samples_fk_plate_samples','project_sample_fk_project_sample','protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['plates_samples_fk_plate_samples','project_sample_fk_project_sample','protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='540' y='217' text-anchor='end' class='colType'>bigserial</text><title>sample_id
 * bigserial</title></a>
 <a xlink:href='#samples.sample_id'><use id='ref' x='543' y='206' xlink:href='#ref'/><title>Referred by plates_samples ( sample_id ) 
-Referred by protocol_settings ( sample_id ) 
 Referred by project_sample ( sample_id ) 
-Referred by project_sample ( sample_id ) </title></a>
+Referred by protocol_settings ( sample_id ) </title></a>
   <use id='nn' x='362' y='222' xlink:href='#nn'/><a xlink:href='#samples.external_name'><use id='unq' x='362' y='221' xlink:href='#unq'/><title>Unq pk_samples_0 ( external_name ) </title></a>
 <a xlink:href='#samples.external_name'><text id='barcodes.samples.external_name' x='378' y='232' onmouseover="hghl(['project_sample_fk_project_external_name'])" onmouseout="uhghl(['project_sample_fk_project_external_name'])">external_name</text><text x='540' y='232' text-anchor='end' class='colType'>varchar(100)</text><title>external_name
 * varchar(100)</title></a>
@@ -922,10 +921,9 @@ Pereson who last scanned the barcode</title></a>
 <path d='M 45.50 214.50 L 45.50 195.50 Q 45.50 188.50 52.50 188.50 L 232.50 188.50 Q 239.50 188.50 239.50 195.50 L 239.50 214.50 L45.50 214.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
 <a xlink:href='#project_sample'><text x='98' y='206'>project_sample</text><title>Table barcodes.project_sample</title></a>
   <use id='nn' x='47' y='222' xlink:href='#nn'/><a xlink:href='#project_sample.sample_id'><use id='unq' x='47' y='221' xlink:href='#unq'/><title>Unq pk_project_sample ( sample_id ) </title></a>
-<a xlink:href='#project_sample.sample_id'><text id='barcodes.project_sample.sample_id' x='63' y='232' onmouseover="hghl(['project_sample_fk_project_sample','samples_fk_samples_3'])" onmouseout="uhghl(['project_sample_fk_project_sample','samples_fk_samples_3'])">sample_id</text><text x='225' y='232' text-anchor='end' class='colType'>bigint</text><title>sample_id
+<a xlink:href='#project_sample.sample_id'><text id='barcodes.project_sample.sample_id' x='63' y='232' onmouseover="hghl(['project_sample_fk_project_sample'])" onmouseout="uhghl(['project_sample_fk_project_sample'])">sample_id</text><text x='225' y='232' text-anchor='end' class='colType'>bigint</text><title>sample_id
 * bigint</title></a>
-<a xlink:href='#project_sample.sample_id'><use id='fk' x='228' y='221' xlink:href='#fk'/><title>References samples ( sample_id ) 
-Referred by samples ( sample_id ) </title></a>
+<a xlink:href='#project_sample.sample_id'><use id='fk' x='228' y='221' xlink:href='#fk'/><title>References samples ( sample_id ) </title></a>
   <use id='nn' x='47' y='237' xlink:href='#nn'/><a xlink:href='#project_sample.project_id'><use id='pk' x='47' y='236' xlink:href='#pk'/><title>Pk project_barcode_pkey ( project_id, external_name ) </title></a>
 <a xlink:href='#project_sample.project_id'><text id='barcodes.project_sample.project_id' x='63' y='247' onmouseover="hghl(['project_sample_fk_pb_to_project'])" onmouseout="uhghl(['project_sample_fk_pb_to_project'])">project_id</text><text x='225' y='247' text-anchor='end' class='colType'>bigint</text><title>project_id
 * bigint</title></a>
