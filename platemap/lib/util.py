@@ -128,9 +128,10 @@ def check_barcode_assigned(barcode):
 
 
 def rollback_transaction(f):
+    """Decorator to roll back work done in a transaction. Useful for testing"""
     @wraps(f)
     def inner(*args, **kwargs):
         with TRN:
-                f(*args, **kwargs)
-                TRN.rollback()
+            f(*args, **kwargs)
+            TRN.rollback()
     return inner
