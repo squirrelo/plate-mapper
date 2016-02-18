@@ -41,6 +41,9 @@ setup(name='plate-mapper',
       maintainer_email="jshorens@gmail.com",
       url='https://github.com/squirrelo/plate-tracker',
       packages=find_packages(),
+      package_data={
+          'platemap': ['db/*.sql']
+      },
       scripts=glob('scripts/*'),
       extras_require={'test': ["nose >= 0.10.1", "flake8", 'mock']},
       install_requires=['tornado', 'psycopg2', 'passlib', 'wtforms', 'click'],
