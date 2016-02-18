@@ -5,11 +5,10 @@ env:
     - PYTHON_VERSION=3.5
 install:
   - pip install --upgrade pip
-  - travis_retry pip install .
+  - travis_retry pip install .[test]
 script:
   - export PLATEMAP_CONFIG=`pwd`/platemap/platemap_config.txt.example
   - platemap make
-  - if [ ${TEST_ADD_STUDIES} == "True" ]; then test_data_studies/commands.sh ; fi
   - nosetests --with-doctest --with-coverage
   - flake8 --max-complexity 10 platemap setup.py
 addons:
