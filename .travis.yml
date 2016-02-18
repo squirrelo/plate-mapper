@@ -4,6 +4,7 @@ env:
   global:
     - PYTHON_VERSION=3.5
 install:
+  - pip install --upgrade pip
   - travis_retry pip install .
 script:
   - export PLATEMAP_CONFIG=`pwd`/platemap/platemap_config.txt.example
