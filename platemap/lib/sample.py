@@ -185,6 +185,7 @@ class Sample(PMObject):
         sql = """SELECT DISTINCT project
                  FROM barcodes.samples
                  LEFT JOIN barcodes.project_sample USING (sample_id)
+                 LEFT JOIN barcodes.project_barcode USING (barcode)
                  LEFT JOIN barcodes.projects USING (project_id)
                  WHERE sample_id = %s
               """
