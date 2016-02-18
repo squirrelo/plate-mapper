@@ -27,7 +27,6 @@
 			<column name="extractionkit_lot" type="varchar" length="40" jt="12" mandatory="y" />
 			<column name="extraction_robot" type="varchar" length="40" jt="12" mandatory="y" />
 			<column name="tm1000_8_tool" type="varchar" length="40" jt="12" mandatory="y" />
-			<fk name="fk_extraction_settings" to_schema="barcodes" to_table="protocol_settings" />
 		</table>
 		<table name="pcr_settings" >
 			<column name="protocol_settings_id" type="bigint" jt="-5" mandatory="y" />
@@ -256,7 +255,6 @@
 			<fk name="fk_pb_to_project" to_schema="barcodes" to_table="project" >
 				<fk_column name="project_id" pk="project_id" />
 			</fk>
-			<fk name="fk_project_external_name" to_schema="barcodes" to_table="samples" />
 			<fk name="fk_project_sample" to_schema="barcodes" to_table="samples" >
 				<fk_column name="sample_id" pk="sample_id" />
 			</fk>

@@ -20,6 +20,12 @@ COMMENT ON COLUMN barcodes.barcode.assigned_on IS 'date barcode assigned to a pr
 
 COMMENT ON COLUMN barcodes.barcode.create_timestamp IS 'Date barcode created on the system';
 
+CREATE TABLE barcodes.extraction_settings ( 
+	extractionkit_lot    varchar(40)  NOT NULL,
+	extraction_robot     varchar(40)  NOT NULL,
+	tm1000_8_tool        varchar(40)  NOT NULL
+ );
+
 CREATE TABLE barcodes.people ( 
 	person_id            bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
@@ -198,7 +204,6 @@ CREATE TABLE barcodes.project_sample (
 	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id ),
 	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
 	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
-	CONSTRAINT fk_project_external_name FOREIGN KEY (  ) REFERENCES barcodes.samples(  )    ,
 	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    
  );
 
@@ -220,13 +225,6 @@ CREATE INDEX idx_protocol_runs ON barcodes.protocol_settings ( created_by );
 CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_barcode );
 
 CREATE INDEX idx_protocol_runs_2 ON barcodes.protocol_settings ( sample_id );
-
-CREATE TABLE barcodes.extraction_settings ( 
-	extractionkit_lot    varchar(40)  NOT NULL,
-	extraction_robot     varchar(40)  NOT NULL,
-	tm1000_8_tool        varchar(40)  NOT NULL,
-	CONSTRAINT fk_extraction_settings FOREIGN KEY (  ) REFERENCES barcodes.protocol_settings(  )    
- );
 
 CREATE TABLE barcodes.pcr_settings ( 
 	protocol_settings_id bigint  NOT NULL,

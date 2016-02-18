@@ -1,0 +1,19 @@
+language: python
+sudo: false
+env:
+  global:
+    - PYTHON_VERSION=3.5
+install:
+  - travis_retry pip install .
+script:
+  - export PLATEMAP_CONFIG=`pwd`/platemap/platemap_config.txt.example
+  - platemap make
+  - if [ ${TEST_ADD_STUDIES} == "True" ]; then test_data_studies/commands.sh ; fi
+  - nosetests --with-doctest --with-coverage
+  - flake8 --max-complexity 10 platemap setup.py
+addons:
+  postgresql: "9.3"
+services:
+  - postgresql
+after_success:
+  - coveralls

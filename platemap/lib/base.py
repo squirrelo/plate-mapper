@@ -119,7 +119,7 @@ class PMObject(object):
 
         Parameters
         ----------
-        id_: int, long, str, or unicode
+        id_: int, str
             the object identifier
 
         Raises
@@ -131,17 +131,15 @@ class PMObject(object):
         # the User object) are strings. Moreover, some integer IDs are passed
         # as strings (e.g., '5'). Therefore, explicit type-checking is needed
         # here to accommodate these possibilities.
-        if not isinstance(id_, (int, long, str, unicode)):
+        if not isinstance(id_, (int, str)):
             raise TypeError("id_ must be a numerical or text type (not %s) "
                             "when instantiating "
                             "%s" % (id_.__class__.__name__,
                                     self.__class__.__name__))
 
-        if isinstance(id_, (str, unicode)):
+        if isinstance(id_, (str)):
             if id_.isdigit():
                 id_ = int(id_)
-        elif isinstance(id_, long):
-            id_ = int(id_)
 
         with TRN:
             self._check_subclass()
