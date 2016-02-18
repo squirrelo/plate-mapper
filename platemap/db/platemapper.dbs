@@ -23,15 +23,6 @@
 				<column name="barcode" />
 			</index>
 		</table>
-		<table name="barcode_exceptions" >
-			<column name="barcode" type="varchar" length="100" jt="12" mandatory="y" />
-			<index name="pk_barcode_exceptions" unique="PRIMARY_KEY" >
-				<column name="barcode" />
-			</index>
-			<fk name="fk_barcode_exceptions" to_schema="barcodes" to_table="barcode" >
-				<fk_column name="barcode" pk="barcode" />
-			</fk>
-		</table>
 		<table name="extraction_settings" >
 			<column name="extractionkit_lot" type="varchar" length="40" jt="12" mandatory="y" />
 			<column name="extraction_robot" type="varchar" length="40" jt="12" mandatory="y" />
@@ -237,16 +228,27 @@
 				<column name="project_id" />
 			</index>
 		</table>
+		<table name="project_barcode" >
+			<column name="project_id" type="bigint" jt="-5" mandatory="y" />
+			<column name="barcode" type="varchar" jt="12" mandatory="y" />
+			<index name="idx_project_barcode" unique="NORMAL" >
+				<column name="project_id" />
+			</index>
+			<index name="idx_project_barcode_0" unique="NORMAL" >
+				<column name="barcode" />
+			</index>
+			<fk name="fk_project_barcode" to_schema="barcodes" to_table="project" >
+				<fk_column name="project_id" pk="project_id" />
+			</fk>
+			<fk name="fk_project_barcode_0" to_schema="barcodes" to_table="barcode" >
+				<fk_column name="barcode" pk="barcode" />
+			</fk>
+		</table>
 		<table name="project_sample" >
 			<column name="sample_id" type="bigint" jt="-5" mandatory="y" />
 			<column name="project_id" type="bigint" length="19" jt="-5" mandatory="y" />
-			<column name="external_name" type="varchar" length="100" jt="12" mandatory="y" />
 			<index name="project_barcode_pkey" unique="PRIMARY_KEY" >
 				<column name="project_id" />
-				<column name="external_name" />
-			</index>
-			<index name="idx_project_external_name" unique="NORMAL" >
-				<column name="external_name" />
 			</index>
 			<index name="pk_project_sample" unique="UNIQUE" >
 				<column name="sample_id" />
@@ -254,9 +256,7 @@
 			<fk name="fk_pb_to_project" to_schema="barcodes" to_table="project" >
 				<fk_column name="project_id" pk="project_id" />
 			</fk>
-			<fk name="fk_project_external_name" to_schema="barcodes" to_table="samples" >
-				<fk_column name="external_name" pk="external_name" />
-			</fk>
+			<fk name="fk_project_external_name" to_schema="barcodes" to_table="samples" />
 			<fk name="fk_project_sample" to_schema="barcodes" to_table="samples" >
 				<fk_column name="sample_id" pk="sample_id" />
 			</fk>
@@ -322,7 +322,6 @@
 			<column name="sample_id" type="bigserial" jt="-5" mandatory="y" />
 			<column name="external_name" type="varchar" length="100" jt="12" mandatory="y" />
 			<column name="barcode" type="varchar" jt="12" />
-			<column name="project_id" type="bigint" jt="-5" mandatory="y" />
 			<column name="sample_type" type="varchar" jt="12" mandatory="y" >
 				<comment><![CDATA[The type of sample collected (stool, soil, etc)]]></comment>
 			</column>
@@ -345,9 +344,6 @@
 			<index name="idx_samples" unique="NORMAL" >
 				<column name="barcode" />
 			</index>
-			<index name="idx_samples_0" unique="NORMAL" >
-				<column name="project_id" />
-			</index>
 			<index name="pk_samples" unique="PRIMARY_KEY" >
 				<column name="sample_id" />
 			</index>
@@ -368,9 +364,6 @@
 			</fk>
 			<fk name="fk_samples_2" to_schema="barcodes" to_table="people" >
 				<fk_column name="created_by" pk="person_id" />
-			</fk>
-			<fk name="fk_samples_0" to_schema="barcodes" to_table="project" >
-				<fk_column name="project_id" pk="project_id" />
 			</fk>
 		</table>
 		<table name="users" >
@@ -22047,24 +22040,24 @@ AS $function$xpath_exists$function$
 		</function>
 	</schema>
 	<layout id="Layout_21c92c9f" name="barcodes" joined_routing="y" show_column_type="y" show_relation_columns="y" >
-		<entity schema="barcodes" name="people" color="b7c8e3" x="510" y="465" />
-		<entity schema="barcodes" name="barcode_exceptions" color="b7c8e3" x="360" y="45" />
-		<entity schema="barcodes" name="pool" color="b7c8e3" x="1320" y="105" />
-		<entity schema="barcodes" name="run" color="b7c8e3" x="1320" y="270" />
-		<entity schema="barcodes" name="plates" color="b7c8e3" x="870" y="165" />
-		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="645" y="165" />
-		<entity schema="barcodes" name="primers" color="b7c8e3" x="735" y="675" />
-		<entity schema="barcodes" name="users" color="b7c8e3" x="720" y="465" />
-		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="900" y="465" />
-		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="1110" y="105" />
-		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1185" y="480" />
-		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1185" y="630" />
-		<entity schema="barcodes" name="primers_lots" color="b7c8e3" x="930" y="675" />
-		<entity schema="barcodes" name="project" color="b7c8e3" x="105" y="300" />
-		<entity schema="barcodes" name="barcode" color="b7c8e3" x="45" y="75" />
-		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1185" y="735" />
-		<entity schema="barcodes" name="samples" color="b7c8e3" x="360" y="180" />
-		<entity schema="barcodes" name="project_sample" color="b7c8e3" x="45" y="195" />
+		<entity schema="barcodes" name="people" color="b7c8e3" x="435" y="405" />
+		<entity schema="barcodes" name="pool" color="b7c8e3" x="1245" y="45" />
+		<entity schema="barcodes" name="run" color="b7c8e3" x="1245" y="210" />
+		<entity schema="barcodes" name="plates" color="b7c8e3" x="795" y="105" />
+		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="570" y="105" />
+		<entity schema="barcodes" name="primers" color="b7c8e3" x="660" y="615" />
+		<entity schema="barcodes" name="users" color="b7c8e3" x="645" y="405" />
+		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="825" y="405" />
+		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="1035" y="45" />
+		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1110" y="420" />
+		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1110" y="570" />
+		<entity schema="barcodes" name="primers_lots" color="b7c8e3" x="855" y="615" />
+		<entity schema="barcodes" name="barcode" color="b7c8e3" x="45" y="105" />
+		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1110" y="675" />
+		<entity schema="barcodes" name="samples" color="b7c8e3" x="285" y="120" />
+		<entity schema="barcodes" name="project" color="b7c8e3" x="75" y="405" />
+		<entity schema="barcodes" name="project_barcode" color="b7c8e3" x="75" y="225" />
+		<entity schema="barcodes" name="project_sample" color="b7c8e3" x="75" y="315" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plates" />
@@ -22088,6 +22081,12 @@ AS $function$xpath_exists$function$
 		<group name="Group_primers" color="ccffcc" >
 			<entity schema="barcodes" name="primers" />
 			<entity schema="barcodes" name="primers_lots" />
+		</group>
+		<group name="Group_barcodes" color="c4e0f9" >
+			<entity schema="barcodes" name="barcode" />
+			<entity schema="barcodes" name="project" />
+			<entity schema="barcodes" name="project_barcode" />
+			<entity schema="barcodes" name="project_sample" />
 		</group>
 		<script name="Sql" id="SQL_27711d58" >
 			<string><![CDATA[CREATE SCHEMA barcodes;

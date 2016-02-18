@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 from platemap.lib.util import (
-    check_barcode_assigned, convert_from_id, convert_to_id, get_count,
+    # check_barcode_assigned, convert_from_id, convert_to_id, get_count,
     rollback_transaction)
 from platemap.lib.sql_connection import TRN
 

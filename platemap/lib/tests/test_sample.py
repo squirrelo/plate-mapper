@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 from platemap.lib.util import rollback_transaction
-from platemap.lib.sample import Sample
+# from platemap.lib.sample import Sample
 
 
 class TestSample(TestCase):

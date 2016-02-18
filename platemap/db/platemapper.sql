@@ -20,12 +20,6 @@ COMMENT ON COLUMN barcodes.barcode.assigned_on IS 'date barcode assigned to a pr
 
 COMMENT ON COLUMN barcodes.barcode.create_timestamp IS 'Date barcode created on the system';
 
-CREATE TABLE barcodes.barcode_exceptions ( 
-	barcode              varchar(100)  NOT NULL,
-	CONSTRAINT pk_barcode_exceptions PRIMARY KEY ( barcode ),
-	CONSTRAINT fk_barcode_exceptions FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    
- );
-
 CREATE TABLE barcodes.people ( 
 	person_id            bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
@@ -89,6 +83,17 @@ CREATE TABLE barcodes.project (
 
 COMMENT ON COLUMN barcodes.project.pi IS 'primary investigator on the study';
 
+CREATE TABLE barcodes.project_barcode ( 
+	project_id           bigint  NOT NULL,
+	barcode              varchar  NOT NULL,
+	CONSTRAINT fk_project_barcode FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
+	CONSTRAINT fk_project_barcode_0 FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    
+ );
+
+CREATE INDEX idx_project_barcode ON barcodes.project_barcode ( project_id );
+
+CREATE INDEX idx_project_barcode_0 ON barcodes.project_barcode ( barcode );
+
 CREATE TABLE barcodes.run ( 
 	run_id               bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
@@ -110,7 +115,6 @@ CREATE TABLE barcodes.samples (
 	sample_id            bigserial  NOT NULL,
 	external_name        varchar(100)  NOT NULL,
 	barcode              varchar  ,
-	project_id           bigint  NOT NULL,
 	sample_type          varchar  NOT NULL,
 	sample_location      varchar  ,
 	biomass_remaining    bool DEFAULT 'T' NOT NULL,
@@ -122,13 +126,10 @@ CREATE TABLE barcodes.samples (
 	CONSTRAINT pk_samples_0 UNIQUE ( external_name ) ,
 	CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.people( person_id )    ,
-	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.people( person_id )    ,
-	CONSTRAINT fk_samples_0 FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
+	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.people( person_id )    
  );
 
 CREATE INDEX idx_samples ON barcodes.samples ( barcode );
-
-CREATE INDEX idx_samples_0 ON barcodes.samples ( project_id );
 
 CREATE INDEX idx_samples_1 ON barcodes.samples ( last_scanned_by );
 
@@ -194,15 +195,12 @@ COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane 
 CREATE TABLE barcodes.project_sample ( 
 	sample_id            bigint  NOT NULL,
 	project_id           bigint  NOT NULL,
-	external_name        varchar(100)  NOT NULL,
-	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id, external_name ),
+	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id ),
 	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
 	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
-	CONSTRAINT fk_project_external_name FOREIGN KEY ( external_name ) REFERENCES barcodes.samples( external_name )    ,
+	CONSTRAINT fk_project_external_name FOREIGN KEY (  ) REFERENCES barcodes.samples(  )    ,
 	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    
  );
-
-CREATE INDEX idx_project_external_name ON barcodes.project_sample ( external_name );
 
 CREATE TABLE barcodes.protocol_settings ( 
 	protocol_settings_id bigserial  NOT NULL,

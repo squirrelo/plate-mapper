@@ -173,7 +173,6 @@ class Sample(PMObject):
             TRN.add(barcode_sql, [barcode])
             TRN.execute()
 
-
     @property
     def projects(self):
         """Returns list of projects this sample is associated with
@@ -192,7 +191,6 @@ class Sample(PMObject):
         with TRN:
             TRN.add(sql, [self.id])
             return TRN.execute_fetchflatten()
-
 
     @property
     def sample_type(self):
