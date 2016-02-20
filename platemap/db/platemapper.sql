@@ -87,18 +87,23 @@ CREATE TABLE barcodes.project (
 	CONSTRAINT project_pkey PRIMARY KEY ( project_id )
  );
 
+COMMENT ON TABLE barcodes.project IS 'Project information';
+
 COMMENT ON COLUMN barcodes.project.pi IS 'primary investigator on the study';
 
 CREATE TABLE barcodes.project_barcode ( 
 	project_id           bigint  NOT NULL,
 	barcode              varchar  NOT NULL,
-	CONSTRAINT fk_project_barcode FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
-	CONSTRAINT fk_project_barcode_0 FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    
+	CONSTRAINT idx_project_barcode_1 PRIMARY KEY ( project_id, barcode ),
+	CONSTRAINT fk_project_barcode_0 FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
+	CONSTRAINT fk_project_barcode FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
  );
 
 CREATE INDEX idx_project_barcode ON barcodes.project_barcode ( project_id );
 
 CREATE INDEX idx_project_barcode_0 ON barcodes.project_barcode ( barcode );
+
+COMMENT ON TABLE barcodes.project_barcode IS 'Assign barcodes to projects before they are assigned to samples';
 
 CREATE TABLE barcodes.run ( 
 	run_id               bigserial  NOT NULL,
@@ -116,6 +121,16 @@ CREATE TABLE barcodes.run (
 CREATE INDEX idx_run ON barcodes.run ( finalized_by );
 
 COMMENT ON TABLE barcodes.run IS 'Full run, equivalent to a multi-lane sequencing run';
+
+CREATE TABLE barcodes.sample_set ( 
+	sample_set_id        bigserial  NOT NULL,
+	sample_set           varchar(100)  NOT NULL,
+	created_on           timestamp DEFAULT current_timestamp ,
+	created_by           bigint  NOT NULL,
+	CONSTRAINT pk_sample_set PRIMARY KEY ( sample_set_id )
+ );
+
+COMMENT ON TABLE barcodes.sample_set IS 'Distinct set of samples that must have unique sample names in them';
 
 CREATE TABLE barcodes.samples ( 
 	sample_id            bigserial  NOT NULL,
@@ -198,14 +213,17 @@ CREATE INDEX idx_pool_1 ON barcodes.pool ( finalized_by );
 
 COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane for sequencing';
 
-CREATE TABLE barcodes.project_sample ( 
-	sample_id            bigint  NOT NULL,
+CREATE TABLE barcodes.project_sample_set ( 
+	sample_set_id        bigint  NOT NULL,
 	project_id           bigint  NOT NULL,
-	CONSTRAINT project_barcode_pkey PRIMARY KEY ( project_id ),
-	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
-	CONSTRAINT fk_pb_to_project FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
-	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    
+	CONSTRAINT idx_projet_sample_set PRIMARY KEY ( sample_set_id, project_id ),
+	CONSTRAINT fk_project_sample_set FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    ,
+	CONSTRAINT fk_project_sample_set_0 FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
  );
+
+CREATE INDEX idx_project_sample_set ON barcodes.project_sample_set ( sample_set_id );
+
+CREATE INDEX idx_project_sample_set_0 ON barcodes.project_sample_set ( project_id );
 
 CREATE TABLE barcodes.protocol_settings ( 
 	protocol_settings_id bigserial  NOT NULL,
@@ -225,6 +243,15 @@ CREATE INDEX idx_protocol_runs ON barcodes.protocol_settings ( created_by );
 CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_barcode );
 
 CREATE INDEX idx_protocol_runs_2 ON barcodes.protocol_settings ( sample_id );
+
+CREATE TABLE barcodes.sample_set_sample ( 
+	sample_id            bigint  NOT NULL,
+	sample_set_id        bigint  NOT NULL,
+	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
+	CONSTRAINT project_barcode_pkey PRIMARY KEY ( sample_set_id, sample_id ),
+	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    ,
+	CONSTRAINT fk_sample_set_sample FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
+ );
 
 CREATE TABLE barcodes.pcr_settings ( 
 	protocol_settings_id bigint  NOT NULL,
