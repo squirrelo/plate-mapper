@@ -183,7 +183,8 @@ COMMENT ON COLUMN barcodes.users."access" IS 'What access the user is allowed';
 CREATE TABLE barcodes.plates_samples ( 
 	plate_barcode        varchar  NOT NULL,
 	sample_id            bigint  NOT NULL,
-	well                 varchar(3)  NOT NULL,
+	plate_row            smallint  NOT NULL,
+	plate_col            smallint  NOT NULL,
 	CONSTRAINT idx_plate_samples PRIMARY KEY ( plate_barcode, sample_id ),
 	CONSTRAINT fk_plate_samples FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    ,
 	CONSTRAINT fk_plate_samples_0 FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.plates( plate_barcode )    
