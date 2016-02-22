@@ -1,16 +1,37 @@
 from unittest import TestCase, main
 from platemap.lib.util import rollback_transaction
-# from platemap.lib.sample import Sample
+from platemap.lib.sample import Sample
+from platemap.lib.exceptions import DeveloperError
 
 
 class TestSample(TestCase):
     @rollback_transaction
     def test_search(self):
-        raise NotImplementedError()
+        obs = Sample.search(biomass_remaining=True)
+        exp = [Sample(1), Sample(2), Sample(3), Sample(4)]
+        self.assertEqual(obs, exp)
+
+        obs = Sample.search(sample_type='stool')
+        exp = [Sample(1), Sample(2)]
+        self.assertEqual(obs, exp)
+
+        obs = Sample.search(barcode='000000002')
+        exp = [Sample(2)]
+        self.assertEqual(obs, exp)
+
+        obs = Sample.search(barcode='000000010')
+        exp = []
+        self.assertEqual(obs, exp)
+
+        # TODO: finish these tests as objects are made
+        # Sample.search(project=)
+        # Sample.search(primer_set=)
+        # Sample.search(protocol=)
 
     @rollback_transaction
     def test_search_no_parameters(self):
-        raise NotImplementedError()
+        with self.assertRaises(DeveloperError):
+            Sample.search()
 
     @rollback_transaction
     def test_create(self):

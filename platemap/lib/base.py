@@ -33,12 +33,12 @@ class PMObject(object):
 
     Raises
     ------
-    IncompetentQiitaDeveloperError
+    DeveloperError
         If trying to instantiate the base class directly
     """
 
     _table = None
-    _portal_table = None
+    _id_col = None
 
     @classmethod
     def create(cls):
@@ -46,7 +46,7 @@ class PMObject(object):
 
         Raises
         ------
-        QiitaDBNotImplementedError
+        NotImplementedError
             If the method is not overwritten by a subclass
         """
         raise NotImplementedError()
@@ -62,7 +62,7 @@ class PMObject(object):
 
         Raises
         ------
-        QiitaDBNotImplementedError
+        NotImplementedError
             If the method is not overwritten by a subclass
         """
         raise NotImplementedError()
@@ -73,7 +73,7 @@ class PMObject(object):
 
         Raises
         ------
-        QiitaDBNotImplementedError
+        NotImplementedError
             If the method is not overwritten by a subclass
         """
         raise NotImplementedError()
@@ -85,7 +85,7 @@ class PMObject(object):
 
         Raises
         ------
-        IncompetentQiitaDeveloperError
+        DeveloperError
             If its called directly from a base class
         """
         if cls._table is None:
@@ -109,8 +109,8 @@ class PMObject(object):
         """
         with TRN:
             sql = """SELECT EXISTS(
-                        SELECT * FROM qiita.{0}
-                        WHERE {0}_id=%s)""".format(self._table)
+                        SELECT * FROM barcodes.{0}
+                        WHERE {1}_id=%s)""".format(self._table, self._id_col)
             TRN.add(sql, [id_])
             return TRN.execute_fetchlast()
 

@@ -16,11 +16,11 @@ INSERT INTO barcodes.project (project, description, pi, contact_person, created_
 
 INSERT INTO barcodes.sample_set (sample_set, created_on, created_by) VALUES ('Sample Set 1', '2016-02-22 8:52:00', 1), ('Sample Set 2', '2016-02-22 8:53:00', 1);
 
-INSERT INTO barcodes.samples (external_name, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by, sample_set_id) VALUES
-('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1),
-('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1, 1),
-('Sample 3', NULL, 'skin', 'the freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1),
-('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2);
+INSERT INTO barcodes.samples (external_name, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by, sample_set_id, biomass_remaining) VALUES
+('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1, 'T'),
+('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1, 1, 'F'),
+('Sample 3', NULL, 'skin', 'the other freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1, 'T'),
+('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T');
 
 INSERT INTO barcodes.plates (plate_barcode, plate_name, created_on, finalized, person_id) VALUES
 ('000000003', 'Test plate 1', '2016-02-22 8:55:00', 'F', 1);

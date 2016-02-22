@@ -12,9 +12,12 @@ from .exceptions import DeveloperError, DuplicateError, AssignError
 
 
 class Sample(PMObject):
-    @staticmethod
-    def search(biomass_remaining=None, sample_type=None, barcode=None,
-               project=None, primer_set=None, status=None, protocol=None):
+    _table = 'samples'
+    _id_col = 'sample'
+
+    @classmethod
+    def search(cls, biomass_remaining=None, sample_type=None, barcode=None,
+               project=None, primer_set=None, protocol=None):
         """Searches over all given parameters for matching samples
 
         Parameters
@@ -29,8 +32,6 @@ class Sample(PMObject):
             project to search over
         primer_set : str, optional
             What primers were used for sample amplification
-        status : str, optional
-            What stage of processing this has made it to
         protocol : str
             What protocol was run on the samples
 
@@ -50,8 +51,35 @@ class Sample(PMObject):
         """
         # Make sure at least one argument passed
         if all([x is None for x in [biomass_remaining, sample_type, barcode,
-                                    project, primer_set, status, protocol]]):
+                                    project, primer_set, protocol]]):
             raise DeveloperError("Must pass at least one parameter")
+
+        joins = []
+        wheres = []
+        sql_args = []
+        sql = 'SELECT sample_id FROM barcodes.samples'
+        if biomass_remaining is not None:
+            wheres.append('biomass_remaining = %s')
+            sql_args.append(biomass_remaining)
+        if sample_type is not None:
+            wheres.append('sample_type = %s')
+            sql_args.append(sample_type)
+        if barcode is not None:
+            wheres.append('barcode = %s')
+            sql_args.append(barcode)
+        if project is not None:
+            joins.append('JOIN barcodes.project_sample USING (sample_id)')
+            joins.append('JOIN barcodes.projects USING (project_id)')
+            wheres.append('project = %s')
+            sql_args.append(project)
+        # TODO: add primer set and protocol searches
+
+        with TRN:
+            sql_join = ' '.join(joins)
+            sql_where = ' AND '.join(wheres)
+            full_sql = '%s %s WHERE %s' % (sql, sql_join, sql_where)
+            TRN.add(full_sql, sql_args)
+            return [cls(s) for s in TRN.execute_fetchflatten()]
 
     @classmethod
     def create(cls, external_name, sample_type, sample_location, sample_set,
