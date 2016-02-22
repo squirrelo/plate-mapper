@@ -34,7 +34,7 @@ def convert_to_id(value, table, text_col=None):
     """
     text_col = table if text_col is None else text_col
     with TRN:
-        sql = "SELECT {0}_id FROM qiita.{0} WHERE {1} = %s".format(
+        sql = "SELECT {0}_id FROM barcodes.{0} WHERE {1} = %s".format(
             table, text_col)
         TRN.add(sql, [value])
         _id = TRN.execute_fetchindex()
@@ -46,7 +46,7 @@ def convert_to_id(value, table, text_col=None):
         return _id[0][0]
 
 
-def convert_from_id(value, table):
+def convert_from_id(value, table, id_col=None):
     """Converts an id value to its corresponding string value
 
     Parameters
@@ -55,6 +55,8 @@ def convert_from_id(value, table):
         The id value to convert
     table : str
         The table that has the conversion
+    id_col : str, optional
+        Column holding the id value. Defaults to [table]_id.
 
     Returns
     -------
@@ -66,8 +68,10 @@ def convert_from_id(value, table):
     LookupError
         The passed id has no associated string
     """
+    id_col = table + '_id' if id_col is None else id_col
     with TRN:
-        sql = "SELECT {0} FROM qiita.{0} WHERE {0}_id = %s".format(table)
+        sql = "SELECT {0} FROM barcodes.{0} WHERE {1} = %s".format(
+            table, id_col)
         TRN.add(sql, [value])
         string = TRN.execute_fetchindex()
         if not string:
@@ -119,12 +123,12 @@ def check_barcode_assigned(barcode):
         WHERE barcode = %s
         """
     with TRN:
-        TRN.add(sql)
+        TRN.add(sql, [barcode])
         barcode_info = TRN.execute_fetchindex()
-        if barcode_info is None:
+        if not barcode_info:
             raise ValueError('Barcode %s does not exist in the DB' % barcode)
-        # Check if assigned on date is set or not
-        return False if barcode_info['assigned_on'] is None else True
+        # Check if barcode retrieved has set assigned on date or not
+        return False if barcode_info[0]['assigned_on'] is None else True
 
 
 def rollback_transaction(f):

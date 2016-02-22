@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 from platemap.lib.util import (
-    # check_barcode_assigned, convert_from_id, convert_to_id, get_count,
+    check_barcode_assigned, convert_from_id, convert_to_id, get_count,
     rollback_transaction)
 from platemap.lib.sql_connection import TRN
 
@@ -8,31 +8,45 @@ from platemap.lib.sql_connection import TRN
 class TestUtil(TestCase):
 
     def test_convert_to_id(self):
-        raise NotImplementedError()
+        obs = convert_to_id('Project 2', 'project')
+        self.assertEqual(obs, 2)
 
     def test_convert_to_id_no_exist(self):
-        raise NotImplementedError()
+        with self.assertRaises(LookupError):
+            convert_to_id('NOTREALPROJECT', 'project')
+
+        with self.assertRaises(ValueError):
+            convert_to_id('Project 2', 'BADTABLE')
 
     def test_convert_from_id(self):
-        raise NotImplementedError()
+        obs = convert_from_id(2, 'project')
+        self.assertEqual(obs, 'Project 2')
 
     def test_convert_from_id_no_exist(self):
-        raise NotImplementedError()
+        with self.assertRaises(LookupError):
+            convert_from_id(12, 'project')
+
+        with self.assertRaises(ValueError):
+            convert_from_id(2, 'BADTABLE')
 
     def test_get_count(self):
-        raise NotImplementedError()
+        obs = get_count('project')
+        self.assertEqual(obs, 3)
 
     def test_get_count_bad_table(self):
-        raise NotImplementedError()
+        with self.assertRaises(ValueError):
+            get_count('BADTABLE')
 
     def test_check_barcode_assigned(self):
-        raise NotImplementedError()
+        obs = check_barcode_assigned('000000001')
+        self.assertTrue(obs)
+
+        obs = check_barcode_assigned('000000010')
+        self.assertFalse(obs)
 
     def test_check_barcode_assigned_no_exist(self):
-        raise NotImplementedError()
-
-    def test_check_barcode_assigned_assigned(self):
-        raise NotImplementedError()
+        with self.assertRaises(ValueError):
+            check_barcode_assigned('100000001')
 
     def test_rollback_transaction(self):
         # Create decorated test function that adds a table
