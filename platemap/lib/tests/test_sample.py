@@ -5,6 +5,9 @@ from platemap.lib.exceptions import DeveloperError
 
 
 class TestSample(TestCase):
+    def setUp(self):
+        self.sample = Sample(1)
+
     @rollback_transaction
     def test_search(self):
         obs = Sample.search(biomass_remaining=True)
@@ -35,6 +38,12 @@ class TestSample(TestCase):
 
     @rollback_transaction
     def test_create(self):
+        raise NotImplementedError()
+
+    def test_create_with_barcode(self):
+        raise NotImplementedError()
+
+    def test_create_with_projects(self):
         raise NotImplementedError()
 
     @rollback_transaction
