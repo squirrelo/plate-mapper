@@ -8,7 +8,8 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 import click
-from platemap.lib.environment import make_database, make_environment
+from platemap.lib.environment import (make_database, make_environment,
+                                      rebuilt_test_env)
 
 
 @click.group()
@@ -18,13 +19,19 @@ def cli():
 
 @cli.command()
 @click.option('-t', '--test', is_flag=True)
-def make(test):
+def make(test=False):
     """Creates the database specified in config"""
     print("Creating database")
     make_database()
     print('Adding schema to database')
+    if (test):
+        print('Populating test environment')
     make_environment(test)
-    print('Setup finished')
+
+
+@cli.command('rebuild-test-db')
+def rebuild_test():
+    rebuilt_test_env()
 
 if __name__ == '__main__':
     cli()

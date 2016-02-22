@@ -52,15 +52,26 @@ def make_database():
     connection.close()
 
 
-def make_environment(test=True):
+def make_environment(test=False):
     """Sets up the database with the schema and optionally test information
 
     Parameters
     ----------
     test : bool, optional
-        Whether the environment will be set up as test or not. Default True
+        Whether the environment will be set up as test or not. Default False
     """
     with TRN:
         with open(join(dirname(abspath(__file__)), '..', 'db',
                        'platemapper.sql')) as f:
             TRN.add(f.read())
+        if test:
+            with open(join(dirname(abspath(__file__)), '..', 'db',
+                      'populate_test.sql')) as f:
+                TRN.add(f.read())
+
+
+def rebuilt_test_env():
+    """Deletes the schema and rebuilds the test database"""
+    with TRN:
+        TRN.add('DROP SCHEMA barcodes CASCADE')
+        make_environment(test=True)
