@@ -9,6 +9,10 @@ class TestSample(TestCase):
         raise NotImplementedError()
 
     @rollback_transaction
+    def test_search_no_parameters(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
     def test_create(self):
         raise NotImplementedError()
 
@@ -17,7 +21,15 @@ class TestSample(TestCase):
         raise NotImplementedError()
 
     @rollback_transaction
+    def test_exists_no_exists(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
     def test_delete(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
+    def test_delete_no_exists(self):
         raise NotImplementedError()
 
     @rollback_transaction
@@ -29,7 +41,19 @@ class TestSample(TestCase):
         raise NotImplementedError()
 
     @rollback_transaction
+    def test_barcode_none(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
     def test_add_barcode(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
+    def test_add_barcode_already_used_barcode(self):
+        raise NotImplementedError()
+
+    @rollback_transaction
+    def test_add_barcode_already_assigned_to_sample(self):
         raise NotImplementedError()
 
     @rollback_transaction
@@ -66,19 +90,19 @@ class TestSample(TestCase):
 
     @rollback_transaction
     def test_plates(self):
-        raise NotImplementedError()
+        pass
 
     @rollback_transaction
     def test_protocols(self):
-        raise NotImplementedError()
+        pass
 
     @rollback_transaction
     def test_pools(self):
-        raise NotImplementedError()
+        pass
 
     @rollback_transaction
     def test_runs(self):
-        raise NotImplementedError()
+        pass
 
 
 if __name__ == "__main__":

@@ -9,12 +9,6 @@ INSERT INTO barcodes.people (name, email, address, affiliation, phone) VALUES
 ('Second test person', 'someone@foo.bar', NULL, NULL, NULL),
 ('Third test person', 'anotherone@foo.bar', NULL, 'UCLA', NULL);
 
-INSERT INTO barcodes.samples (external_name, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by) VALUES
-('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1),
-('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1),
-('Sample 3', NULL, 'skin', 'the freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1),
-('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1);
-
 INSERT INTO barcodes.project (project, description, pi, contact_person, created_on) VALUES
 ('Project 1', 'First test project', 1, 2, '2016-02-22 8:52:00'),
 ('Project 2', 'Second test project', 1, 2, '2016-02-22 8:53:00'),
@@ -23,11 +17,12 @@ INSERT INTO barcodes.project (project, description, pi, contact_person, created_
 INSERT INTO barcodes.sample_set (sample_set, created_on, created_by) VALUES
 ('Sample Set 1', '2016-02-22 8:52:00', 1), ('Sample Set 2', '2016-02-22 8:53:00', 1);
 
+INSERT INTO barcodes.samples (external_name, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by, sample_set_id) VALUES
+('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1),
+('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1, 1),
+('Sample 3', NULL, 'skin', 'the freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1),
+('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2);
+
 INSERT INTO barcodes.project_sample_set (sample_set_id, project_id) VALUES (1, 1), (2, 1), (2, 2);
 
 INSERT INTO barcodes.project_barcode (project_id, barcode) VALUES (3, '000000010'), (3, '000000009');
-
-INSERT INTO barcodes.sample_set_sample (sample_id, sample_set_id) VALUES (1, 1), (2, 1), (3, 1), (4, 2);
-
-
-

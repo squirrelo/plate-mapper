@@ -73,5 +73,7 @@ def make_environment(test=False):
 def rebuilt_test_env():
     """Deletes the schema and rebuilds the test database"""
     with TRN:
+        print('Dropping barcodes schema')
         TRN.add('DROP SCHEMA barcodes CASCADE')
+        print('Rebuilding test environment')
         make_environment(test=True)

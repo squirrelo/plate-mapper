@@ -54,8 +54,8 @@ class Sample(PMObject):
             raise DeveloperError("Must pass at least one parameter")
 
     @classmethod
-    def create(cls, external_name, sample_type, sample_location, projects,
-               person, barcode=None):
+    def create(cls, external_name, sample_type, sample_location, sample_set,
+               person, projects=None, barcode=None):
         """Creates a new sample in the database
 
         Parameters
@@ -66,10 +66,12 @@ class Sample(PMObject):
             What the sample is (stool, etc)
         sample_location : str
             Where th esample is physically located/stored
-        projects : list of str
-            What projects the sample is part of
+        sample_set: str
+            What sample set the sample belongs to
         person  : Person object
             The person initially logging the sample
+        projects : list of str, optional
+            What projects the sample is part of
         barcode : str, optional
             If barcoded, the barcode added
 
@@ -84,6 +86,9 @@ class Sample(PMObject):
                         VALUES (%s,%s,%s,%s,%s,%s)
                         RETURNING sample_id
                      """
+        sample_set_sql = """INSERT INTO barcodes.sample_set_sample
+                            (sample_id, sample_set_id)
+                            VALUES (%s, %s)"""
         project_sql = """INSERT INTO barcodes.project_external_name
                          (external_name, project_id)
                          VALUES (%s,%s)"""
@@ -99,9 +104,13 @@ class Sample(PMObject):
                                  sample_location, person.id, person.id])
             sample_id = TRN.execute_fetchlast()
 
-            pids = [(external_name, convert_to_id(p, 'projects'))
-                    for p in projects]
-            TRN.add(project_sql, pids, many=True)
+            TRN.add(sample_set_sql, [sample_id, convert_to_id(
+                sample_set, 'barcodes.sample_sets')])
+
+            if projects is not None:
+                pids = [(external_name, convert_to_id(p, 'barcodes.projects'))
+                        for p in projects]
+                TRN.add(project_sql, pids, many=True)
 
             if barcode is not None:
                 TRN.add(barcode_sql, [barcode])
@@ -172,6 +181,17 @@ class Sample(PMObject):
             TRN.add(sample_sql, [barcode, self.id])
             TRN.add(barcode_sql, [barcode])
             TRN.execute()
+
+    @property
+    def sample_set(self):
+        """Returns sample set this sample belongs to.
+
+           Returns
+           -------
+           str
+               Sample set the sample belongs to.
+        """
+        return self._get_property('sample_set')
 
     @property
     def projects(self):

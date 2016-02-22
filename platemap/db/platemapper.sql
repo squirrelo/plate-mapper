@@ -136,6 +136,7 @@ CREATE TABLE barcodes.samples (
 	sample_id            bigserial  NOT NULL,
 	external_name        varchar(100)  NOT NULL,
 	barcode              varchar  ,
+	sample_set_id        bigint  NOT NULL,
 	sample_type          varchar  NOT NULL,
 	sample_location      varchar  ,
 	biomass_remaining    bool DEFAULT 'T' NOT NULL,
@@ -147,7 +148,8 @@ CREATE TABLE barcodes.samples (
 	CONSTRAINT pk_samples_0 UNIQUE ( external_name ) ,
 	CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.people( person_id )    ,
-	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.people( person_id )    
+	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.people( person_id )    ,
+	CONSTRAINT fk_samples_0 FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
  );
 
 CREATE INDEX idx_samples ON barcodes.samples ( barcode );
@@ -155,6 +157,8 @@ CREATE INDEX idx_samples ON barcodes.samples ( barcode );
 CREATE INDEX idx_samples_1 ON barcodes.samples ( last_scanned_by );
 
 CREATE INDEX idx_samples_2 ON barcodes.samples ( created_by );
+
+CREATE INDEX idx_samples_0 ON barcodes.samples ( sample_set_id );
 
 COMMENT ON COLUMN barcodes.samples.sample_type IS 'The type of sample collected (stool, soil, etc)';
 
@@ -243,15 +247,6 @@ CREATE INDEX idx_protocol_runs ON barcodes.protocol_settings ( created_by );
 CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_barcode );
 
 CREATE INDEX idx_protocol_runs_2 ON barcodes.protocol_settings ( sample_id );
-
-CREATE TABLE barcodes.sample_set_sample ( 
-	sample_id            bigint  NOT NULL,
-	sample_set_id        bigint  NOT NULL,
-	CONSTRAINT pk_project_sample UNIQUE ( sample_id ) ,
-	CONSTRAINT project_barcode_pkey PRIMARY KEY ( sample_set_id, sample_id ),
-	CONSTRAINT fk_project_sample FOREIGN KEY ( sample_id ) REFERENCES barcodes.samples( sample_id )    ,
-	CONSTRAINT fk_sample_set_sample FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
- );
 
 CREATE TABLE barcodes.pcr_settings ( 
 	protocol_settings_id bigint  NOT NULL,
