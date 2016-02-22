@@ -1,6 +1,7 @@
 |Build Status| |Coverage Status|
 
-# Plate Mapper
+Plate Mapper
+============
 
 Sample and run tracker for internal Knight Lab use.
 
