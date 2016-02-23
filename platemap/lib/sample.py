@@ -138,8 +138,7 @@ class Sample(PMObject):
                 if check_barcode_assigned(barcode):
                     raise ValueError('Barcode %s already assigned!' % barcode)
                 TRN.add(barcode_sql, [barcode])
-            TRN.execute()
-            return cls(sample_id)
+        return cls(sample_id)
 
     @staticmethod
     def exists(name, sample_set):

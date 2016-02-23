@@ -47,10 +47,10 @@ class TestUtil(TestCase):
             check_barcode_assigned('100000001')
 
     def test_rollback_tests(self):
-        # Create decorated test function that adds a table
         @rollback_tests()
-        def testfunc():
-            pass
+        class TestClass(TestCase):
+            def testfunc():
+                pass
 
 
 if __name__ == '__main__':

@@ -37,11 +37,9 @@ class TestSample(TestCase):
             platemap.lib.Sample.search()
 
     def test_create(self):
-        start = datetime.now()
         obs = platemap.lib.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
             platemap.lib.person.Person(3))
-        end = datetime.now()
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
@@ -51,15 +49,13 @@ class TestSample(TestCase):
         self.assertEqual(obs.last_scanned_by, 'Third test person')
         self.assertEqual(obs.projects, None)
         self.assertEqual(obs.barcode, None)
-        self.assertTrue(start < obs.created_on < end)
-        self.assertTrue(start < obs.last_scanned_on < end)
+        self.assertTrue(isinstance(obs.created_on, datetime))
+        self.assertTrue(isinstance(obs.last_scanned, datetime))
 
     def test_create_with_barcode(self):
-        start = datetime.now()
         obs = platemap.lib.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
             platemap.lib.person.Person(3), barcode='000000006')
-        end = datetime.now()
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
@@ -70,15 +66,13 @@ class TestSample(TestCase):
         self.assertEqual(obs.projects, None)
         self.assertEqual(obs.barcode, '000000006')
         self.assertTrue(platemap.lib.util.check_barcode_assigned('000000006'))
-        self.assertTrue(start < obs.created_on < end)
-        self.assertTrue(start < obs.last_scanned_on < end)
+        self.assertTrue(isinstance(obs.created_on, datetime))
+        self.assertTrue(isinstance(obs.last_scanned, datetime))
 
     def test_create_with_projects(self):
-        start = datetime.now()
         obs = platemap.lib.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
             platemap.lib.person.Person(3), projects=['Project 1', 'Project 2'])
-        end = datetime.now()
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
@@ -88,9 +82,8 @@ class TestSample(TestCase):
         self.assertEqual(obs.last_scanned_by, 'Third test person')
         self.assertEqual(obs.projects, ['Project 1', 'Project 2'])
         self.assertEqual(obs.barcode, None)
-        self.assertTrue(platemap.lib.util.check_barcode_assigned('000000006'))
-        self.assertTrue(start < obs.created_on < end)
-        self.assertTrue(start < obs.last_scanned_on < end)
+        self.assertTrue(isinstance(obs.created_on, datetime))
+        self.assertTrue(isinstance(obs.last_scanned, datetime))
 
     def test_create_used_barcode(self):
         with self.assertRaises(ValueError):
