@@ -6,9 +6,6 @@
 # Change to FALSE in a production system
 TEST_ENVIRONMENT = TRUE
 
-# The URL where the site is served from
-BASE_URL = http://localhost:8888
-
 # The value used to secure cookies used for user sessions. A suitable value can
 # be generated with:
 #
