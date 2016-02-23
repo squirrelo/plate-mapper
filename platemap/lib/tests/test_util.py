@@ -1,7 +1,7 @@
 from unittest import TestCase, main
 from platemap.lib.util import (
     check_barcode_assigned, convert_from_id, convert_to_id, get_count,
-    rollback_transaction)
+    rollback_tests)
 from platemap.lib.sql_connection import TRN
 
 
@@ -50,7 +50,7 @@ class TestUtil(TestCase):
 
     def test_rollback_transaction(self):
         # Create decorated test function that adds a table
-        @rollback_transaction
+        @rollback_tests
         def testfunc():
             with TRN:
                 sql = 'CREATE TABLE barcodes.rollback(test varchar NOT NULL)'

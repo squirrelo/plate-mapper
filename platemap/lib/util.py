@@ -135,11 +135,11 @@ def rollback_tests():
         # Now, we decorate the setup and teardown functions
         class DecoratedClass(cls):
             def setUp(self):
+                # Add one extra context so we can rollback in tearDown
                 TRN._contexts_entered = 1
                 super(DecoratedClass, self).setUp()
 
             def tearDown(self):
-                print("rollback!")
                 TRN.rollback()
                 TRN.__exit__(None, None, None)
                 super(DecoratedClass, self).tearDown()
