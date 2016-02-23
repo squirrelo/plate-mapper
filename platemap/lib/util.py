@@ -132,7 +132,16 @@ def check_barcode_assigned(barcode):
 def rollback_tests():
     """Decorator for rolling back tests as they finish"""
     def class_modifier(cls):
-        # Now, we decorate the setup and teardown functions
+        with TRN:
+            # First, we check that we are not in a production environment
+            TRN.add("SELECT test FROM barcodes.settings")
+            test_db = TRN.execute_fetchlast()
+            if not test_db:
+                raise RuntimeError("Working in a production environment. Not "
+                                   "executing the tests to keep the production"
+                                   " database safe.")
+
+        # Now alter TRN so that it rolls back in test classes
         class DecoratedClass(cls):
             def setUp(self):
                 # Add one extra context so we can rollback in tearDown
@@ -140,9 +149,8 @@ def rollback_tests():
                 super(DecoratedClass, self).setUp()
 
             def tearDown(self):
+                super(DecoratedClass, self).tearDown()
                 TRN.rollback()
                 TRN.__exit__(None, None, None)
-                super(DecoratedClass, self).tearDown()
-
         return DecoratedClass
     return class_modifier

@@ -143,6 +143,7 @@ CREATE TABLE barcodes.settings (
  );
 
 COMMENT ON COLUMN barcodes.settings.test IS 'Whether test environment or not.';
+INSERT INTO barcodes.settings (test) VALUES ('F');
 
 CREATE TABLE barcodes."user" ( 
 	username             varchar  NOT NULL,

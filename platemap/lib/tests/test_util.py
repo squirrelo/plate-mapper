@@ -48,9 +48,9 @@ class TestUtil(TestCase):
         with self.assertRaises(ValueError):
             check_barcode_assigned('100000001')
 
-    def test_rollback_transaction(self):
+    def test_rollback_tests(self):
         # Create decorated test function that adds a table
-        @rollback_tests
+        @rollback_tests()
         def testfunc():
             with TRN:
                 sql = 'CREATE TABLE barcodes.rollback(test varchar NOT NULL)'
