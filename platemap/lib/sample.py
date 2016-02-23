@@ -12,8 +12,7 @@ from .exceptions import DeveloperError, DuplicateError, AssignError
 
 
 class Sample(PMObject):
-    _table = 'samples'
-    _id_col = 'sample'
+    _table = 'sample'
 
     @classmethod
     def search(cls, biomass_remaining=None, sample_type=None, barcode=None,
@@ -57,7 +56,7 @@ class Sample(PMObject):
         joins = []
         wheres = []
         sql_args = []
-        sql = 'SELECT sample_id FROM barcodes.samples'
+        sql = 'SELECT sample_id FROM barcodes.sample'
         if biomass_remaining is not None:
             wheres.append('biomass_remaining = %s')
             sql_args.append(biomass_remaining)
@@ -82,13 +81,13 @@ class Sample(PMObject):
             return [cls(s) for s in TRN.execute_fetchflatten()]
 
     @classmethod
-    def create(cls, external_name, sample_type, sample_location, sample_set,
+    def create(cls, name, sample_type, sample_location, sample_set,
                person, projects=None, barcode=None):
         """Creates a new sample in the database
 
         Parameters
         ----------
-        external_name : str
+        name : str
             Common name of the sample
         sample_type : str
             What the sample is (stool, etc)
@@ -108,45 +107,42 @@ class Sample(PMObject):
         Sample object
             The new sample
         """
-        sample_sql = """INSERT INTO barcodes.samples
-                        (external_name, barcode, sample_type, sample_location,
-                         created_by, last_scanned_by)
-                        VALUES (%s,%s,%s,%s,%s,%s)
+        sample_sql = """INSERT INTO barcodes.sample
+                        (sample, barcode, sample_type, sample_location,
+                         sample_set_id, created_by, last_scanned_by)
+                        VALUES (%s,%s,%s,%s,%s,%s, %s)
                         RETURNING sample_id
                      """
-        sample_set_sql = """INSERT INTO barcodes.sample_set_sample
-                            (sample_id, sample_set_id)
-                            VALUES (%s, %s)"""
-        project_sql = """INSERT INTO barcodes.project_external_name
-                         (external_name, project_id)
+        project_sql = """INSERT INTO barcodes.project_samples
+                         (sample_id, project_id)
                          VALUES (%s,%s)"""
         barcode_sql = """UPDATE barcodes.barcode
                          SET assigned_on = NOW()
                          WHERE barcode = %s
                       """
         with TRN:
-            if cls.exists(external_name, barcode):
-                raise DuplicateError(external_name, 'samples')
+            if cls.exists(name, sample_set):
+                raise DuplicateError(name, 'samples')
 
-            TRN.add(sample_sql, [external_name, barcode, sample_type,
-                                 sample_location, person.id, person.id])
+            sample_set_id = convert_to_id(sample_set, 'sample_set')
+            TRN.add(sample_sql, [name, barcode, sample_type, sample_location,
+                                 sample_set_id, person.id, person.id])
             sample_id = TRN.execute_fetchlast()
 
-            TRN.add(sample_set_sql, [sample_id, convert_to_id(
-                sample_set, 'barcodes.sample_sets')])
-
             if projects is not None:
-                pids = [(external_name, convert_to_id(p, 'barcodes.projects'))
+                pids = [(sample_id, convert_to_id(p, 'barcodes.projects'))
                         for p in projects]
                 TRN.add(project_sql, pids, many=True)
 
             if barcode is not None:
+                if check_barcode_assigned(barcode):
+                    raise ValueError('Barcode %s already assigned!' % barcode)
                 TRN.add(barcode_sql, [barcode])
             TRN.execute()
             return cls(sample_id)
 
     @staticmethod
-    def exists(external_name, barcode=None):
+    def exists(name, sample_set):
         pass
 
     @staticmethod
@@ -155,7 +151,7 @@ class Sample(PMObject):
 
     # ----------Properties---------------
     def _get_property(self, column):
-        sql = "Select {} from barcodes.samples WHERE sample_id = %s".format(
+        sql = "Select {} from barcodes.sample WHERE sample_id = %s".format(
             column)
         with TRN:
             TRN.add(sql, [self.id])
@@ -163,7 +159,7 @@ class Sample(PMObject):
 
     @property
     def name(self):
-        return self._get_property('external_name')
+        return self._get_property('sample')
 
     @property
     def barcode(self):
@@ -231,7 +227,7 @@ class Sample(PMObject):
             Projects the sample is associated with
         """
         sql = """SELECT DISTINCT project
-                 FROM barcodes.samples
+                 FROM barcodes.sample
                  LEFT JOIN barcodes.project_sample USING (sample_id)
                  LEFT JOIN barcodes.project_barcode USING (barcode)
                  LEFT JOIN barcodes.projects USING (project_id)

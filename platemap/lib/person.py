@@ -5,7 +5,8 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from platemap.lib.sample import Sample
-from platemap.lib.person import Person
+from .base import PMObject
 
-__all__ = ['Sample', 'Person']
+
+class Person(PMObject):
+    _table = 'person'

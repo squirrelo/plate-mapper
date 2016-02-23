@@ -5,7 +5,6 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from contextlib import contextmanager
 from itertools import chain
 from functools import wraps
 
@@ -50,6 +49,7 @@ class Transaction(object):
         self._results = []
         self._contexts_entered = 0
         self._connection = None
+        self._cursor = None
         self._post_commit_funcs = []
         self._post_rollback_funcs = []
 
@@ -96,30 +96,14 @@ class Transaction(object):
         if self._connection is not None:
             self._connection.close()
 
-    @contextmanager
-    def _get_cursor(self):
-        """Returns a postgres cursor
-
-        Returns
-        -------
-        psycopg2.cursor
-            The psycopg2 cursor
-
-        Raises
-        ------
-        RuntimeError
-            if the cursor cannot be created
-        """
-        self._open_connection()
-
-        try:
-            with self._connection.cursor(cursor_factory=DictCursor) as cur:
-                yield cur
-        except PostgresError as e:
-            raise RuntimeError("Cannot get postgres cursor: %s" % e)
-
     def __enter__(self):
         self._open_connection()
+        if self._cursor is None:
+            try:
+                self._cursor = self._connection.cursor(
+                    cursor_factory=DictCursor)
+            except PostgresError as e:
+                raise RuntimeError("Cannot get postgres cursor: %s" % e)
         self._contexts_entered += 1
         return self
 
@@ -139,6 +123,8 @@ class Transaction(object):
             # There are no queries to be executed, however, the transaction
             # is still not committed. Commit it so the changes are not lost
             self.commit()
+        self._cursor.close()
+        self._cursor = None
 
     def __exit__(self, exc_type, exc_value, traceback):
         # We only need to perform some action if this is the last context
@@ -213,34 +199,32 @@ class Transaction(object):
         that we catch any exception that happens in here and we rollback the
         transaction
         """
-        with self._get_cursor() as cur:
-            cur.execute('SET search_path TO ag, barcodes, public')
-            for sql, sql_args in self._queries:
-                # Execute the current SQL command
-                try:
-                    cur.execute(sql, sql_args)
-                except Exception as e:
-                    # We catch any exception as we want to make sure that we
-                    # rollback every time that something went wrong
-                    self._raise_execution_error(sql, sql_args, e)
+        for sql, sql_args in self._queries:
+            # Execute the current SQL command
+            try:
+                self._cursor.execute(sql, sql_args)
+            except Exception as e:
+                # We catch any exception as we want to make sure that we
+                # rollback every time that something went wrong
+                self._raise_execution_error(sql, sql_args, e)
 
-                try:
-                    res = cur.fetchall()
-                except ProgrammingError as e:
-                    # At this execution point, we don't know if the sql query
-                    # that we executed should retrieve values from the database
-                    # If the query was not supposed to retrieve any value
-                    # (e.g. an INSERT without a RETURNING clause), it will
-                    # raise a ProgrammingError. Otherwise it will just return
-                    # an empty list
-                    res = None
-                except PostgresError as e:
-                    # Some other error happened during the execution of the
-                    # query, so we need to rollback
-                    self._raise_execution_error(sql, sql_args, e)
+            try:
+                res = self._cursor.fetchall()
+            except ProgrammingError as e:
+                # At this execution point, we don't know if the sql query
+                # that we executed should retrieve values from the database
+                # If the query was not supposed to retrieve any value
+                # (e.g. an INSERT without a RETURNING clause), it will
+                # raise a ProgrammingError. Otherwise it will just return
+                # an empty list
+                res = None
+            except PostgresError as e:
+                # Some other error happened during the execution of the
+                # query, so we need to rollback
+                self._raise_execution_error(sql, sql_args, e)
 
-                # Store the results of the current query
-                self._results.append(res)
+            # Store the results of the current query
+            self._results.append(res)
 
         # wipe out the already executed queries
         self._queries = []

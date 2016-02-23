@@ -95,7 +95,7 @@ def get_count(table):
     int
     """
     with TRN:
-        sql = "SELECT count(1) FROM %s" % table
+        sql = "SELECT count(1) FROM barcodes.%s" % table
         TRN.add(sql)
         return TRN.execute_fetchlast()
 

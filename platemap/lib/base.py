@@ -38,7 +38,6 @@ class PMObject(object):
     """
 
     _table = None
-    _id_col = None
 
     @classmethod
     def create(cls):
@@ -110,7 +109,7 @@ class PMObject(object):
         with TRN:
             sql = """SELECT EXISTS(
                         SELECT * FROM barcodes.{0}
-                        WHERE {1}_id=%s)""".format(self._table, self._id_col)
+                        WHERE {0}_id=%s)""".format(self._table)
             TRN.add(sql, [id_])
             return TRN.execute_fetchlast()
 
