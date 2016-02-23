@@ -5,8 +5,6 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from functools import wraps
-
 from .sql_connection import TRN
 
 
@@ -131,11 +129,20 @@ def check_barcode_assigned(barcode):
         return False if barcode_info[0]['assigned_on'] is None else True
 
 
-def rollback_transaction(f):
-    """Decorator to roll back work done in a transaction. Useful for testing"""
-    @wraps(f)
-    def inner(*args, **kwargs):
-        with TRN:
-            f(*args, **kwargs)
-            TRN.rollback()
-    return inner
+def rollback_tests():
+    """Decorator for rolling back tests as they finish"""
+    def class_modifier(cls):
+        # Now, we decorate the setup and teardown functions
+        class DecoratedClass(cls):
+            def setUp(self):
+                TRN._contexts_entered = 1
+                super(DecoratedClass, self).setUp()
+
+            def tearDown(self):
+                print("rollback!")
+                TRN.rollback()
+                TRN.__exit__(None, None, None)
+                super(DecoratedClass, self).tearDown()
+
+        return DecoratedClass
+    return class_modifier

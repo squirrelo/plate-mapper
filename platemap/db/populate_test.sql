@@ -28,6 +28,6 @@ INSERT INTO barcodes.plate (plate_barcode, plate, created_on, finalized, person_
 INSERT INTO barcodes.plates_samples (plate_barcode, sample_id, plate_row, plate_col) VALUES
 ('000000003', 1, 1, 1), ('000000003', 2, 1, 2), ('000000003', 3, 1, 3);
 
-INSERT INTO barcodes.project_sample_sets (sample_set_id, project_id) VALUES (1, 1), (2, 1), (2, 2);
+INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (2, 2);
 
 INSERT INTO barcodes.project_barcodes (project_id, barcode) VALUES (1, '000000001'), (1, '000000002'), (3, '000000004');

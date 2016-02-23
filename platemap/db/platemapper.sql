@@ -138,6 +138,12 @@ CREATE TABLE barcodes.sample_set (
 
 COMMENT ON TABLE barcodes.sample_set IS 'Distinct set of samples that must have unique sample names in them';
 
+CREATE TABLE barcodes.settings ( 
+	test                 bool DEFAULT 'F' NOT NULL
+ );
+
+COMMENT ON COLUMN barcodes.settings.test IS 'Whether test environment or not.';
+
 CREATE TABLE barcodes."user" ( 
 	username             varchar  NOT NULL,
 	pass                 varchar(36)  NOT NULL,
@@ -178,18 +184,6 @@ COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane 
 
 COMMENT ON COLUMN barcodes.pool.pool IS 'Name of the pool';
 
-CREATE TABLE barcodes.project_sample_sets ( 
-	sample_set_id        bigint  NOT NULL,
-	project_id           bigint  NOT NULL,
-	CONSTRAINT idx_projet_sample_set PRIMARY KEY ( sample_set_id, project_id ),
-	CONSTRAINT fk_project_sample_set FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    ,
-	CONSTRAINT fk_project_sample_set_0 FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
- );
-
-CREATE INDEX idx_project_sample_set ON barcodes.project_sample_sets ( sample_set_id );
-
-CREATE INDEX idx_project_sample_set_0 ON barcodes.project_sample_sets ( project_id );
-
 CREATE TABLE barcodes.sample ( 
 	sample_id            bigserial  NOT NULL,
 	sample               varchar(100)  NOT NULL,
@@ -202,15 +196,15 @@ CREATE TABLE barcodes.sample (
 	created_by           bigint  NOT NULL,
 	last_scanned         timestamp DEFAULT current_timestamp NOT NULL,
 	last_scanned_by      bigint  NOT NULL,
+	CONSTRAINT idx_samples UNIQUE ( barcode ) ,
 	CONSTRAINT pk_samples PRIMARY KEY ( sample_id ),
 	CONSTRAINT pk_samples_0 UNIQUE ( sample ) ,
+	CONSTRAINT idx_sample UNIQUE ( sample_set_id, sample ) ,
 	CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.person( person_id )    ,
 	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
 	CONSTRAINT fk_samples_0 FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
  );
-
-CREATE INDEX idx_samples ON barcodes.sample ( barcode );
 
 CREATE INDEX idx_samples_1 ON barcodes.sample ( last_scanned_by );
 
@@ -239,6 +233,17 @@ CREATE TABLE barcodes.plates_samples (
 CREATE INDEX idx_plate_samples_0 ON barcodes.plates_samples ( sample_id );
 
 CREATE INDEX idx_plate_samples_1 ON barcodes.plates_samples ( plate_barcode );
+
+CREATE TABLE barcodes.project_samples ( 
+	sample_id            bigint  NOT NULL,
+	project_id           bigint  NOT NULL,
+	CONSTRAINT fk_project_sample_set_0 FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
+	CONSTRAINT fk_project_samples FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    
+ );
+
+CREATE INDEX idx_project_sample_set ON barcodes.project_samples ( sample_id );
+
+CREATE INDEX idx_project_sample_set_0 ON barcodes.project_samples ( project_id );
 
 CREATE TABLE barcodes.protocol_settings ( 
 	protocol_settings_id bigserial  NOT NULL,

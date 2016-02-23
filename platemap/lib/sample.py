@@ -130,7 +130,7 @@ class Sample(PMObject):
             sample_id = TRN.execute_fetchlast()
 
             if projects is not None:
-                pids = [(sample_id, convert_to_id(p, 'barcodes.projects'))
+                pids = [(sample_id, convert_to_id(p, 'project'))
                         for p in projects]
                 TRN.add(project_sql, pids, many=True)
 
@@ -215,7 +215,14 @@ class Sample(PMObject):
            str
                Sample set the sample belongs to.
         """
-        return self._get_property('sample_set')
+        sql = """SELECT sample_set
+                 FROM barcodes.sample
+                 JOIN barcodes.sample_set USING (sample_set_id)
+                 WHERE sample_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchlast()
 
     @property
     def projects(self):
@@ -226,23 +233,23 @@ class Sample(PMObject):
         list of str
             Projects the sample is associated with
         """
-        sql = """SELECT DISTINCT project
+        sql = """SELECT project
                  FROM barcodes.sample
-                 LEFT JOIN barcodes.project_sample USING (sample_id)
-                 LEFT JOIN barcodes.project_barcode USING (barcode)
-                 LEFT JOIN barcodes.projects USING (project_id)
+                 RIGHT JOIN barcodes.project_samples USING (sample_id)
+                 LEFT JOIN barcodes.project USING (project_id)
                  WHERE sample_id = %s
               """
         with TRN:
             TRN.add(sql, [self.id])
-            return TRN.execute_fetchflatten()
+            projects = TRN.execute_fetchflatten()
+            return None if not projects else projects
 
     @property
     def sample_type(self):
         return self._get_property('sample_type')
 
     @property
-    def sample_location(self):
+    def location(self):
         return self._get_property('sample_location')
 
     @property
@@ -255,7 +262,14 @@ class Sample(PMObject):
 
     @property
     def created_by(self):
-        return self._get_property('created_by')
+        sql = """SELECT name
+                 FROM barcodes.sample S
+                 JOIN barcodes.person P ON (S.created_by = P.person_id)
+                 WHERE sample_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchlast()
 
     @property
     def last_scanned(self):
@@ -263,7 +277,14 @@ class Sample(PMObject):
 
     @property
     def last_scanned_by(self):
-        return self._get_property('last_scanned_by')
+        sql = """SELECT name
+                 FROM barcodes.sample S
+                 JOIN barcodes.person P ON (S.last_scanned_by = P.person_id)
+                 WHERE sample_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchlast()
 
     @property
     def plates(self):
@@ -295,7 +316,7 @@ class Sample(PMObject):
         with TRN:
             if project in self.projects:
                 return
-            pid = convert_to_id(project, 'barcodes.project')
+            pid = convert_to_id(project, 'project')
             TRN.add(sql, [pid, self.id])
             TRN.execute()
 
@@ -304,6 +325,6 @@ class Sample(PMObject):
                  WHERE project_id = %s AND sample_id = %s
               """
         with TRN:
-            pid = convert_to_id(project, 'barcodes.project')
+            pid = convert_to_id(project, 'project')
             TRN.add(sql, [pid, self.id])
             TRN.execute()
