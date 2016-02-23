@@ -10,6 +10,7 @@ install:
   - travis_retry pip install .[test]
 script:
   - export PLATEMAP_CONFIG=`pwd`/platemap/platemap_config.txt.example
+  - echo $PLATEMAP_CONFIG
   - platemap make
   - nosetests --with-doctest --with-coverage
   - flake8 --max-complexity 10 platemap setup.py
