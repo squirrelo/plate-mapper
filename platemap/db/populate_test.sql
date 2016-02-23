@@ -21,13 +21,13 @@ INSERT INTO barcodes.sample_set (sample_set, created_on, created_by) VALUES ('Sa
 INSERT INTO barcodes.sample (sample, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by, sample_set_id, biomass_remaining) VALUES
 ('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1, 'T'),
 ('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1, 1, 'F'),
-('Sample 3', NULL, 'skin', 'the other freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1, 'T'),
+('Sample 3', NULL, 'skin', 'the other freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1, 'F'),
 ('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T');
 
-INSERT INTO barcodes.plate (plate_barcode, plate, created_on, finalized, person_id) VALUES
+INSERT INTO barcodes.plate (plate_id, plate, created_on, finalized, person_id) VALUES
 ('000000003', 'Test plate 1', '2016-02-22 8:55:00', 'F', 1);
 
-INSERT INTO barcodes.plates_samples (plate_barcode, sample_id, plate_row, plate_col) VALUES
+INSERT INTO barcodes.plates_samples (plate_id, sample_id, plate_row, plate_col) VALUES
 ('000000003', 1, 1, 1), ('000000003', 2, 1, 2), ('000000003', 3, 1, 3);
 
 INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (2, 2);

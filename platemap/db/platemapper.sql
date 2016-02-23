@@ -37,18 +37,20 @@ CREATE TABLE barcodes.person (
  );
 
 CREATE TABLE barcodes.plate ( 
-	plate_barcode        varchar  NOT NULL,
+	plate_id             varchar  NOT NULL,
 	plate                varchar(100)  NOT NULL,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	finalized            bool DEFAULT 'F' NOT NULL,
 	person_id            bigint  NOT NULL,
-	CONSTRAINT idx_plates UNIQUE ( plate_barcode ) ,
-	CONSTRAINT pk_plates PRIMARY KEY ( plate_barcode ),
-	CONSTRAINT fk_plates FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.barcode( barcode )    ,
+	CONSTRAINT idx_plates UNIQUE ( plate_id ) ,
+	CONSTRAINT pk_plates PRIMARY KEY ( plate_id ),
+	CONSTRAINT fk_plates FOREIGN KEY ( plate_id ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_plates_0 FOREIGN KEY ( person_id ) REFERENCES barcodes.person( person_id )    
  );
 
 CREATE INDEX idx_plates_0 ON barcodes.plate ( person_id );
+
+COMMENT ON COLUMN barcodes.plate.plate_id IS 'The barcode assigned to the plate';
 
 COMMENT ON COLUMN barcodes.plate.plate IS 'Name of the plate';
 
@@ -222,18 +224,18 @@ COMMENT ON COLUMN barcodes.sample.sample_location IS 'Physical location of sampl
 COMMENT ON COLUMN barcodes.sample.last_scanned_by IS 'Pereson who last scanned the barcode';
 
 CREATE TABLE barcodes.plates_samples ( 
-	plate_barcode        varchar  NOT NULL,
+	plate_id             varchar  NOT NULL,
 	sample_id            bigint  NOT NULL,
 	plate_row            smallint  NOT NULL,
 	plate_col            smallint  NOT NULL,
-	CONSTRAINT idx_plate_samples PRIMARY KEY ( plate_barcode, sample_id ),
+	CONSTRAINT idx_plate_samples PRIMARY KEY ( plate_id, sample_id ),
 	CONSTRAINT fk_plate_samples FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    ,
-	CONSTRAINT fk_plate_samples_0 FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.plate( plate_barcode )    
+	CONSTRAINT fk_plate_samples_0 FOREIGN KEY ( plate_id ) REFERENCES barcodes.plate( plate_id )    
  );
 
 CREATE INDEX idx_plate_samples_0 ON barcodes.plates_samples ( sample_id );
 
-CREATE INDEX idx_plate_samples_1 ON barcodes.plates_samples ( plate_barcode );
+CREATE INDEX idx_plate_samples_1 ON barcodes.plates_samples ( plate_id );
 
 CREATE TABLE barcodes.project_samples ( 
 	sample_id            bigint  NOT NULL,
@@ -255,7 +257,7 @@ CREATE TABLE barcodes.protocol_settings (
 	created_by           bigint  NOT NULL,
 	CONSTRAINT pk_protocol_runs PRIMARY KEY ( protocol_settings_id ),
 	CONSTRAINT fk_protocol_runs FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_protocol_runs_1 FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.plate( plate_barcode )    ,
+	CONSTRAINT fk_protocol_runs_1 FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.plate( plate_id )    ,
 	CONSTRAINT fk_protocol_runs_2 FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    
  );
 

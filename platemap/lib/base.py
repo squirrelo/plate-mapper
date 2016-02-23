@@ -136,10 +136,6 @@ class PMObject(object):
                             "%s" % (id_.__class__.__name__,
                                     self.__class__.__name__))
 
-        if isinstance(id_, (str)):
-            if id_.isdigit():
-                id_ = int(id_)
-
         with TRN:
             self._check_subclass()
             if not self._check_id(id_):

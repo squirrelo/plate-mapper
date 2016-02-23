@@ -9,6 +9,8 @@ from .base import PMObject
 from .util import convert_to_id, check_barcode_assigned
 from .sql_connection import TRN
 from .exceptions import DeveloperError, DuplicateError, AssignError
+from .person import Person
+from .plate import Plate
 
 
 class Sample(PMObject):
@@ -142,11 +144,24 @@ class Sample(PMObject):
 
     @staticmethod
     def exists(name, sample_set):
-        pass
+        sql = """SELECT EXISTS(
+              SELECT *
+              FROM barcodes.sample
+              WHERE sample = %s
+                  AND sample_set_id = %s)
+              """
+        with TRN:
+            try:
+                sample_set_id = convert_to_id(sample_set, 'sample_set')
+            except LookupError:
+                # sample_set given does not exist
+                return False
+            TRN.add(sql, [name, sample_set_id])
+            return TRN.execute_fetchlast()
 
     @staticmethod
     def delete(id_):
-        pass
+        raise NotImplementedError()
 
     # ----------Properties---------------
     def _get_property(self, column):
@@ -261,14 +276,14 @@ class Sample(PMObject):
 
     @property
     def created_by(self):
-        sql = """SELECT name
+        sql = """SELECT person_id
                  FROM barcodes.sample S
                  JOIN barcodes.person P ON (S.created_by = P.person_id)
                  WHERE sample_id = %s
               """
         with TRN:
             TRN.add(sql, [self.id])
-            return TRN.execute_fetchlast()
+            return Person(TRN.execute_fetchlast())
 
     @property
     def last_scanned(self):
@@ -276,24 +291,24 @@ class Sample(PMObject):
 
     @property
     def last_scanned_by(self):
-        sql = """SELECT name
+        sql = """SELECT person_id
                  FROM barcodes.sample S
                  JOIN barcodes.person P ON (S.last_scanned_by = P.person_id)
                  WHERE sample_id = %s
               """
         with TRN:
             TRN.add(sql, [self.id])
-            return TRN.execute_fetchlast()
+            return Person(TRN.execute_fetchlast())
 
     @property
     def plates(self):
-        sql = """SELECT plate_barcode
+        sql = """SELECT plate_id
                  FROM barcodes.plates_samples
                  WHERE sample_id = %s
               """
         with TRN:
             TRN.add(sql, [self.id])
-            return TRN.execute_fetchflatten()
+            return [Plate(p) for p in TRN.execute_fetchflatten()]
 
     @property
     def protocols(self):
