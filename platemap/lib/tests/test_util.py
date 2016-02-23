@@ -2,11 +2,9 @@ from unittest import TestCase, main
 from platemap.lib.util import (
     check_barcode_assigned, convert_from_id, convert_to_id, get_count,
     rollback_tests)
-from platemap.lib.sql_connection import TRN
 
 
 class TestUtil(TestCase):
-
     def test_convert_to_id(self):
         obs = convert_to_id('Project 2', 'project')
         self.assertEqual(obs, 2)
@@ -52,20 +50,7 @@ class TestUtil(TestCase):
         # Create decorated test function that adds a table
         @rollback_tests()
         def testfunc():
-            with TRN:
-                sql = 'CREATE TABLE barcodes.rollback(test varchar NOT NULL)'
-                TRN.add(sql)
-                TRN.execute()
-
-        # Make sure that table does not exist once function completes
-        testfunc()
-        with TRN:
-            sql = """SELECT *
-                     FROM information_schema.tables
-                     WHERE table_schema = 'barcodes'"""
-            TRN.add(sql)
-            obs = TRN.execute_fetchflatten()
-            self.assertNotIn('rollback', obs)
+            pass
 
 
 if __name__ == '__main__':

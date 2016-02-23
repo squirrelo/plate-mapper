@@ -13,23 +13,6 @@ from platemap.lib.config_manager import pm_config
 from platemap.lib.sql_connection import TRN
 
 
-def _check_db_exists(db, conn_handler):
-    """Checks if the database db exists on the postgres server
-
-    Parameters
-    ----------
-    db : str
-        The database
-    conn_handler : SQLConnectionHandler
-        The connection to the database
-    """
-    conn_handler.execute('SELECT datname FROM pg_database')
-    dbs = conn_handler.fetchall()
-
-    # It's a list of tuples, so just create the tuple to check if exists
-    return (db,) in dbs
-
-
 def make_database():
     """Creates the database on the system"""
     # Connect to the postgres server
@@ -41,7 +24,11 @@ def make_database():
 
     with connection.cursor() as c:
         # Check that it does not already exists
-        if _check_db_exists(pm_config.database, c):
+        c.execute('SELECT datname FROM pg_database')
+        dbs = c.fetchall()
+
+        # It's a list of tuples, so just create the tuple to check if exist
+        if (pm_config.database,) in dbs:
             raise EnvironmentError(
                 "Database %s already present on the system" %
                 pm_config.database)
@@ -61,10 +48,12 @@ def make_environment(test=False):
         Whether the environment will be set up as test or not. Default False
     """
     with TRN:
+        print('Creating schema')
         with open(join(dirname(abspath(__file__)), '..', 'db',
                        'platemapper.sql')) as f:
             TRN.add(f.read())
         if test:
+            print('Populating test data')
             with open(join(dirname(abspath(__file__)), '..', 'db',
                       'populate_test.sql')) as f:
                 TRN.add(f.read())
