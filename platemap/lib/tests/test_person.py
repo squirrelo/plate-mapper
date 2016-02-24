@@ -140,16 +140,24 @@ class TestUser(TestCase):
         self.assertFalse(self.user1.authenticate('BADPASS'))
 
     def test_check_access(self):
-        pass
+        self.assertTrue(self.user1.check_access('Create samples'))
 
     def test_check_access_no_access(self):
-        pass
+        self.assertFalse(self.user1.check_access('Create runs'))
 
     def test_add_access(self):
-        pass
+        self.user1.add_access(['Create samples'])
+        self.assertEqual(self.user1.access, 7)
+
+        self.user1.add_access(['Generate prep metadata', 'Create runs'])
+        self.assertEqual(self.user1.access, 55)
 
     def test_remove_access(self):
-        pass
+        self.user1.remove_access(['Generate prep metadata'])
+        self.assertEqual(self.user1.access, 7)
+
+        self.user1.remove_access(['Generate prep metadata', 'Edit samples'])
+        self.assertEqual(self.user1.access, 3)
 
 
 if __name__ == "__main__":

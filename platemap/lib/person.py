@@ -313,24 +313,54 @@ class User(PMObject):
         bool
             If the action is allowed (True) or not (False)
         """
-        pass
+        sql = """SELECT (access & (
+                    SELECT access_value
+                    FROM barcodes.access_controls
+                    WHERE access_level = %s)
+                 ) != 0
+                 FROM barcodes.user
+                 WHERE user_id = %s
+              """
+        with TRN:
+            TRN.add(sql, [action, self.id])
+            return TRN.execute_fetchlast()
 
-    def add_access(self, action):
+    def add_access(self, actions):
         """Adds ability for user to do action
 
         Parameters
         ----------
-        action : str
-            action to add access for
+        action : list of str
+            actions to add access for
         """
-        pass
+        sql = """UPDATE barcodes.user SET access = access + (
+                     SELECT SUM(access_value)
+                     FROM barcodes.access_controls
+                     WHERE access_level IN %s)
+                 WHERE user_id = %s
+              """
+        with TRN:
+            # Only add actions the user does not already have access to
+            add = [a for a in actions if not self.check_access(a)]
+            if add:
+                TRN.add(sql, [tuple(add), self.id])
 
-    def remove_access(self, action):
+    def remove_access(self, actions):
         """Removes ability for user to do action
 
         Parameters
         ----------
-        action : str
+        action : lsit of str
             action to remove access for
         """
-        pass
+        sql = """UPDATE barcodes.user SET access = access - (
+                     SELECT SUM(access_value)
+                     FROM barcodes.access_controls
+                     WHERE access_level IN %s)
+                 WHERE user_id = %s
+              """
+        with TRN:
+            # Make sure only removing actions the user has access to
+            remove = [a for a in actions if self.check_access(a)]
+            if remove:
+                TRN.add(sql, [tuple(remove), self.id])
