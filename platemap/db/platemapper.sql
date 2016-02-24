@@ -1,7 +1,7 @@
 CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
-	access_level         varchar(10)  NOT NULL,
+	access_level         varchar(30)  NOT NULL,
 	access_value         integer  NOT NULL,
 	CONSTRAINT pk_access_controls PRIMARY KEY ( access_level )
  );
@@ -148,16 +148,20 @@ COMMENT ON COLUMN barcodes.settings.test IS 'Whether test environment or not.';
 INSERT INTO barcodes.settings (test) VALUES ('F');
 
 CREATE TABLE barcodes."user" ( 
-	username             varchar  NOT NULL,
-	pass                 varchar(36)  NOT NULL,
+	user_id              varchar  NOT NULL,
+	pass                 varchar(60)  NOT NULL,
 	person_id            integer  NOT NULL,
 	"access"             integer  NOT NULL,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
-	CONSTRAINT pk_users PRIMARY KEY ( username ),
+	CONSTRAINT pk_users PRIMARY KEY ( user_id ),
 	CONSTRAINT fk_users FOREIGN KEY ( person_id ) REFERENCES barcodes.person( person_id )    
  );
 
 CREATE INDEX idx_users ON barcodes."user" ( person_id );
+
+COMMENT ON COLUMN barcodes."user".user_id IS 'username of the user';
+
+COMMENT ON COLUMN barcodes."user".pass IS 'bcrypt hashed password';
 
 COMMENT ON COLUMN barcodes."user"."access" IS 'What access the user is allowed';
 

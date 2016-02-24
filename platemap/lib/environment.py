@@ -52,6 +52,10 @@ def make_environment(test=False):
         with open(join(dirname(abspath(__file__)), '..', 'db',
                        'platemapper.sql')) as f:
             TRN.add(f.read())
+        print('Initializing schema')
+        with open(join(dirname(abspath(__file__)), '..', 'db',
+                       'initialize.sql')) as f:
+            TRN.add(f.read())
         if test:
             print('Populating test data')
             with open(join(dirname(abspath(__file__)), '..', 'db',
