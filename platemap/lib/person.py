@@ -45,7 +45,7 @@ class Person(PMObject):
             if cls.exists(email):
                 raise DuplicateError(email, 'person')
 
-            TRN.add(sql, [name, email, address, affiliation, phone])
+            TRN.add(sql, [name, email.lower(), address, affiliation, phone])
             person_id = TRN.execute_fetchlast()
             return cls(person_id)
 
@@ -80,10 +80,10 @@ class Person(PMObject):
             If the person exists (True) or not (False)
         """
         sql = """SELECT EXISTS(
-                 SELECT * FROM barcodes.person WHERE email = %s)
+                 SELECT * FROM barcodes.person WHERE LOWER(email) = %s)
               """
         with TRN:
-            TRN.add(sql, [email])
+            TRN.add(sql, [email.lower()])
             return TRN.execute_fetchlast()
 
     def _get_property_person(self, column):
@@ -93,13 +93,19 @@ class Person(PMObject):
             TRN.add(sql, [self.id])
             return TRN.execute_fetchlast()
 
+    def _set_property_person(self, column, value):
+        sql = "UPDATE barcodes.person SET {} = %s WHERE person_id = %s".format(
+            column)
+        with TRN:
+            TRN.add(sql, [value, self.id])
+
     @property
     def name(self):
         return self._get_property_person('name')
 
     @name.setter
     def name(self, name):
-        return self._name
+        self._set_property_person('name', name)
 
     @property
     def email(self):
@@ -107,7 +113,7 @@ class Person(PMObject):
 
     @email.setter
     def email(self, email):
-        return self._email
+        self._set_property_person('email', email)
 
     @property
     def address(self):
@@ -115,7 +121,7 @@ class Person(PMObject):
 
     @address.setter
     def address(self, address):
-        return self._address
+        self._set_property_person('address', address)
 
     @property
     def affiliation(self):
@@ -123,7 +129,7 @@ class Person(PMObject):
 
     @affiliation.setter
     def affiliation(self, affiliation):
-        return self._affiliation
+        self._set_property_person('affiliation', affiliation)
 
     @property
     def phone(self):
@@ -131,7 +137,7 @@ class Person(PMObject):
 
     @phone.setter
     def phone(self, phone):
-        return self._phone
+        self._set_property_person('phone', phone)
 
 
 class User(PMObject):
