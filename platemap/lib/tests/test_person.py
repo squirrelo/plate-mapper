@@ -6,11 +6,11 @@ import platemap.lib
 @platemap.lib.util.rollback_tests()
 class TestPerson(TestCase):
     def setUp(self):
-        self.person1 = platemap.lib.person.Person(1)
-        self.person2 = platemap.lib.person.Person(2)
+        self.person1 = platemap.lib.Person(1)
+        self.person2 = platemap.lib.Person(2)
 
     def test_create_minimal(self):
-        obs = platemap.lib.person.Person.create('New Person', 'new@foo.bar')
+        obs = platemap.lib.Person.create('New Person', 'new@foo.bar')
 
         self.assertEqual(obs.name, 'New Person')
         self.assertEqual(obs.email, 'new@foo.bar')
@@ -19,7 +19,7 @@ class TestPerson(TestCase):
         self.assertEqual(obs.phone, None)
 
     def test_create_full(self):
-        obs = platemap.lib.person.Person.create(
+        obs = platemap.lib.Person.create(
             'New Person', 'new@foo.bar', '111 fake street', 'UCSD', '112-2222')
 
         self.assertEqual(obs.name, 'New Person')
@@ -32,15 +32,15 @@ class TestPerson(TestCase):
         pass
 
     def test_exists(self):
-        obs = platemap.lib.person.Person.exists('test@foo.bar')
+        obs = platemap.lib.Person.exists('test@foo.bar')
         self.assertTrue(obs)
 
         # Make sure it's case independent
-        obs = platemap.lib.person.Person.exists('TEST@foo.bar')
+        obs = platemap.lib.Person.exists('TEST@foo.bar')
         self.assertTrue(obs)
 
     def test_exists_no_exist(self):
-        obs = platemap.lib.person.Person.exists('NO@EXISTS.com')
+        obs = platemap.lib.Person.exists('NO@EXISTS.com')
         self.assertFalse(obs)
 
     def test_get_name(self):
@@ -84,29 +84,72 @@ class TestPerson(TestCase):
 
 @platemap.lib.util.rollback_tests()
 class TestUser(TestCase):
-    def test_create(self):
-        raise NotImplementedError()
+    def setUp(self):
+        self.user1 = platemap.lib.User('User1')
+
+    def test_create_minimal(self):
+        obs = platemap.lib.User.create('NewUser', 'newpass', 'New Person',
+                                       'new@foo.bar')
+
+        self.assertEqual(obs.id, 'NewUser')
+        self.assertEqual(obs.access, 1)
+        self.assertTrue(obs.authenticate('newpass'))
+
+        person = obs.person
+        self.assertEqual(person.name, 'New Person')
+        self.assertEqual(person.email, 'new@foo.bar')
+        self.assertEqual(person.address, None)
+        self.assertEqual(person.affiliation, None)
+        self.assertEqual(person.phone, None)
+
+    def test_create_full(self):
+        obs = platemap.lib.User.create(
+            'NewUser', 'newpass', 'New Person', 'new@foo.bar',
+            '111 fake street', 'UCSD', '112-2222',
+            ['Create samples', 'Create protocol runs'])
+
+        self.assertEqual(obs.id, 'NewUser')
+        self.assertEqual(obs.access, 11)
+        self.assertTrue(obs.authenticate('newpass'))
+
+        person = obs.person
+        self.assertEqual(person.name, 'New Person')
+        self.assertEqual(person.email, 'new@foo.bar')
+        self.assertEqual(person.address, '111 fake street')
+        self.assertEqual(person.affiliation, 'UCSD')
+        self.assertEqual(person.phone, '112-2222')
 
     def test_delete(self):
-        raise NotImplementedError()
+        pass
 
     def test_exists(self):
-        raise NotImplementedError()
+        self.assertTrue(platemap.lib.User.exists('User1', 'new@email.com'))
+        self.assertTrue(platemap.lib.User.exists('New User', 'test@foo.bar'))
+        self.assertTrue(platemap.lib.User.exists('New User', 'TEST@foo.BAR'))
+
+    def test_exists_no_exist(self):
+        self.assertFalse(platemap.lib.User.exists('New User', 'new@email.com'))
 
     def test_person(self):
-        raise NotImplementedError()
+        self.assertEqual(self.user1.person, platemap.lib.Person(1))
 
     def test_authenticate(self):
-        raise NotImplementedError()
+        self.assertTrue(self.user1.authenticate('password'))
+
+    def test_authenticate_bad_pass(self):
+        self.assertFalse(self.user1.authenticate('BADPASS'))
 
     def test_check_access(self):
-        raise NotImplementedError()
+        pass
+
+    def test_check_access_no_access(self):
+        pass
 
     def test_add_access(self):
-        raise NotImplementedError()
+        pass
 
     def test_remove_access(self):
-        raise NotImplementedError()
+        pass
 
 
 if __name__ == "__main__":

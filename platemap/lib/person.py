@@ -171,31 +171,42 @@ class User(PMObject):
         -------
         User
             New User object
+
+        Raises
+        ------
+        DuplicateError
+            Email or username already exist
         """
         person_sql = """INSERT INTO barcodes.person
                         (name, email, address, affiliation, phone)
                         VALUES (%s,%s,%s,%s,%s) RETURNING person_id
                      """
         user_sql = """INSERT INTO barcodes.user
-                      (username, pass, access, person_id)
+                      (user_id, pass, access, person_id)
                       VALUES (%s,%s,%s, %s) RETURNING user_id
                      """
         access_sql = """SELECT SUM(access_value)
                         FROM barcodes.access_controls
                         WHERE access_level IN %s"""
         with TRN:
-            if cls.exists(email):
-                raise DuplicateError(email, 'person')
+            if cls.exists(username, email):
+                if Person.exists(email):
+                    raise DuplicateError(email, 'person')
+                else:
+                    raise DuplicateError(username, 'user')
 
-            TRN.add(person_sql, [name, email, address, affiliation, phone])
+            TRN.add(person_sql, [name, email.lower(), address, affiliation,
+                    phone])
             person_id = TRN.execute_fetchlast()
 
             # Convert list of access to integer sum for bit shift access checks
             if access is None:
+                # 1 == Basic access
                 access_int = 1
             else:
-                TRN.add(access_sql, access)
-                access_int = TRN.execute_fetchindex()
+                TRN.add(access_sql, [tuple(access)])
+                # Add 1 so don't have to specify basic access
+                access_int = 1 + TRN.execute_fetchlast()
             encrypt_pass = bcrypt.encrypt(password)
             TRN.add(user_sql, [username, encrypt_pass, access_int, person_id])
             user_id = TRN.execute_fetchlast()
@@ -234,12 +245,20 @@ class User(PMObject):
             If the person exists (True) or not (False)
         """
         sql = """SELECT EXISTS(
-                 SELECT count(1) FROM barcodes.username
-                 JOIN barcodes.person_id USING (person_id)
-                 WHERE username = %s AND email = %s)
+                 SELECT * FROM barcodes.user
+                 WHERE user_id = %s)
               """
         with TRN:
-            TRN.add(sql, [username, email])
+            if Person.exists(email):
+                return True
+
+            TRN.add(sql, [username])
+            return TRN.execute_fetchlast()
+
+    def _get_property_user(self, column):
+        sql = "Select {} from barcodes.user WHERE user_id = %s".format(column)
+        with TRN:
+            TRN.add(sql, [self.id])
             return TRN.execute_fetchlast()
 
     @property
@@ -251,10 +270,11 @@ class User(PMObject):
         Person object
             The person object associated with the user
         """
-        sql = "SELECT person_id FROM barcodes.user WHERE username = %s"
-        with TRN:
-            TRN.add(sql, self.id)
-            return Person(TRN.execute_fetchlast())
+        return Person(self._get_property_user('person_id'))
+
+    @property
+    def access(self):
+        return self._get_property_user('access')
 
     # ---------- Functions --------------
     def authenticate(self, password):
@@ -270,7 +290,7 @@ class User(PMObject):
         bool
             If the password matches (True) or not (False)
         """
-        sql = "SELECT pass FROM barcodes.user WHERE username = %s"
+        sql = "SELECT pass FROM barcodes.user WHERE user_id = %s"
         with TRN:
             TRN.add(sql, [self.id])
             row = TRN.execute_fetchindex()

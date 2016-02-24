@@ -46,5 +46,6 @@ setup(name='plate-mapper',
       },
       scripts=glob('scripts/*'),
       extras_require={'test': ["nose >= 0.10.1", "flake8", 'mock']},
-      install_requires=['tornado', 'psycopg2', 'passlib', 'wtforms', 'click'],
+      install_requires=['tornado', 'psycopg2', 'passlib', 'bcrypt', 'wtforms',
+                        'click'],
       classifiers=classifiers)
