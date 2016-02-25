@@ -1,7 +1,7 @@
 CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
-	access_level         varchar(10)  NOT NULL,
+	access_level         varchar(30)  NOT NULL,
 	access_value         integer  NOT NULL,
 	CONSTRAINT pk_access_controls PRIMARY KEY ( access_level )
  );
@@ -57,6 +57,10 @@ COMMENT ON COLUMN barcodes.plate.plate_id IS 'The barcode assigned to the plate'
 COMMENT ON COLUMN barcodes.plate.plate IS 'Name of the plate';
 
 COMMENT ON COLUMN barcodes.plate.person_id IS 'Who plated the samples';
+
+COMMENT ON COLUMN barcodes.plate."rows" IS 'Number of rows on plate';
+
+COMMENT ON COLUMN barcodes.plate.cols IS 'Number of columns on plate';
 
 CREATE TABLE barcodes.primer_set ( 
 	primer_set_id        bigserial  NOT NULL,
@@ -150,16 +154,20 @@ COMMENT ON COLUMN barcodes.settings.test IS 'Whether test environment or not.';
 INSERT INTO barcodes.settings (test) VALUES ('F');
 
 CREATE TABLE barcodes."user" ( 
-	username             varchar  NOT NULL,
-	pass                 varchar(36)  NOT NULL,
+	user_id              varchar  NOT NULL,
+	pass                 varchar(60)  NOT NULL,
 	person_id            integer  NOT NULL,
 	"access"             integer  NOT NULL,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
-	CONSTRAINT pk_users PRIMARY KEY ( username ),
+	CONSTRAINT pk_users PRIMARY KEY ( user_id ),
 	CONSTRAINT fk_users FOREIGN KEY ( person_id ) REFERENCES barcodes.person( person_id )    
  );
 
 CREATE INDEX idx_users ON barcodes."user" ( person_id );
+
+COMMENT ON COLUMN barcodes."user".user_id IS 'username of the user';
+
+COMMENT ON COLUMN barcodes."user".pass IS 'bcrypt hashed password';
 
 COMMENT ON COLUMN barcodes."user"."access" IS 'What access the user is allowed';
 
@@ -230,14 +238,14 @@ CREATE TABLE barcodes.plates_samples (
 	sample_id            bigint  NOT NULL,
 	plate_row            smallint  NOT NULL,
 	plate_col            smallint  NOT NULL,
-	CONSTRAINT idx_plate_samples PRIMARY KEY ( plate_id, sample_id ),
-	CONSTRAINT fk_plate_samples FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    ,
-	CONSTRAINT fk_plate_samples_0 FOREIGN KEY ( plate_id ) REFERENCES barcodes.plate( plate_id )    
+	CONSTRAINT idx_plates_samples_0 UNIQUE ( plate_id, plate_row, plate_col ) ,
+	CONSTRAINT fk_plate_samples_0 FOREIGN KEY ( plate_id ) REFERENCES barcodes.plate( plate_id )    ,
+	CONSTRAINT fk_plates_samples FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    
  );
 
-CREATE INDEX idx_plate_samples_0 ON barcodes.plates_samples ( sample_id );
-
 CREATE INDEX idx_plate_samples_1 ON barcodes.plates_samples ( plate_id );
+
+CREATE INDEX idx_plates_samples ON barcodes.plates_samples ( sample_id );
 
 CREATE TABLE barcodes.project_samples ( 
 	sample_id            bigint  NOT NULL,

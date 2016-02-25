@@ -375,14 +375,6 @@ primer_set_lots ref person ( person_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 915 765 L 922,765 Q 930,765 930,757 L 930,352 Q 930,345 922,345 L 825,345' ></path>
 <text x='922' y='760' transform='rotate(0 922,760)' title='Fk fk_primers_lots_0
 primer_set_lots ref person ( person_id )' style='fill:#cfc391;'>person_id</text>
-<!-- ============= Fk 'user_fk_users' ============= -->
-<path id='user_fk_users'  onmouseover="hghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" onmouseout="uhghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 690 435 L 667,435 Q 660,435 660,427 L 660,412 Q 660,405 652,405 L 645,405' >
-	<title>Fk fk_users
-user ref person ( person_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 690 435 L 667,435 Q 660,435 660,427 L 660,412 Q 660,405 652,405 L 645,405' ></path>
-<text x='638' y='430' transform='rotate(0 638,430)' title='Fk fk_users
-user ref person ( person_id )' style='fill:#cfc391;'>person_id</text>
 <!-- ============= Fk 'project_barcodes_fk_project_barcode_0' ============= -->
 <path id='project_barcodes_fk_project_barcode_0'  onmouseover="hghl(['project_barcodes_fk_project_barcode_0','barcodes.project_barcodes.barcode','barcodes.barcode.barcode'])" onmouseout="uhghl(['project_barcodes_fk_project_barcode_0','barcodes.project_barcodes.barcode','barcodes.barcode.barcode'])" transform='translate(7,0)' class='scene' d='M 45 660 L 22,660 Q 15,660 15,652 L 15,442 Q 15,435 22,435 L 30,435' >
 	<title>Fk fk_project_barcode_0
@@ -463,6 +455,14 @@ sample ref sample_set ( sample_set_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 330 195 L 352,195 Q 360,195 360,202 L 360,367 Q 360,375 352,375 L 262,375 Q 255,375 255,382 L 255,427 Q 255,435 262,435 L 270,435' ></path>
 <text x='337' y='190' transform='rotate(0 337,190)' title='Fk fk_samples_0
 sample ref sample_set ( sample_set_id )' style='fill:#cfc391;'>sample_set_id</text>
+<!-- ============= Fk 'user_fk_users' ============= -->
+<path id='user_fk_users'  onmouseover="hghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" onmouseout="uhghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 690 435 L 667,435 Q 660,435 660,427 L 660,412 Q 660,405 652,405 L 645,405' >
+	<title>Fk fk_users
+user ref person ( person_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 690 435 L 667,435 Q 660,435 660,427 L 660,412 Q 660,405 652,405 L 645,405' ></path>
+<text x='638' y='430' transform='rotate(0 638,430)' title='Fk fk_users
+user ref person ( person_id )' style='fill:#cfc391;'>person_id</text>
 <!-- ============= Fk 'plate_fk_plates' ============= -->
 <path id='plate_fk_plates'  onmouseover="hghl(['plate_fk_plates','barcodes.plate.plate_id','barcodes.barcode.barcode'])" onmouseout="uhghl(['plate_fk_plates','barcodes.plate.plate_id','barcodes.barcode.barcode'])" transform='translate(7,0)' class='scene' d='M 825 135 L 832,135 Q 840,135 840,127 L 840,82 Q 840,75 832,75 L 22,75 Q 15,75 15,82 L 15,427 Q 15,435 22,435 L 30,435' >
 	<title>Fk fk_plates
@@ -479,6 +479,14 @@ plate ref person ( person_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 825 195 L 832,195 Q 840,195 840,202 L 840,210' ></path>
 <text x='832' y='190' transform='rotate(0 832,190)' title='Fk fk_plates_0
 plate ref person ( person_id )' style='fill:#cfc391;'>person_id</text>
+<!-- ============= Fk 'plates_samples_fk_plate_samples_0' ============= -->
+<path id='plates_samples_fk_plate_samples_0'  onmouseover="hghl(['plates_samples_fk_plate_samples_0','barcodes.plates_samples.plate_id','barcodes.plate.plate_id'])" onmouseout="uhghl(['plates_samples_fk_plate_samples_0','barcodes.plates_samples.plate_id','barcodes.plate.plate_id'])" transform='translate(7,0)' class='scene' d='M 585 135 L 660,135' >
+	<title>Fk fk_plate_samples_0
+plates_samples ref plate ( plate_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 585 135 L 660,135' ></path>
+<text x='592' y='130' transform='rotate(0 592,130)' title='Fk fk_plate_samples_0
+plates_samples ref plate ( plate_id )' style='fill:#cfc391;'>plate_id</text>
 <!-- ============= Fk 'plates_samples_fk_plates_samples' ============= -->
 <path id='plates_samples_fk_plates_samples'  onmouseover="hghl(['plates_samples_fk_plates_samples','barcodes.plates_samples.sample_id','barcodes.sample.sample_id'])" onmouseout="uhghl(['plates_samples_fk_plates_samples','barcodes.plates_samples.sample_id','barcodes.sample.sample_id'])" transform='translate(7,0)' class='scene' d='M 435 150 L 330,150' >
 	<title>Fk fk_plates_samples
@@ -487,14 +495,6 @@ plates_samples ref sample ( sample_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 435 150 L 330,150' ></path>
 <text x='383' y='145' transform='rotate(0 383,145)' title='Fk fk_plates_samples
 plates_samples ref sample ( sample_id )' style='fill:#cfc391;'>sample_id</text>
-<!-- ============= Fk 'plates_samples_fk_plates_samples_0' ============= -->
-<path id='plates_samples_fk_plates_samples_0'  onmouseover="hghl(['plates_samples_fk_plates_samples_0','barcodes.plates_samples.plate_id','barcodes.plate.plate_id'])" onmouseout="uhghl(['plates_samples_fk_plates_samples_0','barcodes.plates_samples.plate_id','barcodes.plate.plate_id'])" transform='translate(7,0)' class='scene' d='M 585 135 L 660,135' >
-	<title>Fk fk_plates_samples_0
-plates_samples ref plate ( plate_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1)' marker-end='url(#arrow1)'    d='M 585 135 L 660,135' ></path>
-<text x='592' y='130' transform='rotate(0 592,130)' title='Fk fk_plates_samples_0
-plates_samples ref plate ( plate_id )' style='fill:#cfc391;'>plate_id</text>
 <!-- ============= Table 'pool_samples' ============= -->
 <rect class='table' x='915' y='38' width='180' height='90' rx='7' ry='7' />
 <line class='delim' x1='915.500000' y1='64.500000' x2='1094.500000' y2='64.500000'/>
@@ -610,20 +610,6 @@ bigint</title></a>
   <use id='nn' x='992' y='807' xlink:href='#nn'/><a xlink:href='#pcr_settings.tm50_8_tool'><text id='barcodes.pcr_settings.tm50_8_tool' x='1008' y='817'>tm50_8_tool</text><text x='1215' y='817' text-anchor='end' class='colType'>varchar(40)</text><title>tm50_8_tool
 * varchar(40)</title></a>
 
-<!-- ============= Table 'access_controls' ============= -->
-<rect class='table' x='600' y='518' width='165' height='75' rx='7' ry='7' />
-<line class='delim' x1='600.500000' y1='544.500000' x2='764.500000' y2='544.500000'/>
-<line class='delim' x1='615.500000' y1='544.500000' x2='615.500000' y2='592.500000'/>
-<line class='delim' x1='753.500000' y1='544.500000' x2='753.500000' y2='592.500000'/>
-<path d='M 600.50 544.50 L 600.50 525.50 Q 600.50 518.50 607.50 518.50 L 757.50 518.50 Q 764.50 518.50 764.50 525.50 L 764.50 544.50 L600.50 544.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#access_controls'><text x='636' y='536'>access_controls</text><title>Table barcodes.access_controls
-Track access levels for bitwise comparisons</title></a>
-  <use id='nn' x='602' y='552' xlink:href='#nn'/><a xlink:href='#access_controls.access_level'><use id='pk' x='602' y='551' xlink:href='#pk'/><title>Pk pk_access_controls ( access_level ) </title></a>
-<a xlink:href='#access_controls.access_level'><text id='barcodes.access_controls.access_level' x='618' y='562'>access_level</text><text x='750' y='562' text-anchor='end' class='colType'>varchar(10)</text><title>access_level
-* varchar(10)</title></a>
-  <use id='nn' x='602' y='567' xlink:href='#nn'/><a xlink:href='#access_controls.access_value'><text id='barcodes.access_controls.access_value' x='618' y='577'>access_value</text><text x='750' y='577' text-anchor='end' class='colType'>integer</text><title>access_value
-* integer</title></a>
-
 <!-- ============= Table 'run' ============= -->
 <rect class='table' x='1125' y='203' width='165' height='150' rx='7' ry='7' />
 <line class='delim' x1='1125.500000' y1='229.500000' x2='1289.500000' y2='229.500000'/>
@@ -729,28 +715,6 @@ varchar(100)</title></a>
 varchar</title></a>
   <a xlink:href='#person.phone'><text id='barcodes.person.phone' x='513' y='487'>phone</text><text x='630' y='487' text-anchor='end' class='colType'>varchar(20)</text><title>phone
 varchar(20)</title></a>
-
-<!-- ============= Table 'user' ============= -->
-<rect class='table' x='705' y='368' width='150' height='120' rx='7' ry='7' />
-<line class='delim' x1='705.500000' y1='394.500000' x2='854.500000' y2='394.500000'/>
-<line class='delim' x1='720.500000' y1='394.500000' x2='720.500000' y2='487.500000'/>
-<line class='delim' x1='843.500000' y1='394.500000' x2='843.500000' y2='487.500000'/>
-<path d='M 705.50 394.50 L 705.50 375.50 Q 705.50 368.50 712.50 368.50 L 847.50 368.50 Q 854.50 368.50 854.50 375.50 L 854.50 394.50 L705.50 394.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#user'><text x='765' y='386'>user</text><title>Table barcodes.user</title></a>
-  <use id='nn' x='707' y='402' xlink:href='#nn'/><a xlink:href='#user.username'><use id='pk' x='707' y='401' xlink:href='#pk'/><title>Pk pk_users ( username ) </title></a>
-<a xlink:href='#user.username'><text id='barcodes.user.username' x='723' y='412'>username</text><text x='840' y='412' text-anchor='end' class='colType'>varchar</text><title>username
-* varchar</title></a>
-  <use id='nn' x='707' y='417' xlink:href='#nn'/><a xlink:href='#user.pass'><text id='barcodes.user.pass' x='723' y='427'>pass</text><text x='840' y='427' text-anchor='end' class='colType'>varchar(36)</text><title>pass
-* varchar(36)</title></a>
-  <use id='nn' x='707' y='432' xlink:href='#nn'/><a xlink:href='#user.person_id'><use id='idx' x='707' y='431' xlink:href='#idx'/><title>idx_users ( person_id ) </title></a>
-<a xlink:href='#user.person_id'><text id='barcodes.user.person_id' x='723' y='442' onmouseover="hghl(['user_fk_users'])" onmouseout="uhghl(['user_fk_users'])">person_id</text><text x='840' y='442' text-anchor='end' class='colType'>integer</text><title>person_id
-* integer</title></a>
-<a xlink:href='#user.person_id'><use id='fk' x='843' y='431' xlink:href='#fk'/><title>References person ( person_id ) </title></a>
-  <use id='nn' x='707' y='447' xlink:href='#nn'/><a xlink:href='#user.access'><text id='barcodes.user.access' x='723' y='457'>access</text><text x='840' y='457' text-anchor='end' class='colType'>integer</text><title>access
-* integer
-What access the user is allowed</title></a>
-  <use id='nn' x='707' y='462' xlink:href='#nn'/><a xlink:href='#user.created_on'><text id='barcodes.user.created_on' x='723' y='472'>created_on</text><text x='840' y='472' text-anchor='end' class='colType'>timestamp</text><title>created_on
-* timestamp default current_timestamp</title></a>
 
 <!-- ============= Table 'project_barcodes' ============= -->
 <rect class='table' x='60' y='608' width='120' height='75' rx='7' ry='7' />
@@ -883,12 +847,11 @@ Whether test environment or not.</title></a>
 <path d='M 165.50 139.50 L 165.50 120.50 Q 165.50 113.50 172.50 113.50 L 322.50 113.50 Q 329.50 113.50 329.50 120.50 L 329.50 139.50 L165.50 139.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
 <a xlink:href='#sample'><text x='225' y='131'>sample</text><title>Table barcodes.sample</title></a>
   <use id='nn' x='167' y='147' xlink:href='#nn'/><a xlink:href='#sample.sample_id'><use id='pk' x='167' y='146' xlink:href='#pk'/><title>Pk pk_samples ( sample_id ) </title></a>
-<a xlink:href='#sample.sample_id'><text id='barcodes.sample.sample_id' x='183' y='157' onmouseover="hghl(['project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2','plates_samples_fk_plates_samples','plates_samples_fk_plates_samples'])" onmouseout="uhghl(['project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2','plates_samples_fk_plates_samples','plates_samples_fk_plates_samples'])">sample_id</text><text x='315' y='157' text-anchor='end' class='colType'>bigserial</text><title>sample_id
+<a xlink:href='#sample.sample_id'><text id='barcodes.sample.sample_id' x='183' y='157' onmouseover="hghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='315' y='157' text-anchor='end' class='colType'>bigserial</text><title>sample_id
 * bigserial</title></a>
-<a xlink:href='#sample.sample_id'><use id='ref' x='318' y='146' xlink:href='#ref'/><title>Referred by project_samples ( sample_id ) 
-Referred by protocol_settings ( sample_id ) 
-Referred by plates_samples ( sample_id ) 
-Referred by plates_samples ( sample_id ) </title></a>
+<a xlink:href='#sample.sample_id'><use id='ref' x='318' y='146' xlink:href='#ref'/><title>Referred by plates_samples ( sample_id ) 
+Referred by project_samples ( sample_id ) 
+Referred by protocol_settings ( sample_id ) </title></a>
   <use id='nn' x='167' y='162' xlink:href='#nn'/><a xlink:href='#sample.sample'><use id='unq' x='167' y='161' xlink:href='#unq'/><title>Unq pk_samples_0 ( sample ) Unq idx_sample ( sample_set_id, sample ) </title></a>
 <a xlink:href='#sample.sample'><text id='barcodes.sample.sample' x='183' y='172'>sample</text><text x='315' y='172' text-anchor='end' class='colType'>varchar(100)</text><title>sample
 * varchar(100)
@@ -923,6 +886,44 @@ Physical location of sample tube</title></a>
 Pereson who last scanned the barcode</title></a>
 <a xlink:href='#sample.last_scanned_by'><use id='fk' x='318' y='296' xlink:href='#fk'/><title>References person ( last_scanned_by -&gt; person_id ) </title></a>
 
+<!-- ============= Table 'user' ============= -->
+<rect class='table' x='705' y='368' width='150' height='120' rx='7' ry='7' />
+<line class='delim' x1='705.500000' y1='394.500000' x2='854.500000' y2='394.500000'/>
+<line class='delim' x1='720.500000' y1='394.500000' x2='720.500000' y2='487.500000'/>
+<line class='delim' x1='843.500000' y1='394.500000' x2='843.500000' y2='487.500000'/>
+<path d='M 705.50 394.50 L 705.50 375.50 Q 705.50 368.50 712.50 368.50 L 847.50 368.50 Q 854.50 368.50 854.50 375.50 L 854.50 394.50 L705.50 394.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#user'><text x='765' y='386'>user</text><title>Table barcodes.user</title></a>
+  <use id='nn' x='707' y='402' xlink:href='#nn'/><a xlink:href='#user.user_id'><use id='pk' x='707' y='401' xlink:href='#pk'/><title>Pk pk_users ( user_id ) </title></a>
+<a xlink:href='#user.user_id'><text id='barcodes.user.user_id' x='723' y='412'>user_id</text><text x='840' y='412' text-anchor='end' class='colType'>varchar</text><title>user_id
+* varchar
+username of the user</title></a>
+  <use id='nn' x='707' y='417' xlink:href='#nn'/><a xlink:href='#user.pass'><text id='barcodes.user.pass' x='723' y='427'>pass</text><text x='840' y='427' text-anchor='end' class='colType'>varchar(60)</text><title>pass
+* varchar(60)
+bcrypt hashed password</title></a>
+  <use id='nn' x='707' y='432' xlink:href='#nn'/><a xlink:href='#user.person_id'><use id='idx' x='707' y='431' xlink:href='#idx'/><title>idx_users ( person_id ) </title></a>
+<a xlink:href='#user.person_id'><text id='barcodes.user.person_id' x='723' y='442' onmouseover="hghl(['user_fk_users'])" onmouseout="uhghl(['user_fk_users'])">person_id</text><text x='840' y='442' text-anchor='end' class='colType'>integer</text><title>person_id
+* integer</title></a>
+<a xlink:href='#user.person_id'><use id='fk' x='843' y='431' xlink:href='#fk'/><title>References person ( person_id ) </title></a>
+  <use id='nn' x='707' y='447' xlink:href='#nn'/><a xlink:href='#user.access'><text id='barcodes.user.access' x='723' y='457'>access</text><text x='840' y='457' text-anchor='end' class='colType'>integer</text><title>access
+* integer
+What access the user is allowed</title></a>
+  <use id='nn' x='707' y='462' xlink:href='#nn'/><a xlink:href='#user.created_on'><text id='barcodes.user.created_on' x='723' y='472'>created_on</text><text x='840' y='472' text-anchor='end' class='colType'>timestamp</text><title>created_on
+* timestamp default current_timestamp</title></a>
+
+<!-- ============= Table 'access_controls' ============= -->
+<rect class='table' x='600' y='518' width='165' height='75' rx='7' ry='7' />
+<line class='delim' x1='600.500000' y1='544.500000' x2='764.500000' y2='544.500000'/>
+<line class='delim' x1='615.500000' y1='544.500000' x2='615.500000' y2='592.500000'/>
+<line class='delim' x1='753.500000' y1='544.500000' x2='753.500000' y2='592.500000'/>
+<path d='M 600.50 544.50 L 600.50 525.50 Q 600.50 518.50 607.50 518.50 L 757.50 518.50 Q 764.50 518.50 764.50 525.50 L 764.50 544.50 L600.50 544.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#access_controls'><text x='636' y='536'>access_controls</text><title>Table barcodes.access_controls
+Track access levels for bitwise comparisons</title></a>
+  <use id='nn' x='602' y='552' xlink:href='#nn'/><a xlink:href='#access_controls.access_level'><use id='pk' x='602' y='551' xlink:href='#pk'/><title>Pk pk_access_controls ( access_level ) </title></a>
+<a xlink:href='#access_controls.access_level'><text id='barcodes.access_controls.access_level' x='618' y='562'>access_level</text><text x='750' y='562' text-anchor='end' class='colType'>varchar(30)</text><title>access_level
+* varchar(30)</title></a>
+  <use id='nn' x='602' y='567' xlink:href='#nn'/><a xlink:href='#access_controls.access_value'><text id='barcodes.access_controls.access_value' x='618' y='577'>access_value</text><text x='750' y='577' text-anchor='end' class='colType'>integer</text><title>access_value
+* integer</title></a>
+
 <!-- ============= Table 'plate' ============= -->
 <rect class='table' x='675' y='98' width='150' height='150' rx='7' ry='7' />
 <line class='delim' x1='675.500000' y1='124.500000' x2='824.500000' y2='124.500000'/>
@@ -931,13 +932,12 @@ Pereson who last scanned the barcode</title></a>
 <path d='M 675.50 124.50 L 675.50 105.50 Q 675.50 98.50 682.50 98.50 L 817.50 98.50 Q 824.50 98.50 824.50 105.50 L 824.50 124.50 L675.50 124.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
 <a xlink:href='#plate'><text x='734' y='116'>plate</text><title>Table barcodes.plate</title></a>
   <use id='nn' x='677' y='132' xlink:href='#nn'/><a xlink:href='#plate.plate_id'><use id='pk' x='677' y='131' xlink:href='#pk'/><title>Unq idx_plates ( plate_id ) Pk pk_plates ( plate_id ) </title></a>
-<a xlink:href='#plate.plate_id'><text id='barcodes.plate.plate_id' x='693' y='142' onmouseover="hghl(['plate_fk_plates','protocol_settings_fk_protocol_runs_1','plates_samples_fk_plates_samples_0','plates_samples_fk_plates_samples_0'])" onmouseout="uhghl(['plate_fk_plates','protocol_settings_fk_protocol_runs_1','plates_samples_fk_plates_samples_0','plates_samples_fk_plates_samples_0'])">plate_id</text><text x='810' y='142' text-anchor='end' class='colType'>varchar</text><title>plate_id
+<a xlink:href='#plate.plate_id'><text id='barcodes.plate.plate_id' x='693' y='142' onmouseover="hghl(['plate_fk_plates','plates_samples_fk_plate_samples_0','protocol_settings_fk_protocol_runs_1'])" onmouseout="uhghl(['plate_fk_plates','plates_samples_fk_plate_samples_0','protocol_settings_fk_protocol_runs_1'])">plate_id</text><text x='810' y='142' text-anchor='end' class='colType'>varchar</text><title>plate_id
 * varchar
 The barcode assigned to the plate</title></a>
 <a xlink:href='#plate.plate_id'><use id='fk' x='813' y='131' xlink:href='#fk'/><title>References barcode ( plate_id -&gt; barcode ) 
-Referred by protocol_settings ( plate_barcode -&gt; plate_id ) 
 Referred by plates_samples ( plate_id ) 
-Referred by plates_samples ( plate_id ) </title></a>
+Referred by protocol_settings ( plate_barcode -&gt; plate_id ) </title></a>
   <use id='nn' x='677' y='147' xlink:href='#nn'/><a xlink:href='#plate.plate'><text id='barcodes.plate.plate' x='693' y='157'>plate</text><text x='810' y='157' text-anchor='end' class='colType'>varchar(100)</text><title>plate
 * varchar(100)
 Name of the plate</title></a>
@@ -952,10 +952,10 @@ Who plated the samples</title></a>
 <a xlink:href='#plate.person_id'><use id='fk' x='813' y='191' xlink:href='#fk'/><title>References person ( person_id ) </title></a>
   <use id='nn' x='677' y='207' xlink:href='#nn'/><a xlink:href='#plate.rows'><text id='barcodes.plate.rows' x='693' y='217'>rows</text><text x='810' y='217' text-anchor='end' class='colType'>smallint</text><title>rows
 * smallint
-Number of rows in the plate</title></a>
+Number of rows on plate</title></a>
   <use id='nn' x='677' y='222' xlink:href='#nn'/><a xlink:href='#plate.cols'><text id='barcodes.plate.cols' x='693' y='232'>cols</text><text x='810' y='232' text-anchor='end' class='colType'>smallint</text><title>cols
 * smallint
-Number of columns in the plate</title></a>
+Number of columns on plate</title></a>
 
 <!-- ============= Table 'plates_samples' ============= -->
 <rect class='table' x='450' y='98' width='135' height='105' rx='7' ry='7' />
@@ -964,18 +964,18 @@ Number of columns in the plate</title></a>
 <line class='delim' x1='573.500000' y1='124.500000' x2='573.500000' y2='202.500000'/>
 <path d='M 450.50 124.50 L 450.50 105.50 Q 450.50 98.50 457.50 98.50 L 577.50 98.50 Q 584.50 98.50 584.50 105.50 L 584.50 124.50 L450.50 124.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
 <a xlink:href='#plates_samples'><text x='473' y='116'>plates_samples</text><title>Table barcodes.plates_samples</title></a>
-  <use id='nn' x='452' y='132' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_id'><use id='pk' x='452' y='131' xlink:href='#pk'/><title>Pk idx_plate_samples ( plate_id ) idx_plate_samples_1 ( plate_id ) Unq idx_plates_samples ( plate_id, plate_row, plate_col ) </title></a>
-<a xlink:href='#plates_samples.plate_id'><text id='barcodes.plates_samples.plate_id' x='468' y='142' onmouseover="hghl(['plates_samples_fk_plates_samples_0'])" onmouseout="uhghl(['plates_samples_fk_plates_samples_0'])">plate_id</text><text x='570' y='142' text-anchor='end' class='colType'>varchar</text><title>plate_id
+  <use id='nn' x='452' y='132' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_id'><use id='unq' x='452' y='131' xlink:href='#unq'/><title>idx_plate_samples_1 ( plate_id ) Unq idx_plates_samples_0 ( plate_id, plate_row, plate_col ) </title></a>
+<a xlink:href='#plates_samples.plate_id'><text id='barcodes.plates_samples.plate_id' x='468' y='142' onmouseover="hghl(['plates_samples_fk_plate_samples_0'])" onmouseout="uhghl(['plates_samples_fk_plate_samples_0'])">plate_id</text><text x='570' y='142' text-anchor='end' class='colType'>varchar</text><title>plate_id
 * varchar</title></a>
 <a xlink:href='#plates_samples.plate_id'><use id='fk' x='573' y='131' xlink:href='#fk'/><title>References plate ( plate_id ) </title></a>
-  <use id='nn' x='452' y='147' xlink:href='#nn'/><a xlink:href='#plates_samples.sample_id'><use id='idx' x='452' y='146' xlink:href='#idx'/><title>idx_plates_samples_0 ( sample_id ) </title></a>
+  <use id='nn' x='452' y='147' xlink:href='#nn'/><a xlink:href='#plates_samples.sample_id'><use id='idx' x='452' y='146' xlink:href='#idx'/><title>idx_plates_samples ( sample_id ) </title></a>
 <a xlink:href='#plates_samples.sample_id'><text id='barcodes.plates_samples.sample_id' x='468' y='157' onmouseover="hghl(['plates_samples_fk_plates_samples'])" onmouseout="uhghl(['plates_samples_fk_plates_samples'])">sample_id</text><text x='570' y='157' text-anchor='end' class='colType'>bigint</text><title>sample_id
 * bigint</title></a>
 <a xlink:href='#plates_samples.sample_id'><use id='fk' x='573' y='146' xlink:href='#fk'/><title>References sample ( sample_id ) </title></a>
-  <use id='nn' x='452' y='162' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_row'><use id='unq' x='452' y='161' xlink:href='#unq'/><title>Unq idx_plates_samples ( plate_id, plate_row, plate_col ) </title></a>
+  <use id='nn' x='452' y='162' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_row'><use id='unq' x='452' y='161' xlink:href='#unq'/><title>Unq idx_plates_samples_0 ( plate_id, plate_row, plate_col ) </title></a>
 <a xlink:href='#plates_samples.plate_row'><text id='barcodes.plates_samples.plate_row' x='468' y='172'>plate_row</text><text x='570' y='172' text-anchor='end' class='colType'>smallint</text><title>plate_row
 * smallint</title></a>
-  <use id='nn' x='452' y='177' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_col'><use id='unq' x='452' y='176' xlink:href='#unq'/><title>Unq idx_plates_samples ( plate_id, plate_row, plate_col ) </title></a>
+  <use id='nn' x='452' y='177' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_col'><use id='unq' x='452' y='176' xlink:href='#unq'/><title>Unq idx_plates_samples_0 ( plate_id, plate_row, plate_col ) </title></a>
 <a xlink:href='#plates_samples.plate_col'><text id='barcodes.plates_samples.plate_col' x='468' y='187'>plate_col</text><text x='570' y='187' text-anchor='end' class='colType'>smallint</text><title>plate_col
 * smallint</title></a>
 
@@ -1264,33 +1264,6 @@ Number of columns in the plate</title></a>
 <br/><br/>
 <table class='bordered'>
 <thead>
-<tr><th colspan='4'><a name='access_controls'>Table access_controls</a></th></tr>
-<tr><td colspan='3'>Track access levels for bitwise comparisons </td></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='access_controls.access_level'>access&#95;level</a></td>
-		<td> varchar&#40; 10 &#41;   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='access_controls.access_value'>access&#95;value</a></td>
-		<td> integer   </td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>Pk</td><td>pk&#95;access&#95;controls</td>
-		<td> ON access&#95;level</td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
 <tr><th colspan='4'><a name='run'>Table run</a></th></tr>
 <tr><td colspan='3'>Full run&#44; equivalent to a multi&#45;lane sequencing run </td></tr>
 </thead>
@@ -1517,60 +1490,6 @@ Number of columns in the plate</title></a>
 <tr><th colspan='4'><b>Indexes</b></th></tr>
 	<tr>		<td>Pk</td><td>pk&#95;people</td>
 		<td> ON person&#95;id</td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
-<tr><th colspan='4'><a name='user'>Table user</a></th></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='user.username'>username</a></td>
-		<td> varchar   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='user.pass'>pass</a></td>
-		<td> varchar&#40; 36 &#41;   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='user.person_id'>person&#95;id</a></td>
-		<td> integer   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='user.access'>access</a></td>
-		<td> integer   </td>
-		<td> What access the user is allowed </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='user.created_on'>created&#95;on</a></td>
-		<td> timestamp   DEFO current_timestamp </td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;users</td>
-		<td> ON person&#95;id</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>Pk</td><td>pk&#95;users</td>
-		<td> ON username</td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_users</td>
-		<td > ( person&#95;id ) ref <a href='#person'>person</a> (person&#95;id) </td>
 		<td>  </td>
 	</tr>
 </tbody>
@@ -1991,6 +1910,87 @@ Number of columns in the plate</title></a>
 <br/><br/>
 <table class='bordered'>
 <thead>
+<tr><th colspan='4'><a name='user'>Table user</a></th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='user.user_id'>user&#95;id</a></td>
+		<td> varchar   </td>
+		<td> username of the user </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='user.pass'>pass</a></td>
+		<td> varchar&#40; 60 &#41;   </td>
+		<td> bcrypt hashed password </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='user.person_id'>person&#95;id</a></td>
+		<td> integer   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='user.access'>access</a></td>
+		<td> integer   </td>
+		<td> What access the user is allowed </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='user.created_on'>created&#95;on</a></td>
+		<td> timestamp   DEFO current_timestamp </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;users</td>
+		<td> ON person&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>Pk</td><td>pk&#95;users</td>
+		<td> ON user&#95;id</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_users</td>
+		<td > ( person&#95;id ) ref <a href='#person'>person</a> (person&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
+<tr><th colspan='4'><a name='access_controls'>Table access_controls</a></th></tr>
+<tr><td colspan='3'>Track access levels for bitwise comparisons </td></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='access_controls.access_level'>access&#95;level</a></td>
+		<td> varchar&#40; 30 &#41;   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='access_controls.access_value'>access&#95;value</a></td>
+		<td> integer   </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>Pk</td><td>pk&#95;access&#95;controls</td>
+		<td> ON access&#95;level</td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
 <tr><th colspan='4'><a name='plate'>Table plate</a></th></tr>
 </thead>
 <tbody>
@@ -2028,13 +2028,13 @@ Number of columns in the plate</title></a>
 		<td>*</td>
 		<td><a name='plate.rows'>rows</a></td>
 		<td> smallint   </td>
-		<td> Number of rows in the plate </td>
+		<td> Number of rows on plate </td>
 	</tr>
 	<tr>
 		<td>*</td>
 		<td><a name='plate.cols'>cols</a></td>
 		<td> smallint   </td>
-		<td> Number of columns in the plate </td>
+		<td> Number of columns on plate </td>
 	</tr>
 <tr><th colspan='4'><b>Indexes</b></th></tr>
 	<tr>		<td>U</td><td>idx&#95;plates</td>
@@ -2094,31 +2094,27 @@ Number of columns in the plate</title></a>
 		<td>  </td>
 	</tr>
 <tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>Pk</td><td>idx&#95;plate&#95;samples</td>
-		<td> ON plate&#95;id</td>
-		<td>  </td>
-	</tr>
 	<tr>		<td>&nbsp;</td><td>idx&#95;plate&#95;samples&#95;1</td>
 		<td> ON plate&#95;id</td>
 		<td>  </td>
 	</tr>
-	<tr>		<td>U</td><td>idx&#95;plates&#95;samples</td>
-		<td> ON plate&#95;id&#44; plate&#95;row&#44; plate&#95;col</td>
+	<tr>		<td>&nbsp;</td><td>idx&#95;plates&#95;samples</td>
+		<td> ON sample&#95;id</td>
 		<td>  </td>
 	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;plates&#95;samples&#95;0</td>
-		<td> ON sample&#95;id</td>
+	<tr>		<td>U</td><td>idx&#95;plates&#95;samples&#95;0</td>
+		<td> ON plate&#95;id&#44; plate&#95;row&#44; plate&#95;col</td>
 		<td>  </td>
 	</tr>
 <tr><th colspan='4'><b>Foreign Keys</b></th></tr>
 	<tr>
-		<td>&nbsp;</td><td>fk_plates_samples</td>
-		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
+		<td>&nbsp;</td><td>fk_plate_samples_0</td>
+		<td > ( plate&#95;id ) ref <a href='#plate'>plate</a> (plate&#95;id) </td>
 		<td>  </td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td><td>fk_plates_samples_0</td>
-		<td > ( plate&#95;id ) ref <a href='#plate'>plate</a> (plate&#95;id) </td>
+		<td>&nbsp;</td><td>fk_plates_samples</td>
+		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
 		<td>  </td>
 	</tr>
 </tbody>
