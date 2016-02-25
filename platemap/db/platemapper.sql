@@ -42,6 +42,8 @@ CREATE TABLE barcodes.plate (
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	finalized            bool DEFAULT 'F' NOT NULL,
 	person_id            bigint  NOT NULL,
+	"rows"               smallint  NOT NULL,
+	cols                 smallint  NOT NULL,
 	CONSTRAINT idx_plates UNIQUE ( plate_id ) ,
 	CONSTRAINT pk_plates PRIMARY KEY ( plate_id ),
 	CONSTRAINT fk_plates FOREIGN KEY ( plate_id ) REFERENCES barcodes.barcode( barcode )    ,

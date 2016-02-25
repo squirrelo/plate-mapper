@@ -86,6 +86,12 @@
 			<column name="person_id" type="bigint" jt="-5" mandatory="y" >
 				<comment><![CDATA[Who plated the samples]]></comment>
 			</column>
+			<column name="rows" type="smallint" jt="5" mandatory="y" >
+				<comment><![CDATA[Number of rows in the plate]]></comment>
+			</column>
+			<column name="cols" type="smallint" jt="5" mandatory="y" >
+				<comment><![CDATA[Number of columns in the plate]]></comment>
+			</column>
 			<index name="idx_plates" unique="UNIQUE" >
 				<column name="plate_id" />
 			</index>
@@ -22104,8 +22110,8 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="sample_set" color="b7c8e3" x="285" y="405" />
 		<entity schema="barcodes" name="settings" color="b7c8e3" x="60" y="735" />
 		<entity schema="barcodes" name="sample" color="b7c8e3" x="165" y="120" />
-		<entity schema="barcodes" name="plate" color="b7c8e3" x="675" y="105" />
 		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="450" y="105" />
+		<entity schema="barcodes" name="plate" color="b7c8e3" x="675" y="105" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plate" />
