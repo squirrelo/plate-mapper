@@ -6,6 +6,9 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 from .base import PMObject
+from .sql_connection import TRN
+from .exceptions import DuplicateError
+from .sample import Sample
 
 
 class Plate(PMObject):
@@ -30,8 +33,21 @@ class Plate(PMObject):
         -------
         Plate object
             New plate object
+
+        Raises
+        ------
+        DuplicateError
+            Plate with given barcode already exists
         """
-        raise NotImplementedError()
+        sql = """INSERT INTO barcodes.plate (plate_id, plate, rows, cols)
+                 VALUES (%s, %s, %s, %s)
+              """
+        with TRN:
+            if cls.exists(barcode):
+                raise DuplicateError(barcode, 'plate')
+            TRN.add(sql, [barcode, name, rows, cols])
+            TRN.execute()
+            return cls(barcode)
 
     @staticmethod
     def delete(cls, barcode):
@@ -43,6 +59,25 @@ class Plate(PMObject):
             The plate barcode
         """
         raise NotImplementedError()
+
+    @staticmethod
+    def exists(barcode):
+        r"""Checks if a plate already exists
+
+        Parameters
+        ----------
+        barcode : str
+            Barcode for plate
+
+        Returns
+        -------
+        bool
+            Whether plate already exists (True) or not (False)
+        """
+        sql = "SELECT EXISTS(SELECT * FROM barcodes.plate WHERE plate_id = %s)"
+        with TRN:
+            TRN.add(sql, [barcode])
+            return TRN.execute_fetchlast()
 
     def __getitem__(self, pos):
         """
@@ -62,7 +97,15 @@ class Plate(PMObject):
         -----
         Passed a tuple, so called as sample = plate[row, col]
         """
-        raise NotImplementedError()
+        sql = """SELECT sample_id
+                 FROM barcodes.plates_samples
+                 WHERE plate_id = %s AND plate_row = %s and plate_col = %s
+              """
+        with TRN:
+            row, col = pos[0], pos[1]
+            TRN.add(sql, [self.id, row, col])
+            sid = TRN.execute_fetchlast()
+            return None if sid is None else Sample(sid)
 
     def __setitem__(self, pos, value):
         """
@@ -79,23 +122,13 @@ class Plate(PMObject):
         -----
         Passed a tuple, so called as plate[row, col] = Sample()
         """
-        raise NotImplementedError()
-
-    @staticmethod
-    def exists(barcode):
-        r"""Checks if a plate already exists
-
-        Parameters
-        ----------
-        barcode : str
-            Barcode for plate
-
-        Returns
-        -------
-        bool
-            Whether plate already exists (True) or not (False)
-        """
-        raise NotImplementedError()
+        sql = """UPDATE barcodes.plates_samples
+                 SET SAMPLE_ID = %s
+                 WHERE plate_id = %s AND plate_row = %s and plate_col = %s
+              """
+        with TRN:
+            row, col = pos[0], pos[1]
+            TRN.add(sql, [value.id, self.id, row, col])
 
     @property
     def name(self):
@@ -125,10 +158,10 @@ class Plate(PMObject):
 
         Returns
         -------
-        list of Sample objects
+        list of Sample objects or None
             Samples on the plate, ordered by row.
             Sample at [0, 0], followed by [0, 1], [0, 2], etc.
-
+            If no sample exists for the well, None is added to the list
         """
         raise NotImplementedError()
 
