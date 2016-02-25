@@ -5,15 +5,10 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from .base import PMObject
-from .util import convert_to_id, check_barcode_assigned
-from .sql_connection import TRN
-from .exceptions import DeveloperError, DuplicateError, AssignError
-from .person import Person
-from .plate import Plate
+import platemap as pm
 
 
-class Sample(PMObject):
+class Sample(pm.base.PMObject):
     _table = 'sample'
 
     @classmethod
@@ -53,7 +48,8 @@ class Sample(PMObject):
         # Make sure at least one argument passed
         if all([x is None for x in [biomass_remaining, sample_type, barcode,
                                     project, primer_set, protocol]]):
-            raise DeveloperError("Must pass at least one parameter")
+            raise pm.exceptions.DeveloperError(
+                'Must pass at least one parameter')
 
         joins = []
         wheres = []
@@ -75,12 +71,13 @@ class Sample(PMObject):
             sql_args.append(project)
         # TODO: add primer set and protocol searches
 
-        with TRN:
+        with pm.sql.TRN:
             sql_join = ' '.join(joins)
             sql_where = ' AND '.join(wheres)
             full_sql = '%s %s WHERE %s' % (sql, sql_join, sql_where)
-            TRN.add(full_sql, sql_args)
-            return [cls(s) for s in TRN.execute_fetchflatten()]
+            pm.sql.TRN.add(full_sql, sql_args)
+            return [cls(s) for s in
+                    pm.sql.TRN.execute_fetchflatten()]
 
     @classmethod
     def create(cls, name, sample_type, sample_location, sample_set,
@@ -122,24 +119,25 @@ class Sample(PMObject):
                          SET assigned_on = NOW()
                          WHERE barcode = %s
                       """
-        with TRN:
+        with pm.sql.TRN:
             if cls.exists(name, sample_set):
-                raise DuplicateError(name, 'samples')
+                raise pm.exceptions.DuplicateError(name, 'sample')
 
-            sample_set_id = convert_to_id(sample_set, 'sample_set')
-            TRN.add(sample_sql, [name, barcode, sample_type, sample_location,
-                                 sample_set_id, person.id, person.id])
-            sample_id = TRN.execute_fetchlast()
+            sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
+            pm.sql.TRN.add(sample_sql, [
+                name, barcode, sample_type, sample_location, sample_set_id,
+                person.id, person.id])
+            sample_id = pm.sql.TRN.execute_fetchlast()
 
             if projects is not None:
-                pids = [(sample_id, convert_to_id(p, 'project'))
+                pids = [(sample_id, pm.util.convert_to_id(p, 'project'))
                         for p in projects]
-                TRN.add(project_sql, pids, many=True)
+                pm.sql.TRN.add(project_sql, pids, many=True)
 
             if barcode is not None:
-                if check_barcode_assigned(barcode):
+                if pm.util.check_barcode_assigned(barcode):
                     raise ValueError('Barcode %s already assigned!' % barcode)
-                TRN.add(barcode_sql, [barcode])
+                pm.sql.TRN.add(barcode_sql, [barcode])
         return cls(sample_id)
 
     @staticmethod
@@ -150,14 +148,14 @@ class Sample(PMObject):
               WHERE sample = %s
                   AND sample_set_id = %s)
               """
-        with TRN:
+        with pm.sql.TRN:
             try:
-                sample_set_id = convert_to_id(sample_set, 'sample_set')
+                sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
             except LookupError:
                 # sample_set given does not exist
                 return False
-            TRN.add(sql, [name, sample_set_id])
-            return TRN.execute_fetchlast()
+            pm.sql.TRN.add(sql, [name, sample_set_id])
+            return pm.sql.TRN.execute_fetchlast()
 
     @staticmethod
     def delete(id_):
@@ -167,9 +165,9 @@ class Sample(PMObject):
     def _get_property(self, column):
         sql = "Select {} from barcodes.sample WHERE sample_id = %s".format(
             column)
-        with TRN:
-            TRN.add(sql, [self.id])
-            return TRN.execute_fetchlast()
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.sql.TRN.execute_fetchlast()
 
     @property
     def name(self):
@@ -211,14 +209,15 @@ class Sample(PMObject):
                          SET assigned_on = NOW()
                          WHERE barcode = %s
                       """
-        with TRN:
-            if check_barcode_assigned(barcode):
+        with pm.sql.TRN:
+            if pm.util.check_barcode_assigned(barcode):
                 raise ValueError("Barcode %s already assigned" % barcode)
             if self.barcode is not None:
-                raise AssignError('Barcode already assigned to this sample')
-            TRN.add(sample_sql, [barcode, self.id])
-            TRN.add(barcode_sql, [barcode])
-            TRN.execute()
+                raise pm.exceptions.AssignError(
+                    'Barcode already assigned to this sample')
+            pm.sql.TRN.add(sample_sql, [barcode, self.id])
+            pm.sql.TRN.add(barcode_sql, [barcode])
+            pm.sql.TRN.execute()
 
     @property
     def sample_set(self):
@@ -234,9 +233,9 @@ class Sample(PMObject):
                  JOIN barcodes.sample_set USING (sample_set_id)
                  WHERE sample_id = %s
               """
-        with TRN:
-            TRN.add(sql, [self.id])
-            return TRN.execute_fetchlast()
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.sql.TRN.execute_fetchlast()
 
     @property
     def projects(self):
@@ -253,9 +252,9 @@ class Sample(PMObject):
                  LEFT JOIN barcodes.project USING (project_id)
                  WHERE sample_id = %s
               """
-        with TRN:
-            TRN.add(sql, [self.id])
-            projects = TRN.execute_fetchflatten()
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            projects = pm.sql.TRN.execute_fetchflatten()
             return None if not projects else projects
 
     @property
@@ -281,9 +280,9 @@ class Sample(PMObject):
                  JOIN barcodes.person P ON (S.created_by = P.person_id)
                  WHERE sample_id = %s
               """
-        with TRN:
-            TRN.add(sql, [self.id])
-            return Person(TRN.execute_fetchlast())
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.person.Person(pm.sql.TRN.execute_fetchlast())
 
     @property
     def last_scanned(self):
@@ -296,9 +295,9 @@ class Sample(PMObject):
                  JOIN barcodes.person P ON (S.last_scanned_by = P.person_id)
                  WHERE sample_id = %s
               """
-        with TRN:
-            TRN.add(sql, [self.id])
-            return Person(TRN.execute_fetchlast())
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.person.Person(pm.sql.TRN.execute_fetchlast())
 
     @property
     def plates(self):
@@ -306,9 +305,10 @@ class Sample(PMObject):
                  FROM barcodes.plates_samples
                  WHERE sample_id = %s
               """
-        with TRN:
-            TRN.add(sql, [self.id])
-            return [Plate(p) for p in TRN.execute_fetchflatten()]
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return [pm.plate.Plate(p) for p in
+                    pm.sql.TRN.execute_fetchflatten()]
 
     @property
     def protocols(self):
@@ -327,18 +327,18 @@ class Sample(PMObject):
         sql = """INSERT INTO barcodes.project_sample (project_id, sample_id)
                  VALUES (%s, %s)
               """
-        with TRN:
+        with pm.sql.TRN:
             if project in self.projects:
                 return
-            pid = convert_to_id(project, 'project')
-            TRN.add(sql, [pid, self.id])
-            TRN.execute()
+            pid = pm.util.convert_to_id(project, 'project')
+            pm.sql.TRN.add(sql, [pid, self.id])
+            pm.sql.TRN.execute()
 
     def remove_project(self, project):
         sql = """DELETE FROM barcodes.project_sample
                  WHERE project_id = %s AND sample_id = %s
               """
-        with TRN:
-            pid = convert_to_id(project, 'project')
-            TRN.add(sql, [pid, self.id])
-            TRN.execute()
+        with pm.sql.TRN:
+            pid = pm.util.convert_to_id(project, 'project')
+            pm.sql.TRN.add(sql, [pid, self.id])
+            pm.sql.TRN.execute()

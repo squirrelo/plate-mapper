@@ -5,8 +5,3 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from platemap.lib.sample import Sample
-from platemap.lib.person import Person
-from platemap.lib.plate import Plate
-
-__all__ = ['Sample', 'Person', 'Plate']

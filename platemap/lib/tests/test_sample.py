@@ -1,85 +1,85 @@
 from unittest import TestCase, main
 from datetime import datetime
 
-import platemap.lib
+import platemap as pm
 
 
-@platemap.lib.util.rollback_tests()
+@pm.util.rollback_tests()
 class TestSample(TestCase):
     def setUp(self):
-        self.sample1 = platemap.lib.Sample(1)
-        self.sample3 = platemap.lib.Sample(3)
+        self.sample1 = pm.sample.Sample(1)
+        self.sample3 = pm.sample.Sample(3)
 
     def test_search(self):
-        obs = platemap.lib.Sample.search(biomass_remaining=True)
-        exp = [platemap.lib.Sample(1), platemap.lib.Sample(4)]
+        obs = pm.sample.Sample.search(biomass_remaining=True)
+        exp = [pm.sample.Sample(1), pm.sample.Sample(4)]
         self.assertEqual(obs, exp)
 
-        obs = platemap.lib.Sample.search(sample_type='stool')
-        exp = [platemap.lib.Sample(1), platemap.lib.Sample(2)]
+        obs = pm.sample.Sample.search(sample_type='stool')
+        exp = [pm.sample.Sample(1), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
-        obs = platemap.lib.Sample.search(barcode='000000002')
-        exp = [platemap.lib.Sample(2)]
+        obs = pm.sample.Sample.search(barcode='000000002')
+        exp = [pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
-        obs = platemap.lib.Sample.search(barcode='000000010')
+        obs = pm.sample.Sample.search(barcode='000000010')
         exp = []
         self.assertEqual(obs, exp)
 
         # TODO: finish these tests as objects are made
-        # platemap.lib.Sample.search(project=)
-        # platemap.lib.Sample.search(primer_set=)
-        # platemap.lib.Sample.search(protocol=)
+        # pm.sample.Sample.search(project=)
+        # pm.sample.Sample.search(primer_set=)
+        # pm.sample.Sample.search(protocol=)
 
     def test_search_no_parameters(self):
-        with self.assertRaises(platemap.lib.exceptions.DeveloperError):
-            platemap.lib.Sample.search()
+        with self.assertRaises(pm.exceptions.DeveloperError):
+            pm.sample.Sample.search()
 
     def test_create(self):
-        obs = platemap.lib.Sample.create(
+        obs = pm.sample.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
-            platemap.lib.person.Person(3))
+            pm.person.Person(3))
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
         self.assertEqual(obs.location, 'in the mail')
         self.assertEqual(obs.sample_set, 'Sample Set 1')
-        self.assertEqual(obs.created_by, platemap.lib.Person(3))
-        self.assertEqual(obs.last_scanned_by, platemap.lib.Person(3))
+        self.assertEqual(obs.created_by, pm.person.Person(3))
+        self.assertEqual(obs.last_scanned_by, pm.person.Person(3))
         self.assertEqual(obs.projects, None)
         self.assertEqual(obs.barcode, None)
         self.assertTrue(isinstance(obs.created_on, datetime))
         self.assertTrue(isinstance(obs.last_scanned, datetime))
 
     def test_create_with_barcode(self):
-        obs = platemap.lib.Sample.create(
+        obs = pm.sample.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
-            platemap.lib.person.Person(3), barcode='000000006')
+            pm.person.Person(3), barcode='000000006')
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
         self.assertEqual(obs.location, 'in the mail')
         self.assertEqual(obs.sample_set, 'Sample Set 1')
-        self.assertEqual(obs.created_by, platemap.lib.Person(3))
-        self.assertEqual(obs.last_scanned_by, platemap.lib.Person(3))
+        self.assertEqual(obs.created_by, pm.person.Person(3))
+        self.assertEqual(obs.last_scanned_by, pm.person.Person(3))
         self.assertEqual(obs.projects, None)
         self.assertEqual(obs.barcode, '000000006')
-        self.assertTrue(platemap.lib.util.check_barcode_assigned('000000006'))
+        self.assertTrue(pm.util.check_barcode_assigned('000000006'))
         self.assertTrue(isinstance(obs.created_on, datetime))
         self.assertTrue(isinstance(obs.last_scanned, datetime))
 
     def test_create_with_projects(self):
-        obs = platemap.lib.Sample.create(
+        obs = pm.sample.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
-            platemap.lib.person.Person(3), projects=['Project 1', 'Project 2'])
+            pm.person.Person(3), projects=['Project 1', 'Project 2'])
 
         self.assertEqual(obs.name, 'test sample')
         self.assertEqual(obs.sample_type, 'test')
         self.assertEqual(obs.location, 'in the mail')
         self.assertEqual(obs.sample_set, 'Sample Set 1')
-        self.assertEqual(obs.created_by, platemap.lib.Person(3))
-        self.assertEqual(obs.last_scanned_by, platemap.lib.Person(3))
+        self.assertEqual(obs.created_by, pm.person.Person(3))
+        self.assertEqual(obs.last_scanned_by, pm.person.Person(3))
         self.assertEqual(obs.projects, ['Project 1', 'Project 2'])
         self.assertEqual(obs.barcode, None)
         self.assertTrue(isinstance(obs.created_on, datetime))
@@ -87,19 +87,19 @@ class TestSample(TestCase):
 
     def test_create_used_barcode(self):
         with self.assertRaises(ValueError):
-            platemap.lib.Sample.create(
+            pm.sample.Sample.create(
                 'test sample', 'test', 'in the mail', 'Sample Set 1',
-                platemap.lib.person.Person(3), barcode='000000001')
+                pm.person.Person(3), barcode='000000001')
 
     def test_exists(self):
         self.assertTrue(
-            platemap.lib.Sample.exists('Sample 1', 'Sample Set 1'))
+            pm.sample.Sample.exists('Sample 1', 'Sample Set 1'))
 
     def test_exists_no_exists(self):
         self.assertFalse(
-            platemap.lib.Sample.exists('NOEXISTS', 'Sample Set 1'))
+            pm.sample.Sample.exists('NOEXISTS', 'Sample Set 1'))
         self.assertFalse(
-            platemap.lib.Sample.exists('Test Sample 1', 'NOEXISTS'))
+            pm.sample.Sample.exists('Test Sample 1', 'NOEXISTS'))
 
     def test_delete(self):
         pass
@@ -126,7 +126,7 @@ class TestSample(TestCase):
             self.sample3.barcode = '000000001'
 
     def test_add_barcode_already_assigned_to_sample(self):
-        with self.assertRaises(platemap.lib.exceptions.AssignError):
+        with self.assertRaises(pm.exceptions.AssignError):
             self.sample1.barcode = '000000010'
 
     def test_projects(self):
@@ -148,17 +148,17 @@ class TestSample(TestCase):
         self.assertEqual(self.sample1.created_on, datetime(2016, 2, 22, 8, 52))
 
     def test_created_by(self):
-        self.assertEqual(self.sample1.created_by, platemap.lib.Person(1))
+        self.assertEqual(self.sample1.created_by, pm.person.Person(1))
 
     def test_last_scanned(self):
         self.assertEqual(self.sample1.created_on, datetime(2016, 2, 22, 8, 52))
 
     def test_last_scanned_by(self):
-        self.assertEqual(self.sample1.created_by, platemap.lib.Person(1))
+        self.assertEqual(self.sample1.created_by, pm.person.Person(1))
 
     def test_plates(self):
         self.assertEqual(
-            self.sample1.plates, [platemap.lib.Plate('000000003')])
+            self.sample1.plates, [pm.plate.Plate('000000003')])
 
     def test_protocols(self):
         pass
