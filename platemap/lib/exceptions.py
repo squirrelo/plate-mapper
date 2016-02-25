@@ -28,7 +28,7 @@ class UnknownIDError(PlateMapperError):
 class DuplicateError(PlateMapperError):
     """Exception for error when an object already exists in the DB"""
     def __init__(self, external_name, table):
-        super(UnknownIDError, self).__init__()
+        super(DuplicateError, self).__init__()
         self.args = ("The object with name '%s' already exists in table '%s'"
                      % (external_name, table),)
 
@@ -36,3 +36,11 @@ class DuplicateError(PlateMapperError):
 class AssignError(PlateMapperError):
     """Trying to assign a value to something that can not change"""
     pass
+
+
+class EditError(PlateMapperError):
+    """Exception for error when trying to edit a finalized object"""
+    def __init__(self, id_):
+        super(EditError, self).__init__()
+        self.args = ("The object with ID '%s' is finalized and can not be "
+                     "edited" % str(id_),)

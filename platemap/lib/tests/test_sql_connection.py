@@ -279,6 +279,10 @@ class TestTransaction(TestBase):
             TRN.add(sql, [2])
             self.assertTrue(TRN.execute_fetchlast())
 
+            sql = """SELECT * FROM barcodes.test_table WHERE int_column=%s"""
+            TRN.add(sql, [2234])
+            self.assertEqual(TRN.execute_fetchlast(), None)
+
     def test_execute_fetchindex(self):
         with TRN:
             sql = """INSERT INTO barcodes.test_table (str_column, int_column)

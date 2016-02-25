@@ -21,7 +21,7 @@ class Sample(pm.base.PMObject):
         biomass_remaining : bool, optional
             Whether physical sample remains
         sample_type : str, optional
-            What sampel type to look for (stool, etc)
+            What sample type to look for (stool, etc)
         barcode : str, optional
             barcode to get
         project : str, optional

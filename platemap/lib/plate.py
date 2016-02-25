@@ -90,6 +90,17 @@ class Plate(pm.base.PMObject):
             pm.sql.TRN.add(sql, [barcode])
             return pm.sql.TRN.execute_fetchlast()
 
+    def _check_finalized(self):
+        """Locks down changes to plate if already finalized
+
+        Raises
+        ------
+        EditError
+            Trying to change values of a finalized plate
+        """
+        if self.finalized:
+            raise pm.exceptions.EditError(self.id)
+
     def __getitem__(self, pos):
         """
         Returns the sample at a given position on the plate
@@ -104,6 +115,11 @@ class Plate(pm.base.PMObject):
         Sample object or None
             Sample at the positon, or None if no sample.
 
+        Raises
+        ------
+        IndexError
+            Position given is outside of plate
+
         Notes
         -----
         Passed a tuple, so called as sample = plate[row, col]
@@ -115,8 +131,9 @@ class Plate(pm.base.PMObject):
         with pm.sql.TRN:
             row, col = pos[0], pos[1]
             rows, cols = self.shape
-            if rows < 0 or row >= rows or col < 0 or col >= cols:
+            if row < 0 or row >= rows or col < 0 or col >= cols:
                 raise IndexError('Position %d, %d not on plate' % (row, col))
+
             pm.sql.TRN.add(sql, [self.id, row, col])
             sid = pm.sql.TRN.execute_fetchlast()
             return None if sid is None else pm.sample.Sample(sid)
@@ -132,21 +149,45 @@ class Plate(pm.base.PMObject):
         value : Sample object or None
             The sample to add, or None to remove sample from position
 
+        Raises
+        ------
+        IndexError
+            Position given is outside of plate
+
         Notes
         -----
         Passed a tuple, so called as plate[row, col] = Sample()
         """
-        sql = """INSERT INTO barcodes.plates_samples
-                 (sample_id, plate_id, plate_row, plate_col)
-                 VALUES (%s, %s, %s, %s)
-                 ON CONFLICT DO UPDATE sample_id = %s
+        # Need to get around postgres not having upsert in postgres < 9.5
+        # So do this slightly hacky workaround
+        # http://www.the-art-of-web.com/sql/upsert/
+        upsert_sql = """WITH upsert AS (
+                            UPDATE barcodes.plates_samples
+                            SET sample_id = %s
+                            WHERE plate_id = %s AND plate_row = %s
+                                AND plate_col = %s
+                            RETURNING *)
+                        INSERT INTO barcodes.plates_samples
+                        (sample_id, plate_id, plate_row, plate_col)
+                        SELECT %s, %s, %s, %s WHERE NOT EXISTS (
+                            SELECT * FROM upsert)
               """
+        delete_sql = """DELETE FROM barcodes.plates_samples
+                        WHERE plate_id = %s AND plate_row = %s
+                            AND plate_col = %s"""
+
         with pm.sql.TRN:
+            self._check_finalized()
             row, col = pos[0], pos[1]
             rows, cols = self.shape
             if row < 0 or row >= rows or col < 0 or col >= cols:
                 raise IndexError('Position %d, %d not on plate' % (row, col))
-            pm.sql.TRN.add(sql, [value.id, self.id, row, col, value.id])
+
+            if value is not None:
+                pm.sql.TRN.add(upsert_sql, [value.id, self.id, row, col,
+                                            value.id, self.id, row, col])
+            else:
+                pm.sql.TRN.add(delete_sql, [self.id, row, col])
 
     def _get_property(self, column):
         sql = "Select {} from barcodes.plate WHERE plate_id = %s".format(
@@ -204,7 +245,7 @@ class Plate(pm.base.PMObject):
         sql = """SELECT sample_id
                  FROM barcodes.plates_samples
                  WHERE plate_id = %s
-                 ORDER BY row, col
+                 ORDER BY plate_row, plate_col
               """
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
@@ -220,10 +261,10 @@ class Plate(pm.base.PMObject):
         list of list of Sample objects or None
             Samples on the plate, with None if no sample at the position
         """
-        sql = """SELECT row || col, sample_id
+        sql = """SELECT plate_row::varchar || plate_col::varchar, sample_id
                  FROM barcodes.plates_samples
                  WHERE plate_id = %s
-                 ORDER BY row, col
+                 ORDER BY plate_row, plate_col
               """
         with pm.sql.TRN:
             rows, cols = self.shape
@@ -257,9 +298,13 @@ class Plate(pm.base.PMObject):
 
         samples = self.platemap
         rows, cols = self.shape
-        table = ['<table class="plate">']
+        table = ['<table class="plate"><tr><th></th>']
+        # Add column header
+        for col in range(1, cols + 1):
+            table.append('<th>%d</th>' % col)
+        table.append('</tr>')
         for row in range(rows):
-            table.append('<tr>')
+            table.append('<tr><th>%s</th>' % chr(65 + row))
             for col in range(cols):
                 samp = samples[row][col]
                 table.append('<td>%s</td>' %
@@ -267,3 +312,9 @@ class Plate(pm.base.PMObject):
             table.append('</tr>')
         table.append('</table>')
         return ''.join(table)
+
+    def finalize(self):
+        """Finalizes plate by flagging it in the DB"""
+        sql = "UPDATE barcodes.plate SET finalized = 'T' WHERE plate_id = %s"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])

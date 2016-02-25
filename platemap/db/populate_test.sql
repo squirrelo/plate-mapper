@@ -32,7 +32,7 @@ INSERT INTO barcodes.plate (plate_id, plate, created_on, finalized, person_id, r
 ('000000003', 'Test plate 1', '2016-02-22 8:55:00', 'F', 1, 8, 12);
 
 INSERT INTO barcodes.plates_samples (plate_id, sample_id, plate_row, plate_col) VALUES
-('000000003', 1, 1, 1), ('000000003', 2, 1, 2), ('000000003', 3, 1, 3);
+('000000003', 1, 1, 1), ('000000003', 2, 1, 2), ('000000003', 3, 2, 3);
 
 INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (2, 2);
 

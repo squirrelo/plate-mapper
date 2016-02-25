@@ -288,8 +288,8 @@ class Transaction(object):
 
         Returns
         -------
-        object
-            The first value of the last SQL query executed
+        object or None
+            The first value of the last SQL query executed, or None of no value
 
         See Also
         --------
@@ -297,7 +297,10 @@ class Transaction(object):
         execute_fetchindex
         execute_fetchflatten
         """
-        return self.execute()[-1][0][0]
+        try:
+            return self.execute()[-1][0][0]
+        except IndexError:
+            return None
 
     @_checker
     def execute_fetchindex(self, idx=-1):
