@@ -24,6 +24,11 @@ class QiitaBaseTest(TestCase):
         with self.assertRaises(pm.exceptions.DeveloperError):
             pm.base.PMObject(1)
 
+    def test_init_bad_type(self):
+        """Raises an error when instantiating witn non int or string"""
+        with self.assertRaises(TypeError):
+            pm.base.PMObject(['list', 'fail'])
+
     def test_init_error_inexistent(self):
         """Raises an error when instantiating an object that does not exists"""
         with self.assertRaises(pm.exceptions.UnknownIDError):
@@ -62,6 +67,11 @@ class QiitaBaseTest(TestCase):
         """Not equals works with object of different type"""
         new = pm.person.Person(1)
         self.assertNotEqual(self.tester, new)
+
+    def test_hash(self):
+        test_dict = {}
+        test_dict[self.tester] = 1
+        self.assertEqual(test_dict[self.tester], 1)
 
 if __name__ == '__main__':
     main()
