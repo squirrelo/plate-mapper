@@ -123,6 +123,12 @@ class Sample(pm.base.PMObject):
             if cls.exists(name, sample_set):
                 raise pm.exceptions.DuplicateError(name, 'sample')
 
+            if barcode is not None:
+                if pm.util.check_barcode_assigned(barcode):
+                    raise pm.exceptions.AssignError(
+                        'Barcode %s already assigned!' % barcode)
+                pm.sql.TRN.add(barcode_sql, [barcode])
+
             sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
             pm.sql.TRN.add(sample_sql, [
                 name, barcode, sample_type, sample_location, sample_set_id,
@@ -134,10 +140,6 @@ class Sample(pm.base.PMObject):
                         for p in projects]
                 pm.sql.TRN.add(project_sql, pids, many=True)
 
-            if barcode is not None:
-                if pm.util.check_barcode_assigned(barcode):
-                    raise ValueError('Barcode %s already assigned!' % barcode)
-                pm.sql.TRN.add(barcode_sql, [barcode])
         return cls(sample_id)
 
     @staticmethod
