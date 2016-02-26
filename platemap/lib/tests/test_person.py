@@ -35,6 +35,10 @@ class TestPerson(TestCase):
         self.assertEqual(obs.affiliation, 'UCSD')
         self.assertEqual(obs.phone, '112-2222')
 
+    def test_create_exists(self):
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.person.Person.create('New Person', 'test@foo.bar')
+
     def test_delete(self):
         pass
 
@@ -125,6 +129,15 @@ class TestUser(TestCase):
         self.assertEqual(person.address, '111 fake street')
         self.assertEqual(person.affiliation, 'UCSD')
         self.assertEqual(person.phone, '112-2222')
+
+    def test_create_exists(self):
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.person.User.create('NewUser', 'newpass', 'New Person',
+                                  'test@foo.bar')
+
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.person.User.create('User1', 'newpass', 'New Person',
+                                  'new@foo.bar')
 
     def test_delete(self):
         pass
