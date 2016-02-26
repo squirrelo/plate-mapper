@@ -65,8 +65,8 @@ class Sample(pm.base.PMObject):
             wheres.append('barcode = %s')
             sql_args.append(barcode)
         if project is not None:
-            joins.append('JOIN barcodes.project_sample USING (sample_id)')
-            joins.append('JOIN barcodes.projects USING (project_id)')
+            joins.append('JOIN barcodes.project_samples USING (sample_id)')
+            joins.append('JOIN barcodes.project USING (project_id)')
             wheres.append('project = %s')
             sql_args.append(project)
         # TODO: add primer set and protocol searches
@@ -324,18 +324,19 @@ class Sample(pm.base.PMObject):
 
     # ---------------Functions---------------
     def add_project(self, project):
-        sql = """INSERT INTO barcodes.project_sample (project_id, sample_id)
+        sql = """INSERT INTO barcodes.project_samples (project_id, sample_id)
                  VALUES (%s, %s)
               """
         with pm.sql.TRN:
-            if project in self.projects:
+            projects = self.projects
+            if projects is not None and project in self.projects:
                 return
             pid = pm.util.convert_to_id(project, 'project')
             pm.sql.TRN.add(sql, [pid, self.id])
             pm.sql.TRN.execute()
 
     def remove_project(self, project):
-        sql = """DELETE FROM barcodes.project_sample
+        sql = """DELETE FROM barcodes.project_samples
                  WHERE project_id = %s AND sample_id = %s
               """
         with pm.sql.TRN:

@@ -34,8 +34,11 @@ class TestSample(TestCase):
         exp = []
         self.assertEqual(obs, exp)
 
+        obs = pm.sample.Sample.search(project='Project 2')
+        exp = [pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
         # TODO: finish these tests as objects are made
-        # pm.sample.Sample.search(project=)
         # pm.sample.Sample.search(primer_set=)
         # pm.sample.Sample.search(protocol=)
 
@@ -95,8 +98,14 @@ class TestSample(TestCase):
     def test_create_used_barcode(self):
         with self.assertRaises(ValueError):
             pm.sample.Sample.create(
-                'test sample', 'test', 'in the mail', 'Sample Set 1',
+                'test sample new', 'test', 'in the mail', 'Sample Set 1',
                 pm.person.Person(3), barcode='000000001')
+
+    def test_create_sample_exists(self):
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.sample.Sample.create(
+                'Sample 1', 'test', 'in the mail', 'Sample Set 1',
+                pm.person.Person(3))
 
     def test_exists(self):
         self.assertTrue(
@@ -166,6 +175,45 @@ class TestSample(TestCase):
     def test_plates(self):
         self.assertEqual(
             self.sample1.plates, [pm.plate.Plate('000000003')])
+
+    def test_add_project(self):
+        obs = pm.sample.Sample.search(project='Project 2')
+        exp = [pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
+        self.sample3.add_project('Project 2')
+        obs = pm.sample.Sample.search(project='Project 2')
+        exp = [pm.sample.Sample(2), pm.sample.Sample(3)]
+        self.assertEqual(obs, exp)
+
+    def test_add_project_already_in(self):
+        sample = pm.sample.Sample(2)
+        obs = pm.sample.Sample.search(project='Project 2')
+        exp = [pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
+        #
+        sample.add_project('Project 2')
+        obs = pm.sample.Sample.search(project='Project 2')
+        exp = [pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
+    def test_remove_project(self):
+        obs = pm.sample.Sample.search(project='Project 1')
+        exp = [pm.sample.Sample(1), pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
+        self.sample1.remove_project('Project 1')
+        obs = pm.sample.Sample.search(project='Project 1')
+        exp = [pm.sample.Sample(2)]
+        self.assertEqual(obs, exp)
+
+    def test_remove_project_failure(self):
+        with self.assertRaises(LookupError):
+            self.sample1.remove_project('Project NOEXIST')
+
+        # make sure removing from project it isn't in doesn't raise errors
+        self.sample1.remove_project('Project 3')
 
     def test_protocols(self):
         pass
