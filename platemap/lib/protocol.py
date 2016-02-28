@@ -159,14 +159,40 @@ class ExtractionProtocol(ProtocolBase):
             return pm.sql.TRN.execute_fetchlast()
 
     @classmethod
-    def create(cls, person, sample, plate, extractionkit_lot, extraction_robot,
-               tm1000_8_tool):
+    def create(cls, person, extractionkit_lot, extraction_robot,
+               tm1000_8_tool, sample=None, plate=None):
         r"""Creates new settings for an extraction protocol run
 
+        Parameters
+        ----------
+        person : Person object
+            Person doing the run and logging in system
+        sample : Sample object
+            Sample the protocol is being run on
+        plate : Plate object
+            Plate the protocol is being run on
+        extractionkit_lot : str
+            Lot used for extraction
+        extraction_robot : str
+            Specific robot identifier used for extraction
+        tm1000_8_tool : str
+            Specific tool identifier used for extraction
+
+        Returns
+        -------
+        ExtractionProtocol object
+            New ExtractionProtocol
         """
-        protocol_id = cls._create_protocol(person, sample, plate)
-        raise NotImplementedError()
-        return cls(protocol_id)
+        sql = """INSERT INTO barcodes.extraction_settings
+                 (protocol_settings_id, extractionkit_lot, extraction_robot,
+                  tm1000_8_tool)
+                 VALUES (%s, %s, %s, %s)
+              """
+        with pm.sql.TRN:
+            protocol_id = cls._create_protocol(person, sample, plate)
+            pm.sql.TRN.add(sql, [protocol_id, extractionkit_lot,
+                                 extraction_robot, tm1000_8_tool])
+            return cls(protocol_id)
 
     @property
     def extractionkit_lot(self):
@@ -200,15 +226,24 @@ class PCRProtocol(ProtocolBase):
             return pm.sql.TRN.execute_fetchlast()
 
     @classmethod
-    def create(cls, person, sample, plate, extraction_protocol, primer_lot,
+    def create(cls, person, extraction_protocol, primer_lot,
                mastermix_lot, water_lot, processing_robot, tm300_8_tool,
-               tm50_8_tool):
+               tm50_8_tool, sample=None, plate=None):
         r"""Creates new settings for a PCR protocol run
 
         """
-        protocol_id = cls._create_protocol(person, sample, plate)
-        raise NotImplementedError()
-        return cls(protocol_id)
+        sql = """INSERT INTO barcodes.pcr_settings
+                 (protocol_settings_id, extraction_protocol_settings_id,
+                  primer_lot, mastermix_lot, water_lot, processing_robot,
+                  tm300_8_tool, tm50_8_tool)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+              """
+        with pm.sql.TRN:
+            protocol_id = cls._create_protocol(person, sample, plate)
+            pm.sql.TRN.add(sql, [
+                protocol_id, extraction_protocol.id, primer_lot, mastermix_lot,
+                water_lot, processing_robot, tm300_8_tool, tm50_8_tool])
+            return cls(protocol_id)
 
     @property
     def extraction_protocol(self):
@@ -238,3 +273,11 @@ class PCRProtocol(ProtocolBase):
     @property
     def tm50_8_tool(self):
         return self._get_subproperty('tm50_8_tool')
+
+    def summary(self):
+        """See parent class for docstring"""
+        summary = super(PCRProtocol, self).summary()
+        summary['extraction_protocol'] = ExtractionProtocol(
+            summary['extraction_protocol_settings_id'])
+        del summary['extraction_protocol_settings_id']
+        return summary

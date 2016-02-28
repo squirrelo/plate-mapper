@@ -72,7 +72,24 @@ class TestExtractionProtocol(TestCase):
             pm.protocol.ExtractionProtocol(4)
 
     def test_create(self):
-        raise NotImplementedError()
+        obs = pm.protocol.ExtractionProtocol.create(
+            pm.person.Person(3), 'exkl004', 'exrb004', 'tm18004',
+            plate=pm.plate.Plate('000000003'))
+        obs = obs.summary()
+        # Ignore these because they change every test and are controlled for
+        # already in other tests
+        del obs['protocol_settings_id']
+        del obs['created_on']
+
+        exp = {'protocol_id': None,
+               'sample': None,
+               'plate': pm.plate.Plate('000000003'),
+               'extraction_robot': 'exrb004',
+               'extractionkit_lot': 'exkl004',
+               'tm1000_8_tool': 'tm18004',
+               'created_by': pm.person.Person(3)}
+
+        self.assertEqual(obs, exp)
 
     def test_extractionkit_lot(self):
         obs = self.extract_protocol1.extractionkit_lot
@@ -142,7 +159,28 @@ class TestPCRProtocol(TestCase):
             pm.protocol.PCRProtocol(1)
 
     def test_create(self):
-        raise NotImplementedError()
+        obs = pm.protocol.PCRProtocol.create(
+            pm.person.Person(3), pm.protocol.ExtractionProtocol(2), 'pr002',
+            'mm004', 'wat004', 'prrb004', 'tm38004', 'tm58004',
+            sample=pm.sample.Sample(4))
+        obs = obs.summary()
+        # Ignore these because they change every test and are controlled for
+        # already in other tests
+        del obs['protocol_settings_id']
+        del obs['created_on']
+
+        exp = {'processing_robot': 'prrb004',
+               'mastermix_lot': 'mm004',
+               'created_by': pm.person.Person(3),
+               'sample': pm.sample.Sample(4),
+               'primer_lot': 'pr002',
+               'tm50_8_tool': 'tm58004',
+               'plate': None,
+               'water_lot': 'wat004',
+               'protocol_id': None,
+               'extraction_protocol': pm.protocol.ExtractionProtocol(2),
+               'tm300_8_tool': 'tm38004'}
+        self.assertEqual(obs, exp)
 
     def test_extraction_protocol(self):
         obs = self.pcr_protocol3.extraction_protocol
@@ -219,7 +257,7 @@ class TestPCRProtocol(TestCase):
                'water_lot': 'wat002',
                'plate': pm.plate.Plate('000000003'),
                'sample': None,
-               'extraction_protocol_settings_id': 2,
+               'extraction_protocol': pm.protocol.ExtractionProtocol(2),
                'mastermix_lot': 'mm002',
                'protocol_id': 1,
                'tm50_8_tool': 'tm58002',
