@@ -20,12 +20,6 @@ COMMENT ON COLUMN barcodes.barcode.assigned_on IS 'date barcode assigned to a pr
 
 COMMENT ON COLUMN barcodes.barcode.create_timestamp IS 'Date barcode created on the system';
 
-CREATE TABLE barcodes.extraction_settings ( 
-	extractionkit_lot    varchar(40)  NOT NULL,
-	extraction_robot     varchar(40)  NOT NULL,
-	tm1000_8_tool        varchar(40)  NOT NULL
- );
-
 CREATE TABLE barcodes.person ( 
 	person_id            bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
@@ -262,20 +256,30 @@ CREATE TABLE barcodes.protocol_settings (
 	protocol_settings_id bigserial  NOT NULL,
 	protocol_id          integer  ,
 	sample_id            bigint  ,
-	plate_barcode        varchar  ,
+	plate_id             varchar  ,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	created_by           bigint  NOT NULL,
 	CONSTRAINT pk_protocol_runs PRIMARY KEY ( protocol_settings_id ),
 	CONSTRAINT fk_protocol_runs FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_protocol_runs_1 FOREIGN KEY ( plate_barcode ) REFERENCES barcodes.plate( plate_id )    ,
+	CONSTRAINT fk_protocol_runs_1 FOREIGN KEY ( plate_id ) REFERENCES barcodes.plate( plate_id )    ,
 	CONSTRAINT fk_protocol_runs_2 FOREIGN KEY ( sample_id ) REFERENCES barcodes.sample( sample_id )    
  );
 
 CREATE INDEX idx_protocol_runs ON barcodes.protocol_settings ( created_by );
 
-CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_barcode );
+CREATE INDEX idx_protocol_runs_1 ON barcodes.protocol_settings ( plate_id );
 
 CREATE INDEX idx_protocol_runs_2 ON barcodes.protocol_settings ( sample_id );
+
+CREATE TABLE barcodes.extraction_settings ( 
+	protocol_settings_id bigint  NOT NULL,
+	extractionkit_lot    varchar(40)  NOT NULL,
+	extraction_robot     varchar(40)  NOT NULL,
+	tm1000_8_tool        varchar(40)  NOT NULL,
+	CONSTRAINT fk_extraction_settings FOREIGN KEY ( protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    
+ );
+
+CREATE INDEX idx_extraction_settings ON barcodes.extraction_settings ( protocol_settings_id );
 
 CREATE TABLE barcodes.pcr_settings ( 
 	protocol_settings_id bigint  NOT NULL,

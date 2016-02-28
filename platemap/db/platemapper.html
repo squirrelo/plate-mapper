@@ -303,30 +303,6 @@ pool_samples ref protocol_settings ( protocol_settings_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 900 90 L 892,90 Q 885,90 885,97 L 885,442 Q 885,450 892,450 L 975,450' ></path>
 <text x='791' y='85' transform='rotate(0 791,85)' title='Fk fk_pool_samples_0
 pool_samples ref protocol_settings ( protocol_settings_id )' style='fill:#cfc391;'>protocol_settings_id</text>
-<!-- ============= Fk 'protocol_settings_fk_protocol_runs' ============= -->
-<path id='protocol_settings_fk_protocol_runs'  onmouseover="hghl(['protocol_settings_fk_protocol_runs','barcodes.protocol_settings.created_by','barcodes.person.person_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs','barcodes.protocol_settings.created_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 975 525 L 937,525 Q 930,525 930,517 L 930,510' >
-	<title>Fk fk_protocol_runs
-protocol_settings ref person ( created_by -&gt; person_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 975 525 L 937,525 Q 930,525 930,517 L 930,510' ></path>
-<text x='918' y='520' transform='rotate(0 918,520)' title='Fk fk_protocol_runs
-protocol_settings ref person ( created_by -&gt; person_id )' style='fill:#cfc391;'>created_by</text>
-<!-- ============= Fk 'protocol_settings_fk_protocol_runs_1' ============= -->
-<path id='protocol_settings_fk_protocol_runs_1'  onmouseover="hghl(['protocol_settings_fk_protocol_runs_1','barcodes.protocol_settings.plate_barcode','barcodes.plate.plate_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_1','barcodes.protocol_settings.plate_barcode','barcodes.plate.plate_id'])" transform='translate(7,0)' class='scene' d='M 975 495 L 877,495 Q 870,495 870,487 L 870,277 Q 870,270 862,270 L 652,270 Q 645,270 645,262 L 645,142 Q 645,135 652,135 L 660,135' >
-	<title>Fk fk_protocol_runs_1
-protocol_settings ref plate ( plate_barcode -&gt; plate_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot0p)'     d='M 975 495 L 877,495 Q 870,495 870,487 L 870,277 Q 870,270 862,270 L 652,270 Q 645,270 645,262 L 645,142 Q 645,135 652,135 L 660,135' ></path>
-<text x='901' y='490' transform='rotate(0 901,490)' title='Fk fk_protocol_runs_1
-protocol_settings ref plate ( plate_barcode -&gt; plate_id )' style='fill:#cfc391;'>plate_barcode</text>
-<!-- ============= Fk 'protocol_settings_fk_protocol_runs_2' ============= -->
-<path id='protocol_settings_fk_protocol_runs_2'  onmouseover="hghl(['protocol_settings_fk_protocol_runs_2','barcodes.protocol_settings.sample_id','barcodes.sample.sample_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_2','barcodes.protocol_settings.sample_id','barcodes.sample.sample_id'])" transform='translate(7,0)' class='scene' d='M 975 480 L 907,480 Q 900,480 900,472 L 900,292 Q 900,285 892,285 L 427,285 Q 420,285 420,277 L 420,157 Q 420,150 412,150 L 405,150' >
-	<title>Fk fk_protocol_runs_2
-protocol_settings ref sample ( sample_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot0p)'     d='M 975 480 L 907,480 Q 900,480 900,472 L 900,292 Q 900,285 892,285 L 427,285 Q 420,285 420,277 L 420,157 Q 420,150 412,150 L 405,150' ></path>
-<text x='923' y='475' transform='rotate(0 923,475)' title='Fk fk_protocol_runs_2
-protocol_settings ref sample ( sample_id )' style='fill:#cfc391;'>sample_id</text>
 <!-- ============= Fk 'pcr_settings_fk_hardcode_settings' ============= -->
 <path id='pcr_settings_fk_hardcode_settings'  onmouseover="hghl(['pcr_settings_fk_hardcode_settings','barcodes.pcr_settings.primer_lot','barcodes.primer_set_lots.lot'])" onmouseout="uhghl(['pcr_settings_fk_hardcode_settings','barcodes.pcr_settings.primer_lot','barcodes.primer_set_lots.lot'])" transform='translate(7,0)' class='scene' d='M 975 735 L 915,735' >
 	<title>Fk fk_hardcode_settings
@@ -336,11 +312,11 @@ pcr_settings ref primer_set_lots ( primer_lot -&gt; lot )</title>
 <text x='921' y='730' transform='rotate(0 921,730)' title='Fk fk_hardcode_settings
 pcr_settings ref primer_set_lots ( primer_lot -&gt; lot )' style='fill:#cfc391;'>primer_lot</text>
 <!-- ============= Fk 'pcr_settings_fk_hardcode_settings_0' ============= -->
-<path id='pcr_settings_fk_hardcode_settings_0'  onmouseover="hghl(['pcr_settings_fk_hardcode_settings_0','barcodes.pcr_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" onmouseout="uhghl(['pcr_settings_fk_hardcode_settings_0','barcodes.pcr_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" transform='translate(7,0)' class='scene' d='M 975 705 L 967,705 Q 960,705 960,697 L 960,457 Q 960,450 967,450 L 975,450' >
+<path id='pcr_settings_fk_hardcode_settings_0'  onmouseover="hghl(['pcr_settings_fk_hardcode_settings_0','barcodes.pcr_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" onmouseout="uhghl(['pcr_settings_fk_hardcode_settings_0','barcodes.pcr_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" transform='translate(7,0)' class='scene' d='M 975 705 L 967,705 Q 960,705 960,697 L 960,585' >
 	<title>Fk fk_hardcode_settings_0
 pcr_settings ref protocol_settings ( protocol_settings_id )</title>
 </path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1)' marker-end='url(#arrow1)'    d='M 975 705 L 967,705 Q 960,705 960,697 L 960,457 Q 960,450 967,450 L 975,450' ></path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1)'     d='M 975 705 L 967,705 Q 960,705 960,697 L 960,585' ></path>
 <text x='866' y='700' transform='rotate(0 866,700)' title='Fk fk_hardcode_settings_0
 pcr_settings ref protocol_settings ( protocol_settings_id )' style='fill:#cfc391;'>protocol_settings_id</text>
 <!-- ============= Fk 'pcr_settings_fk_pcr_settings' ============= -->
@@ -495,6 +471,38 @@ plates_samples ref sample ( sample_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 435 150 L 330,150' ></path>
 <text x='383' y='145' transform='rotate(0 383,145)' title='Fk fk_plates_samples
 plates_samples ref sample ( sample_id )' style='fill:#cfc391;'>sample_id</text>
+<!-- ============= Fk 'protocol_settings_fk_protocol_runs' ============= -->
+<path id='protocol_settings_fk_protocol_runs'  onmouseover="hghl(['protocol_settings_fk_protocol_runs','barcodes.protocol_settings.created_by','barcodes.person.person_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs','barcodes.protocol_settings.created_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 975 525 L 937,525 Q 930,525 930,517 L 930,510' >
+	<title>Fk fk_protocol_runs
+protocol_settings ref person ( created_by -&gt; person_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 975 525 L 937,525 Q 930,525 930,517 L 930,510' ></path>
+<text x='918' y='520' transform='rotate(0 918,520)' title='Fk fk_protocol_runs
+protocol_settings ref person ( created_by -&gt; person_id )' style='fill:#cfc391;'>created_by</text>
+<!-- ============= Fk 'protocol_settings_fk_protocol_runs_1' ============= -->
+<path id='protocol_settings_fk_protocol_runs_1'  onmouseover="hghl(['protocol_settings_fk_protocol_runs_1','barcodes.protocol_settings.plate_id','barcodes.plate.plate_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_1','barcodes.protocol_settings.plate_id','barcodes.plate.plate_id'])" transform='translate(7,0)' class='scene' d='M 975 495 L 877,495 Q 870,495 870,487 L 870,277 Q 870,270 862,270 L 652,270 Q 645,270 645,262 L 645,142 Q 645,135 652,135 L 660,135' >
+	<title>Fk fk_protocol_runs_1
+protocol_settings ref plate ( plate_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot0p)'     d='M 975 495 L 877,495 Q 870,495 870,487 L 870,277 Q 870,270 862,270 L 652,270 Q 645,270 645,262 L 645,142 Q 645,135 652,135 L 660,135' ></path>
+<text x='935' y='490' transform='rotate(0 935,490)' title='Fk fk_protocol_runs_1
+protocol_settings ref plate ( plate_id )' style='fill:#cfc391;'>plate_id</text>
+<!-- ============= Fk 'protocol_settings_fk_protocol_runs_2' ============= -->
+<path id='protocol_settings_fk_protocol_runs_2'  onmouseover="hghl(['protocol_settings_fk_protocol_runs_2','barcodes.protocol_settings.sample_id','barcodes.sample.sample_id'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_2','barcodes.protocol_settings.sample_id','barcodes.sample.sample_id'])" transform='translate(7,0)' class='scene' d='M 975 480 L 907,480 Q 900,480 900,472 L 900,292 Q 900,285 892,285 L 427,285 Q 420,285 420,277 L 420,157 Q 420,150 412,150 L 405,150' >
+	<title>Fk fk_protocol_runs_2
+protocol_settings ref sample ( sample_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot0p)'     d='M 975 480 L 907,480 Q 900,480 900,472 L 900,292 Q 900,285 892,285 L 427,285 Q 420,285 420,277 L 420,157 Q 420,150 412,150 L 405,150' ></path>
+<text x='923' y='475' transform='rotate(0 923,475)' title='Fk fk_protocol_runs_2
+protocol_settings ref sample ( sample_id )' style='fill:#cfc391;'>sample_id</text>
+<!-- ============= Fk 'extraction_settings_fk_extraction_settings' ============= -->
+<path id='extraction_settings_fk_extraction_settings'  onmouseover="hghl(['extraction_settings_fk_extraction_settings','barcodes.extraction_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" onmouseout="uhghl(['extraction_settings_fk_extraction_settings','barcodes.extraction_settings.protocol_settings_id','barcodes.protocol_settings.protocol_settings_id'])" transform='translate(7,0)' class='scene' d='M 975 600 L 967,600 Q 960,600 960,592 L 960,457 Q 960,450 967,450 L 975,450' >
+	<title>Fk fk_extraction_settings
+extraction_settings ref protocol_settings ( protocol_settings_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 975 600 L 967,600 Q 960,600 960,592 L 960,457 Q 960,450 967,450 L 975,450' ></path>
+<text x='866' y='595' transform='rotate(0 866,595)' title='Fk fk_extraction_settings
+extraction_settings ref protocol_settings ( protocol_settings_id )' style='fill:#cfc391;'>protocol_settings_id</text>
 <!-- ============= Table 'pool_samples' ============= -->
 <rect class='table' x='915' y='38' width='180' height='90' rx='7' ry='7' />
 <line class='delim' x1='915.500000' y1='64.500000' x2='1094.500000' y2='64.500000'/>
@@ -513,50 +521,6 @@ plates_samples ref sample ( sample_id )' style='fill:#cfc391;'>sample_id</text>
   <a xlink:href='#pool_samples.volume'><text id='barcodes.pool_samples.volume' x='933' y='112'>volume</text><text x='1080' y='112' text-anchor='end' class='colType'>varchar</text><title>volume
 varchar
 Volume used from each plate/sample for final pool</title></a>
-
-<!-- ============= Table 'protocol_settings' ============= -->
-<rect class='table' x='990' y='413' width='195' height='135' rx='7' ry='7' />
-<line class='delim' x1='990.500000' y1='439.500000' x2='1184.500000' y2='439.500000'/>
-<line class='delim' x1='1005.500000' y1='439.500000' x2='1005.500000' y2='547.500000'/>
-<line class='delim' x1='1173.500000' y1='439.500000' x2='1173.500000' y2='547.500000'/>
-<path d='M 990.50 439.50 L 990.50 420.50 Q 990.50 413.50 997.50 413.50 L 1177.50 413.50 Q 1184.50 413.50 1184.50 420.50 L 1184.50 439.50 L990.50 439.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#protocol_settings'><text x='1037' y='431'>protocol_settings</text><title>Table barcodes.protocol_settings</title></a>
-  <use id='nn' x='992' y='447' xlink:href='#nn'/><a xlink:href='#protocol_settings.protocol_settings_id'><use id='pk' x='992' y='446' xlink:href='#pk'/><title>Pk pk_protocol_runs ( protocol_settings_id ) </title></a>
-<a xlink:href='#protocol_settings.protocol_settings_id'><text id='barcodes.protocol_settings.protocol_settings_id' x='1008' y='457' onmouseover="hghl(['pcr_settings_fk_hardcode_settings_0','pcr_settings_fk_pcr_settings','pool_samples_fk_pool_samples_0'])" onmouseout="uhghl(['pcr_settings_fk_hardcode_settings_0','pcr_settings_fk_pcr_settings','pool_samples_fk_pool_samples_0'])">protocol_settings_id</text><text x='1170' y='457' text-anchor='end' class='colType'>bigserial</text><title>protocol_settings_id
-* bigserial</title></a>
-<a xlink:href='#protocol_settings.protocol_settings_id'><use id='ref' x='1173' y='446' xlink:href='#ref'/><title>Referred by pcr_settings ( protocol_settings_id ) 
-Referred by pcr_settings ( extraction_protocol_settings_id -&gt; protocol_settings_id ) 
-Referred by pool_samples ( protocol_settings_id ) </title></a>
-  <a xlink:href='#protocol_settings.protocol_id'><text id='barcodes.protocol_settings.protocol_id' x='1008' y='472'>protocol_id</text><text x='1170' y='472' text-anchor='end' class='colType'>integer</text><title>protocol_id
-integer</title></a>
-  <a xlink:href='#protocol_settings.sample_id'><use id='idx' x='992' y='476' xlink:href='#idx'/><title>idx_protocol_runs_2 ( sample_id ) </title></a>
-<a xlink:href='#protocol_settings.sample_id'><text id='barcodes.protocol_settings.sample_id' x='1008' y='487' onmouseover="hghl(['protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='1170' y='487' text-anchor='end' class='colType'>bigint</text><title>sample_id
-bigint</title></a>
-<a xlink:href='#protocol_settings.sample_id'><use id='fk' x='1173' y='476' xlink:href='#fk'/><title>References sample ( sample_id ) </title></a>
-  <a xlink:href='#protocol_settings.plate_barcode'><use id='idx' x='992' y='491' xlink:href='#idx'/><title>idx_protocol_runs_1 ( plate_barcode ) </title></a>
-<a xlink:href='#protocol_settings.plate_barcode'><text id='barcodes.protocol_settings.plate_barcode' x='1008' y='502' onmouseover="hghl(['protocol_settings_fk_protocol_runs_1'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_1'])">plate_barcode</text><text x='1170' y='502' text-anchor='end' class='colType'>varchar</text><title>plate_barcode
-varchar</title></a>
-<a xlink:href='#protocol_settings.plate_barcode'><use id='fk' x='1173' y='491' xlink:href='#fk'/><title>References plate ( plate_barcode -&gt; plate_id ) </title></a>
-  <use id='nn' x='992' y='507' xlink:href='#nn'/><a xlink:href='#protocol_settings.created_on'><text id='barcodes.protocol_settings.created_on' x='1008' y='517'>created_on</text><text x='1170' y='517' text-anchor='end' class='colType'>timestamp</text><title>created_on
-* timestamp default current_timestamp</title></a>
-  <use id='nn' x='992' y='522' xlink:href='#nn'/><a xlink:href='#protocol_settings.created_by'><use id='idx' x='992' y='521' xlink:href='#idx'/><title>idx_protocol_runs ( created_by ) </title></a>
-<a xlink:href='#protocol_settings.created_by'><text id='barcodes.protocol_settings.created_by' x='1008' y='532' onmouseover="hghl(['protocol_settings_fk_protocol_runs'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs'])">created_by</text><text x='1170' y='532' text-anchor='end' class='colType'>bigint</text><title>created_by
-* bigint</title></a>
-<a xlink:href='#protocol_settings.created_by'><use id='fk' x='1173' y='521' xlink:href='#fk'/><title>References person ( created_by -&gt; person_id ) </title></a>
-
-<!-- ============= Table 'extraction_settings' ============= -->
-<rect class='table' x='990' y='563' width='195' height='90' rx='7' ry='7' />
-<line class='delim' x1='990.500000' y1='589.500000' x2='1184.500000' y2='589.500000'/>
-<line class='delim' x1='1005.500000' y1='589.500000' x2='1005.500000' y2='652.500000'/>
-<line class='delim' x1='1173.500000' y1='589.500000' x2='1173.500000' y2='652.500000'/>
-<path d='M 990.50 589.50 L 990.50 570.50 Q 990.50 563.50 997.50 563.50 L 1177.50 563.50 Q 1184.50 563.50 1184.50 570.50 L 1184.50 589.50 L990.50 589.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#extraction_settings'><text x='1032' y='581'>extraction_settings</text><title>Table barcodes.extraction_settings</title></a>
-  <use id='nn' x='992' y='597' xlink:href='#nn'/><a xlink:href='#extraction_settings.extractionkit_lot'><text id='barcodes.extraction_settings.extractionkit_lot' x='1008' y='607'>extractionkit_lot</text><text x='1170' y='607' text-anchor='end' class='colType'>varchar(40)</text><title>extractionkit_lot
-* varchar(40)</title></a>
-  <use id='nn' x='992' y='612' xlink:href='#nn'/><a xlink:href='#extraction_settings.extraction_robot'><text id='barcodes.extraction_settings.extraction_robot' x='1008' y='622'>extraction_robot</text><text x='1170' y='622' text-anchor='end' class='colType'>varchar(40)</text><title>extraction_robot
-* varchar(40)</title></a>
-  <use id='nn' x='992' y='627' xlink:href='#nn'/><a xlink:href='#extraction_settings.tm1000_8_tool'><text id='barcodes.extraction_settings.tm1000_8_tool' x='1008' y='637'>tm1000_8_tool</text><text x='1170' y='637' text-anchor='end' class='colType'>varchar(40)</text><title>tm1000_8_tool
-* varchar(40)</title></a>
 
 <!-- ============= Table 'barcode' ============= -->
 <rect class='table' x='45' y='398' width='195' height='105' rx='7' ry='7' />
@@ -937,7 +901,7 @@ Track access levels for bitwise comparisons</title></a>
 The barcode assigned to the plate</title></a>
 <a xlink:href='#plate.plate_id'><use id='fk' x='813' y='131' xlink:href='#fk'/><title>References barcode ( plate_id -&gt; barcode ) 
 Referred by plates_samples ( plate_id ) 
-Referred by protocol_settings ( plate_barcode -&gt; plate_id ) </title></a>
+Referred by protocol_settings ( plate_id ) </title></a>
   <use id='nn' x='677' y='147' xlink:href='#nn'/><a xlink:href='#plate.plate'><text id='barcodes.plate.plate' x='693' y='157'>plate</text><text x='810' y='157' text-anchor='end' class='colType'>varchar(100)</text><title>plate
 * varchar(100)
 Name of the plate</title></a>
@@ -978,6 +942,56 @@ Number of columns on plate</title></a>
   <use id='nn' x='452' y='177' xlink:href='#nn'/><a xlink:href='#plates_samples.plate_col'><use id='unq' x='452' y='176' xlink:href='#unq'/><title>Unq idx_plates_samples_0 ( plate_id, plate_row, plate_col ) </title></a>
 <a xlink:href='#plates_samples.plate_col'><text id='barcodes.plates_samples.plate_col' x='468' y='187'>plate_col</text><text x='570' y='187' text-anchor='end' class='colType'>smallint</text><title>plate_col
 * smallint</title></a>
+
+<!-- ============= Table 'protocol_settings' ============= -->
+<rect class='table' x='990' y='413' width='195' height='135' rx='7' ry='7' />
+<line class='delim' x1='990.500000' y1='439.500000' x2='1184.500000' y2='439.500000'/>
+<line class='delim' x1='1005.500000' y1='439.500000' x2='1005.500000' y2='547.500000'/>
+<line class='delim' x1='1173.500000' y1='439.500000' x2='1173.500000' y2='547.500000'/>
+<path d='M 990.50 439.50 L 990.50 420.50 Q 990.50 413.50 997.50 413.50 L 1177.50 413.50 Q 1184.50 413.50 1184.50 420.50 L 1184.50 439.50 L990.50 439.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#protocol_settings'><text x='1037' y='431'>protocol_settings</text><title>Table barcodes.protocol_settings</title></a>
+  <use id='nn' x='992' y='447' xlink:href='#nn'/><a xlink:href='#protocol_settings.protocol_settings_id'><use id='pk' x='992' y='446' xlink:href='#pk'/><title>Pk pk_protocol_runs ( protocol_settings_id ) </title></a>
+<a xlink:href='#protocol_settings.protocol_settings_id'><text id='barcodes.protocol_settings.protocol_settings_id' x='1008' y='457' onmouseover="hghl(['pcr_settings_fk_hardcode_settings_0','pcr_settings_fk_pcr_settings','pool_samples_fk_pool_samples_0','extraction_settings_fk_extraction_settings','extraction_settings_fk_extraction_settings'])" onmouseout="uhghl(['pcr_settings_fk_hardcode_settings_0','pcr_settings_fk_pcr_settings','pool_samples_fk_pool_samples_0','extraction_settings_fk_extraction_settings','extraction_settings_fk_extraction_settings'])">protocol_settings_id</text><text x='1170' y='457' text-anchor='end' class='colType'>bigserial</text><title>protocol_settings_id
+* bigserial</title></a>
+<a xlink:href='#protocol_settings.protocol_settings_id'><use id='ref' x='1173' y='446' xlink:href='#ref'/><title>Referred by pcr_settings ( protocol_settings_id ) 
+Referred by pcr_settings ( extraction_protocol_settings_id -&gt; protocol_settings_id ) 
+Referred by pool_samples ( protocol_settings_id ) 
+Referred by extraction_settings ( protocol_settings_id ) 
+Referred by extraction_settings ( protocol_settings_id ) </title></a>
+  <a xlink:href='#protocol_settings.protocol_id'><text id='barcodes.protocol_settings.protocol_id' x='1008' y='472'>protocol_id</text><text x='1170' y='472' text-anchor='end' class='colType'>integer</text><title>protocol_id
+integer</title></a>
+  <a xlink:href='#protocol_settings.sample_id'><use id='idx' x='992' y='476' xlink:href='#idx'/><title>idx_protocol_runs_2 ( sample_id ) </title></a>
+<a xlink:href='#protocol_settings.sample_id'><text id='barcodes.protocol_settings.sample_id' x='1008' y='487' onmouseover="hghl(['protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='1170' y='487' text-anchor='end' class='colType'>bigint</text><title>sample_id
+bigint</title></a>
+<a xlink:href='#protocol_settings.sample_id'><use id='fk' x='1173' y='476' xlink:href='#fk'/><title>References sample ( sample_id ) </title></a>
+  <a xlink:href='#protocol_settings.plate_id'><use id='idx' x='992' y='491' xlink:href='#idx'/><title>idx_protocol_runs_1 ( plate_id ) </title></a>
+<a xlink:href='#protocol_settings.plate_id'><text id='barcodes.protocol_settings.plate_id' x='1008' y='502' onmouseover="hghl(['protocol_settings_fk_protocol_runs_1'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs_1'])">plate_id</text><text x='1170' y='502' text-anchor='end' class='colType'>varchar</text><title>plate_id
+varchar</title></a>
+<a xlink:href='#protocol_settings.plate_id'><use id='fk' x='1173' y='491' xlink:href='#fk'/><title>References plate ( plate_id ) </title></a>
+  <use id='nn' x='992' y='507' xlink:href='#nn'/><a xlink:href='#protocol_settings.created_on'><text id='barcodes.protocol_settings.created_on' x='1008' y='517'>created_on</text><text x='1170' y='517' text-anchor='end' class='colType'>timestamp</text><title>created_on
+* timestamp default current_timestamp</title></a>
+  <use id='nn' x='992' y='522' xlink:href='#nn'/><a xlink:href='#protocol_settings.created_by'><use id='idx' x='992' y='521' xlink:href='#idx'/><title>idx_protocol_runs ( created_by ) </title></a>
+<a xlink:href='#protocol_settings.created_by'><text id='barcodes.protocol_settings.created_by' x='1008' y='532' onmouseover="hghl(['protocol_settings_fk_protocol_runs'])" onmouseout="uhghl(['protocol_settings_fk_protocol_runs'])">created_by</text><text x='1170' y='532' text-anchor='end' class='colType'>bigint</text><title>created_by
+* bigint</title></a>
+<a xlink:href='#protocol_settings.created_by'><use id='fk' x='1173' y='521' xlink:href='#fk'/><title>References person ( created_by -&gt; person_id ) </title></a>
+
+<!-- ============= Table 'extraction_settings' ============= -->
+<rect class='table' x='990' y='563' width='195' height='105' rx='7' ry='7' />
+<line class='delim' x1='990.500000' y1='589.500000' x2='1184.500000' y2='589.500000'/>
+<line class='delim' x1='1005.500000' y1='589.500000' x2='1005.500000' y2='667.500000'/>
+<line class='delim' x1='1173.500000' y1='589.500000' x2='1173.500000' y2='667.500000'/>
+<path d='M 990.50 589.50 L 990.50 570.50 Q 990.50 563.50 997.50 563.50 L 1177.50 563.50 Q 1184.50 563.50 1184.50 570.50 L 1184.50 589.50 L990.50 589.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#extraction_settings'><text x='1032' y='581'>extraction_settings</text><title>Table barcodes.extraction_settings</title></a>
+  <use id='nn' x='992' y='597' xlink:href='#nn'/><a xlink:href='#extraction_settings.protocol_settings_id'><use id='idx' x='992' y='596' xlink:href='#idx'/><title>idx_extraction_settings ( protocol_settings_id ) </title></a>
+<a xlink:href='#extraction_settings.protocol_settings_id'><text id='barcodes.extraction_settings.protocol_settings_id' x='1008' y='607' onmouseover="hghl(['extraction_settings_fk_extraction_settings'])" onmouseout="uhghl(['extraction_settings_fk_extraction_settings'])">protocol_settings_id</text><text x='1170' y='607' text-anchor='end' class='colType'>bigint</text><title>protocol_settings_id
+* bigint</title></a>
+<a xlink:href='#extraction_settings.protocol_settings_id'><use id='fk' x='1173' y='596' xlink:href='#fk'/><title>References protocol_settings ( protocol_settings_id ) </title></a>
+  <use id='nn' x='992' y='612' xlink:href='#nn'/><a xlink:href='#extraction_settings.extractionkit_lot'><text id='barcodes.extraction_settings.extractionkit_lot' x='1008' y='622'>extractionkit_lot</text><text x='1170' y='622' text-anchor='end' class='colType'>varchar(40)</text><title>extractionkit_lot
+* varchar(40)</title></a>
+  <use id='nn' x='992' y='627' xlink:href='#nn'/><a xlink:href='#extraction_settings.extraction_robot'><text id='barcodes.extraction_settings.extraction_robot' x='1008' y='637'>extraction_robot</text><text x='1170' y='637' text-anchor='end' class='colType'>varchar(40)</text><title>extraction_robot
+* varchar(40)</title></a>
+  <use id='nn' x='992' y='642' xlink:href='#nn'/><a xlink:href='#extraction_settings.tm1000_8_tool'><text id='barcodes.extraction_settings.tm1000_8_tool' x='1008' y='652'>tm1000_8_tool</text><text x='1170' y='652' text-anchor='end' class='colType'>varchar(40)</text><title>tm1000_8_tool
+* varchar(40)</title></a>
 
 </g></svg>
 
@@ -1023,111 +1037,6 @@ Number of columns on plate</title></a>
 	<tr>
 		<td>&nbsp;</td><td>fk_pool_samples_0</td>
 		<td > ( protocol&#95;settings&#95;id ) ref <a href='#protocol&#95;settings'>protocol&#95;settings</a> (protocol&#95;settings&#95;id) </td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
-<tr><th colspan='4'><a name='protocol_settings'>Table protocol_settings</a></th></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='protocol_settings.protocol_settings_id'>protocol&#95;settings&#95;id</a></td>
-		<td> bigserial   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='protocol_settings.protocol_id'>protocol&#95;id</a></td>
-		<td> integer   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='protocol_settings.sample_id'>sample&#95;id</a></td>
-		<td> bigint   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='protocol_settings.plate_barcode'>plate&#95;barcode</a></td>
-		<td> varchar   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='protocol_settings.created_on'>created&#95;on</a></td>
-		<td> timestamp   DEFO current_timestamp </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='protocol_settings.created_by'>created&#95;by</a></td>
-		<td> bigint   </td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>Pk</td><td>pk&#95;protocol&#95;runs</td>
-		<td> ON protocol&#95;settings&#95;id</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs</td>
-		<td> ON created&#95;by</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs&#95;1</td>
-		<td> ON plate&#95;barcode</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs&#95;2</td>
-		<td> ON sample&#95;id</td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_protocol_runs</td>
-		<td > ( created&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_protocol_runs_1</td>
-		<td > ( plate&#95;barcode ) ref <a href='#plate'>plate</a> (plate&#95;id) </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_protocol_runs_2</td>
-		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
-<tr><th colspan='4'><a name='extraction_settings'>Table extraction_settings</a></th></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='extraction_settings.extractionkit_lot'>extractionkit&#95;lot</a></td>
-		<td> varchar&#40; 40 &#41;   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='extraction_settings.extraction_robot'>extraction&#95;robot</a></td>
-		<td> varchar&#40; 40 &#41;   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='extraction_settings.tm1000_8_tool'>tm1000&#95;8&#95;tool</a></td>
-		<td> varchar&#40; 40 &#41;   </td>
 		<td>  </td>
 	</tr>
 </tbody>
@@ -2115,6 +2024,128 @@ Number of columns on plate</title></a>
 	<tr>
 		<td>&nbsp;</td><td>fk_plates_samples</td>
 		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
+<tr><th colspan='4'><a name='protocol_settings'>Table protocol_settings</a></th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='protocol_settings.protocol_settings_id'>protocol&#95;settings&#95;id</a></td>
+		<td> bigserial   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='protocol_settings.protocol_id'>protocol&#95;id</a></td>
+		<td> integer   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='protocol_settings.sample_id'>sample&#95;id</a></td>
+		<td> bigint   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='protocol_settings.plate_id'>plate&#95;id</a></td>
+		<td> varchar   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='protocol_settings.created_on'>created&#95;on</a></td>
+		<td> timestamp   DEFO current_timestamp </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='protocol_settings.created_by'>created&#95;by</a></td>
+		<td> bigint   </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>Pk</td><td>pk&#95;protocol&#95;runs</td>
+		<td> ON protocol&#95;settings&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs</td>
+		<td> ON created&#95;by</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs&#95;1</td>
+		<td> ON plate&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;protocol&#95;runs&#95;2</td>
+		<td> ON sample&#95;id</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_protocol_runs</td>
+		<td > ( created&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_protocol_runs_1</td>
+		<td > ( plate&#95;id ) ref <a href='#plate'>plate</a> (plate&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_protocol_runs_2</td>
+		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
+<tr><th colspan='4'><a name='extraction_settings'>Table extraction_settings</a></th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='extraction_settings.protocol_settings_id'>protocol&#95;settings&#95;id</a></td>
+		<td> bigint   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='extraction_settings.extractionkit_lot'>extractionkit&#95;lot</a></td>
+		<td> varchar&#40; 40 &#41;   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='extraction_settings.extraction_robot'>extraction&#95;robot</a></td>
+		<td> varchar&#40; 40 &#41;   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='extraction_settings.tm1000_8_tool'>tm1000&#95;8&#95;tool</a></td>
+		<td> varchar&#40; 40 &#41;   </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;extraction&#95;settings</td>
+		<td> ON protocol&#95;settings&#95;id</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_extraction_settings</td>
+		<td > ( protocol&#95;settings&#95;id ) ref <a href='#protocol&#95;settings'>protocol&#95;settings</a> (protocol&#95;settings&#95;id) </td>
 		<td>  </td>
 	</tr>
 </tbody>
