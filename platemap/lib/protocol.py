@@ -123,11 +123,10 @@ class ProtocolBase(pm.base.PMObject):
               """.format(self._subtable)
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
-            info = dict(pm.sql.TRN.execute_fetchindex())
+            info = dict(pm.sql.TRN.execute_fetchindex()[0])
 
             # Clean person, plate, and sample ids to their objects
-            info['person'] = pm.person.Person(info['person_id'])
-            del info['person_id']
+            info['created_by'] = pm.person.Person(info['created_by'])
             if info['sample_id'] is not None:
                 info['plate'] = None
                 del info['plate_id']
@@ -154,7 +153,7 @@ class ExtractionProtocol(ProtocolBase):
         """
         sql = """SELECT EXISTS(
                    SELECT * FROM barcodes.{0}
-                   WHERE {0}_id=%s)""".format(self._subtable)
+                   WHERE protocol_settings_id=%s)""".format(self._subtable)
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [id_])
             return pm.sql.TRN.execute_fetchlast()
@@ -195,7 +194,7 @@ class PCRProtocol(ProtocolBase):
         """
         sql = """SELECT EXISTS(
                    SELECT * FROM barcodes.{0}
-                   WHERE {0}_id=%s)""".format(self._subtable)
+                   WHERE protocol_settings_id=%s)""".format(self._subtable)
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [id_])
             return pm.sql.TRN.execute_fetchlast()
@@ -213,28 +212,29 @@ class PCRProtocol(ProtocolBase):
 
     @property
     def extraction_protocol(self):
-        self._get_subproperty('extraction_protocol')
+        return ExtractionProtocol(
+            self._get_subproperty('extraction_protocol_settings_id'))
 
     @property
     def primer_lot(self):
-        self._get_subproperty('primer_lot')
+        return self._get_subproperty('primer_lot')
 
     @property
     def mastermix_lot(self):
-        self._get_subproperty('mastermix_lot')
+        return self._get_subproperty('mastermix_lot')
 
     @property
     def water_lot(self):
-        self._get_subproperty('water_lot')
+        return self._get_subproperty('water_lot')
 
     @property
     def processing_robot(self):
-        self._get_subproperty('processing_robot')
+        return self._get_subproperty('processing_robot')
 
     @property
     def tm300_8_tool(self):
-        self._get_subproperty('tm300_8_tool')
+        return self._get_subproperty('tm300_8_tool')
 
     @property
     def tm50_8_tool(self):
-        self._get_subproperty('tm50_8_tool')
+        return self._get_subproperty('tm50_8_tool')
