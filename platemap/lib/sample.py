@@ -44,12 +44,14 @@ class Sample(pm.base.PMObject):
             return pm.sql.TRN.execute_fetchflatten()
 
     @classmethod
-    def search(cls, biomass_remaining=None, sample_type=None, barcode=None,
-               project=None, primer_set=None, protocol=None):
+    def search(cls, name=None, biomass_remaining=None, sample_type=None,
+               barcode=None, project=None, primer_set=None, protocol=None):
         """Searches over all given parameters for matching samples
 
         Parameters
         ----------
+        name : str
+            Sample name to search for
         biomass_remaining : bool, optional
             Whether physical sample remains
         sample_type : str, optional
@@ -78,8 +80,8 @@ class Sample(pm.base.PMObject):
             No parameters passed in
         """
         # Make sure at least one argument passed
-        if all([x is None for x in [biomass_remaining, sample_type, barcode,
-                                    project, primer_set, protocol]]):
+        if all([x is None for x in [name, biomass_remaining, sample_type,
+                                    barcode, project, primer_set, protocol]]):
             raise pm.exceptions.DeveloperError(
                 'Must pass at least one parameter')
 
@@ -87,6 +89,9 @@ class Sample(pm.base.PMObject):
         wheres = []
         sql_args = []
         sql = 'SELECT sample_id FROM barcodes.sample'
+        if name is not None:
+            wheres.append('sample = %s')
+            sql_args.append(name)
         if biomass_remaining is not None:
             wheres.append('biomass_remaining = %s')
             sql_args.append(biomass_remaining)

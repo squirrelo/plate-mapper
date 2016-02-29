@@ -28,6 +28,10 @@ class TestSample(TestCase):
         self.assertEqual(obs, exp)
 
     def test_search(self):
+        obs = pm.sample.Sample.search(name='Sample 1')
+        exp = [pm.sample.Sample(1)]
+        self.assertEqual(obs, exp)
+
         obs = pm.sample.Sample.search(biomass_remaining=True)
         exp = [pm.sample.Sample(1), pm.sample.Sample(4)]
         self.assertEqual(obs, exp)
