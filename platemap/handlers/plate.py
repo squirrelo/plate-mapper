@@ -24,7 +24,7 @@ class PlateCreateHandler(BaseHandler):
         plate = self.get_argument('plate')
         plates = {
             '96 well': (8, 12),
-            '384 well': (12, 24),
+            '384 well': (16, 24)
         }
 
         plate = pm.plate.Plate.create(barcode, name, self.current_user.person,
