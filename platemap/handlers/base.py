@@ -11,7 +11,7 @@ from traceback import format_exception
 from tornado.web import RequestHandler
 
 from platemap.lib.config_manager import pm_config
-import platemap as pm
+# import platemap as pm
 
 
 class BaseHandler(RequestHandler):

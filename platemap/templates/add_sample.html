@@ -1,0 +1,30 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#sample-form").validate();
+    $("#type").autofill({{types}});
+    $("#location").autofill({{locations}});
+  });
+</script>
+{% end %}
+{% block content %}
+<h3> Add a new sample</h3>
+<form method="POST" action="/sample/create/">
+<table class="table">
+<tr><td>Sample Name</td><td><input type="text" name="sample" id="sample" required></td></tr>
+<tr><td>Sample Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
+<tr><td>Sample Set</td><td>
+  <select name="sample-set" id="sample-set" required>
+    <option value=""></option>
+    {% for set in sets %}
+    <option value="{{set}}">{{set}}</option>
+    {% end %}
+  </select><br/>
+</td></tr>
+<tr><td>Sample Type</td><td><input type="text" name="type" id="type" required></td></tr>
+<tr><td>Sample Location</td><td><input type="text" name="location" id="location" required></td></tr>
+</table>
+<input type="submit" value="Create sample">
+</form>
+{% end %}

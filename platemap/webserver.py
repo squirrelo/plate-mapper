@@ -15,6 +15,7 @@ from tornado.options import define, options, parse_command_line
 from platemap.lib.config_manager import pm_config
 from platemap.handlers.base import MainHandler, NoPageHandler
 from platemap.handlers.auth import AuthLoginHandler, AuthLogoutHandler
+from platemap.handlers.sample import SampleCreateHandler
 
 define("port", default=7778, help="run on the given port", type=int)
 
@@ -31,6 +32,7 @@ class PMApplication(Application):
             # (r"/auth/create/", AuthCreateHandler),
             # (r"/auth/delete/", AuthDeleteHandler),
             # (r"/auth/profile/", UserProfileHandler),
+            (r'/sample/add/', SampleCreateHandler),
             # 404 PAGE MUST BE LAST IN THIS LIST!
             (r".*", NoPageHandler)
         ]

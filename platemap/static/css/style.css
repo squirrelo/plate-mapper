@@ -24,6 +24,9 @@ body {
   padding-left: 220px;
 }
 
+.table td {
+  padding: 5px;
+}
 /* specific styling for how to show plate map tables */
 .plate th {
   font-weight: bold;
