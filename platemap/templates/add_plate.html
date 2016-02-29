@@ -1,0 +1,19 @@
+{% extends sitebase.html %}
+{% block content %}
+<h3> Add a new platemap</h3>
+<form method="POST" action="/plate/add/">
+<table class="table">
+<tr><td>Plate Name</td><td><input type="text" name="name" id="name" required></td></tr>
+<tr><td>Plate Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
+<tr><td>Plate Type</td><td>
+  <select name="plate" id="plate" required>
+    <option value=""></option>
+    {% for plate in plates %}
+    <option value="{{plate}}">{{plate}}</option>
+    {% end %}
+  </select><br/>
+</td></tr>
+</table>
+<input type="submit" value="Create Plate">
+</form>
+{% end %}
