@@ -9,17 +9,17 @@ import platemap as pm
 
 
 class TestHandlerBase(AsyncHTTPTestCase):
-    database = False
     app = Application()
 
     def get_app(self):
-        BaseHandler.get_current_user = Mock(
-            return_value=pm.person.User('User1'))
         self.app.settings['debug'] = False
         return self.app
 
     # helpers from http://www.peterbe.com/plog/tricks-asynchttpclient-tornado
-    def get(self, url, data=None, headers=None, doseq=True):
+    def get(self, url, data=None, headers=None, doseq=True, mocked=True):
+        if mocked:
+            BaseHandler.get_current_user = Mock(
+                return_value=pm.person.User('User1'))
         if data is not None:
             if isinstance(data, dict):
                 data = urlencode(data, doseq=doseq)
@@ -29,7 +29,10 @@ class TestHandlerBase(AsyncHTTPTestCase):
                 url += '?%s' % data
         return self._fetch(url, 'GET', headers=headers)
 
-    def post(self, url, data, headers=None, doseq=True):
+    def post(self, url, data, headers=None, doseq=True, mocked=True):
+        if mocked:
+            BaseHandler.get_current_user = Mock(
+                return_value=pm.person.User('User1'))
         if data is not None:
             if isinstance(data, dict):
                 data = urlencode(data, doseq=doseq)
