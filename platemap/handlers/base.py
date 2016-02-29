@@ -6,6 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 import logging
+from traceback import format_exception
 
 from tornado.web import RequestHandler
 
@@ -19,15 +20,15 @@ class BaseHandler(RequestHandler):
         username = self.get_secure_cookie('user')
         if username is not None:
             # strip off quotes added by get_secure_cookie
-            username = str(username).strip('\'" ')
-            return pm.person.User(username)
+            username = str(username)
+            return username
+            # return pm.person.User(username)
         else:
             self.clear_cookie('user')
             return None
 
     def write_error(self, status_code, **kwargs):
         """Overrides the error page created by Tornado"""
-        from traceback import format_exception
         user = self.current_user
 
         # Nicely formatted error info if debugging in test environment

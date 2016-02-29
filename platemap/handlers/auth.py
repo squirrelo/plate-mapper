@@ -15,7 +15,7 @@ import platemap as pm
 class AuthBasehandler(BaseHandler):
     def set_current_user(self, user=None):
         if user is not None:
-            self.set_secure_cookie('user', str(user))
+            self.set_secure_cookie('user', user)
         else:
             self.clear_cookie('user')
 
