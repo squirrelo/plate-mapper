@@ -12,6 +12,20 @@ class Plate(pm.base.PMObject):
     _table = 'plate'
 
     @classmethod
+    def plates(cls):
+        """Returns all plates available in the system
+
+        Returns
+        -------
+        list of Plate objects
+            All plates in the system
+        """
+        sql = "SELECT plate_id FROM barcodes.plate"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
+
+    @classmethod
     def create(cls, barcode, name, person, rows, cols):
         r"""Creates a new plate object
 

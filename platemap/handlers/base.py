@@ -11,7 +11,7 @@ from traceback import format_exception
 from tornado.web import RequestHandler
 
 from platemap.lib.config_manager import pm_config
-# import platemap as pm
+import platemap as pm
 
 
 class BaseHandler(RequestHandler):
@@ -20,8 +20,8 @@ class BaseHandler(RequestHandler):
         username = self.get_secure_cookie('user')
         if username is not None:
             # strip off quotes added by get_secure_cookie
-            username = str(username)
-            return username
+            username = username.decode("utf-8")
+            return pm.person.User(username)
             # return pm.person.User(username)
         else:
             self.clear_cookie('user')

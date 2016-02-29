@@ -16,7 +16,8 @@ from platemap.lib.config_manager import pm_config
 from platemap.handlers.base import MainHandler, NoPageHandler
 from platemap.handlers.auth import AuthLoginHandler, AuthLogoutHandler
 from platemap.handlers.sample import SampleCreateHandler
-from platemap.handlers.plate import PlateCreateHandler, PlateEditHandler
+from platemap.handlers.plate import (PlateCreateHandler, PlateEditHandler,
+                                     PlateRenderHandler)
 
 define("port", default=7778, help="run on the given port", type=int)
 
@@ -36,6 +37,7 @@ class PMApplication(Application):
             (r'/sample/add/', SampleCreateHandler),
             (r'/plate/add/', PlateCreateHandler),
             (r'/plate/edit/', PlateEditHandler),
+            (r'/plate/render/(.*)', PlateRenderHandler),
             # 404 PAGE MUST BE LAST IN THIS LIST!
             (r".*", NoPageHandler)
         ]

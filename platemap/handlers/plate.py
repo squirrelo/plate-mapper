@@ -27,13 +27,29 @@ class PlateCreateHandler(BaseHandler):
             '384 well': (12, 24),
         }
 
-        plate = pm.plate.Plate.create(barcode, name, self.current_user,
+        plate = pm.plate.Plate.create(barcode, name, self.current_user.person,
                                       *plates[plate])
 
-        self.redirect('/plate/edit/%d' % plate.id)
+        self.redirect('/plate/edit/?plate=%s' % plate.id)
 
 
 class PlateEditHandler(BaseHandler):
     @authenticated
     def get(self):
-        pass
+        plate_id = self.get_argument('plate', None)
+        plates = pm.plate.Plate.plates()
+        self.render('edit_plate.html', plates=plates, plate_id=plate_id)
+
+
+class PlateRenderHandler(BaseHandler):
+    @authenticated
+    def get(self, plate_id):
+        if not plate_id:
+            # Blank info sent, so send blank info back
+            self.write('')
+            return
+
+        plate = pm.plate.Plate(plate_id)
+        self.render('render_plate.html', platemap=plate.platemap,
+                    plate_id=plate_id, plate_name=plate.name,
+                    finalized=plate.finalized)

@@ -1,0 +1,31 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+function render_plate(plate_id) {
+	$.get("/plate/render/" + plate_id)
+		.done(function (data) {
+			$("#render").html(data);
+		});
+}
+
+	$(document).ready(function () {
+		{% if plate_id is not None %}
+		$("#platemap-select").val("{{plate_id}}");
+		render_plate("{{plate_id}}");
+		{% end %}
+		$("#plates").chosen();
+	});
+</script>
+{% end %}
+
+{% block content %}
+<div id="select">
+	Select platemap: <select name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
+	<option value=""></option>
+	{% for p in plates %}
+		<option value="{{p.id}}">{{p.id}} - {{p.name}}</option>
+	{% end %}
+	</select>
+</div>
+<div id="render"></div>
+{% end %}
