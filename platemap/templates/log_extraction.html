@@ -1,0 +1,30 @@
+{% extends sitebase.html%}
+{% block head %}
+<script type="text/javascript">
+  function render_plate(plate_id) {
+    $.get('/plate/html/' + plate_id)
+      .done(function (data) {
+        $("#plate-render").html(data);
+        if(data !== "") { $("#form-div").show(); }
+        else { $("#form-div").hide(); }
+      });
+  }
+
+  $(document).ready(function () {
+    $("#platemap-select").chosen();
+  });
+</script>
+{% end %}
+{% block content %}
+<div id="select">
+  <h3>Log Extraction Run</h3>
+  Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
+  <option value=""></option>
+  {% for p in plates %}
+    <option value="{{p.id}}">{{p.id}} - {{p.name}}</option>
+  {% end %}
+  </select>
+</div>
+<div id="plate-render" style="padding: 5px"></div>
+<div id="form-div" hidden>FORM</div>
+{% end %}

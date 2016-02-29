@@ -20,6 +20,7 @@ function render_plate(plate_id) {
 
 {% block content %}
 <div id="select">
+	<h3>View/Edit Platemap</h3>
 	Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
 	<option value=""></option>
 	{% for p in plates %}

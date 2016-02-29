@@ -41,7 +41,7 @@ class PlateEditHandler(BaseHandler):
         self.render('edit_plate.html', plates=plates, plate_id=plate_id)
 
 
-class PlateRenderHandler(BaseHandler):
+class PlateEditableRenderHandler(BaseHandler):
     @authenticated
     def get(self, plate_id):
         if not plate_id:
@@ -53,6 +53,15 @@ class PlateRenderHandler(BaseHandler):
         self.render('render_plate.html', platemap=plate.platemap,
                     plate_id=plate_id, plate_name=plate.name,
                     finalized=plate.finalized)
+
+
+class PlateStaticRenderHandler(BaseHandler):
+    @authenticated
+    def get(self, plate_id):
+        if plate_id:
+            self.write(pm.plate.Plate(plate_id).to_html())
+        else:
+            self.write('')
 
 
 class PlateUpdateHandler(BaseHandler):

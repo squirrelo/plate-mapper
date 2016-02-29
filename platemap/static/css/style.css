@@ -35,6 +35,13 @@ body {
 /* specific styling for how to show plate map tables */
 .plate th {
   font-weight: bold;
+  font-size: 9pt;
+}
+
+.plate td {
+  width: 90px;
+  border: solid 1px black;
+  font-size: 9pt;
 }
 
 .truncated {

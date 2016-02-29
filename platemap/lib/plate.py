@@ -329,7 +329,7 @@ class Plate(pm.base.PMObject):
             for col in range(cols):
                 samp = samples[row][col]
                 table.append('<td>%s</td>' %
-                             samp.name if samp is not None else '')
+                             samp.name if samp is not None else '<td></td>')
             table.append('</tr>')
         table.append('</table>')
         return ''.join(table)
