@@ -11,6 +11,22 @@ import platemap as pm
 class Sample(pm.base.PMObject):
     _table = 'sample'
 
+    @staticmethod
+    def types():
+        """Returns list of all sample types for samples in DB
+
+        Returns
+        -------
+        list of str
+            All sample types in the DB
+        """
+        sql = """SELECT DISTINCT sample_type
+                 FROM barcodes.sample
+                 ORDER BY sample_type"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return pm.sql.TRN.execute_fetchflatten()
+
     @classmethod
     def search(cls, biomass_remaining=None, sample_type=None, barcode=None,
                project=None, primer_set=None, protocol=None):

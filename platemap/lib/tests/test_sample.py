@@ -17,6 +17,11 @@ class TestSample(TestCase):
         self.sample1 = pm.sample.Sample(1)
         self.sample3 = pm.sample.Sample(3)
 
+    def test_types(self):
+        obs = pm.sample.Sample.types()
+        exp = ['oral', 'skin', 'stool']
+        self.assertEqual(obs, exp)
+
     def test_search(self):
         obs = pm.sample.Sample.search(biomass_remaining=True)
         exp = [pm.sample.Sample(1), pm.sample.Sample(4)]
