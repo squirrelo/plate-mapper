@@ -14,8 +14,27 @@ import platemap as pm
 class SampleCreateHandler(BaseHandler):
     @authenticated
     def get(self):
-        sets = ['set1', 'set2']
+        sets = ['Sample Set 1', 'Sample Set 2']
         types = pm.sample.Sample.types()
         locations = pm.sample.Sample.locations()
         self.render('add_sample.html', sets=sets, types=types,
-                    locations=locations)
+                    locations=locations, msg='')
+
+    @authenticated
+    def post(self):
+        name = self.get_argument('sample')
+        barcode = self.get_argument('barcode', None)
+        if not barcode:
+            barcode = None
+        sample_set = self.get_argument('sample-set')
+        sample_type = self.get_argument('type')
+        sample_location = self.get_argument('location')
+
+        pm.sample.Sample.create(name, sample_type, sample_location, sample_set,
+                                self.current_user, None, barcode)
+
+        sets = ['Sample Set 1', 'Sample Set 2']
+        types = pm.sample.Sample.types()
+        locations = pm.sample.Sample.locations()
+        self.render('add_sample.html', sets=sets, types=types,
+                    locations=locations, msg='Created sample %s' % name)

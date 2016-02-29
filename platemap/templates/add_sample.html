@@ -3,14 +3,15 @@
 <script type="text/javascript">
   $(document).ready(function () {
     $("#sample-form").validate();
-    $("#type").autofill({{types}});
-    $("#location").autofill({{locations}});
+    $("#type").autofill({% raw types %});
+    $("#location").autofill({% raw locations %});
   });
 </script>
 {% end %}
 {% block content %}
+<span style="color:red;">{{msg}}</span>
 <h3> Add a new sample</h3>
-<form method="POST" action="/sample/create/">
+<form method="POST" action="/sample/add/">
 <table class="table">
 <tr><td>Sample Name</td><td><input type="text" name="sample" id="sample" required></td></tr>
 <tr><td>Sample Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
