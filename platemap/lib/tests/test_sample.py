@@ -22,6 +22,11 @@ class TestSample(TestCase):
         exp = ['oral', 'skin', 'stool']
         self.assertEqual(obs, exp)
 
+    def test_locations(self):
+        obs = pm.sample.Sample.locations()
+        exp = ['the freezer', 'the other freezer']
+        self.assertEqual(obs, exp)
+
     def test_search(self):
         obs = pm.sample.Sample.search(biomass_remaining=True)
         exp = [pm.sample.Sample(1), pm.sample.Sample(4)]

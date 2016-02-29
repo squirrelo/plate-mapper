@@ -27,6 +27,22 @@ class Sample(pm.base.PMObject):
             pm.sql.TRN.add(sql)
             return pm.sql.TRN.execute_fetchflatten()
 
+    @staticmethod
+    def locations():
+        """Returns list of all sample locations for samples in DB
+
+        Returns
+        -------
+        list of str
+            All sample locations in the DB
+        """
+        sql = """SELECT DISTINCT sample_location
+                 FROM barcodes.sample
+                 ORDER BY sample_location"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return pm.sql.TRN.execute_fetchflatten()
+
     @classmethod
     def search(cls, biomass_remaining=None, sample_type=None, barcode=None,
                project=None, primer_set=None, protocol=None):
