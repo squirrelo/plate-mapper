@@ -72,7 +72,6 @@ class PlateUpdateHandler(BaseHandler):
             if not sample:
                 self.write('Could not find sample "%s"' % samp_name)
                 return
-
             try:
                 pm.plate.Plate(plate_id)[row, col] = sample[0]
                 self.write('')
