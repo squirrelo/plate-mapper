@@ -2,12 +2,17 @@ body {
   font-family: Helvetica;
 }
 
+#parent {
+  overflow: auto;
+  width: 100%;
+}
+
 .menu {
-  position:fixed;
   width: 210px;
   height: 100%;
+  display: inline;
+  postion: relative;
   float: left;
-  z-index: 9999999;
 }
 
 .inner-menu {
@@ -17,11 +22,11 @@ body {
 }
 
 .template-content {
-  position: fixed;
-  width: 100%;
   height: 100%;
-  align-content: left;
-  padding-left: 220px;
+  padding: 10px;
+  display: inline;
+  postion: relative;
+  float: left;
 }
 
 .table td {

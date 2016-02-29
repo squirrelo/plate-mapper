@@ -15,50 +15,52 @@
 {%end%}
 </head>
 <body>
-  <div id="menu" class="menu">
-  {% if current_user is not None %}
-  <p>Hello {{current_user}}! <a href="/auth/logout/">Logout</a></p>
-  <div id="menu-sample" class="inner-menu">
-      <h4>Sample Sets &amp; Projects</h4>
-      <a href="#">Add Sample Set</a><br/>
-      <a href="#">Delete Sample Set</a><br/>
-      <a href="#">View Sample Set</a><br/>
-      <a href="#">Add Project</a><br/>
-      <a href="#">Delete Project</a><br/>
-      <a href="#">View Project</a><br/>
-    </div>
-    <p> </p>
+  <div id="parent">
+    <div id="menu" class="menu">
+    {% if current_user is not None %}
+    <p>Hello {{current_user.id}}! <a href="/auth/logout/">Logout</a></p>
     <div id="menu-sample" class="inner-menu">
-      <h4>Samples &amp; Plates</h4>
-      <a href="/sample/add/">Add Sample</a><br/>
-      <a href="#">Edit Sample</a><br/>
-      <a href="/plate/add/">Create Platemap</a><br/>
-      <a href="/plate/edit/">View/Edit Platemap</a><br/>
+        <h4>Sample Sets &amp; Projects</h4>
+        <a href="#">Add Sample Set</a><br/>
+        <a href="#">Delete Sample Set</a><br/>
+        <a href="#">View Sample Set</a><br/>
+        <a href="#">Add Project</a><br/>
+        <a href="#">Delete Project</a><br/>
+        <a href="#">View Project</a><br/>
+      </div>
+      <p> </p>
+      <div id="menu-sample" class="inner-menu">
+        <h4>Samples &amp; Plates</h4>
+        <a href="/sample/add/">Add Sample</a><br/>
+        <a href="#">Edit Sample</a><br/>
+        <a href="/plate/add/">Create Platemap</a><br/>
+        <a href="/plate/edit/">View/Edit Platemap</a><br/>
+      </div>
+      <p> </p>
+      <div id="menu-protocols" class="inner-menu">
+        <h4>Protocols &amp; Runs</h4>
+        <a href="#">Log Extraction</a><br/>
+        <a href="#">Log PCR</a><br/>
+        <a href="#">Create Pool</a><br/>
+        <a href="#">View/Edit Pool</a><br/>
+        <a href="#">Create Run</a><br/>
+        <a href="#">View/Edit Run</a><br/>
+        <a href="#">Generate Prep Info</a><br/>
+      </div>
+      <p> </p>
+      <div id="menu-admin" class="inner-menu">
+        <h4>Administrative</h4>
+        <a href="#">Add user</a><br/>
+        <a href="#">Edit user permissions</a><br/>
+        <a href="#">Delete user</a><br/>
+      </div>
+    {% else %}
+    LOGIN
+    {% end %}
     </div>
-    <p> </p>
-    <div id="menu-protocols" class="inner-menu">
-      <h4>Protocols &amp; Runs</h4>
-      <a href="#">Log Extraction</a><br/>
-      <a href="#">Log PCR</a><br/>
-      <a href="#">Create Pool</a><br/>
-      <a href="#">View/Edit Pool</a><br/>
-      <a href="#">Create Run</a><br/>
-      <a href="#">View/Edit Run</a><br/>
-      <a href="#">Generate Prep Info</a><br/>
+    <div id="content" class="template-content">
+    {% block content %}{% end %}
     </div>
-    <p> </p>
-    <div id="menu-admin" class="inner-menu">
-      <h4>Administrative</h4>
-      <a href="#">Add user</a><br/>
-      <a href="#">Edit user permissions</a><br/>
-      <a href="#">Delete user</a><br/>
-    </div>
-  {% else %}
-  LOGIN
-  {% end %}
-  </div>
-  <div id="content" class="template-content">
-  {% block content %}{% end %}
   </div>
 </body>
 </html>
