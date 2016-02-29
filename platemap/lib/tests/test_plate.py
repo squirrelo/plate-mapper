@@ -20,6 +20,15 @@ class TestPlate(TestCase):
         exp = [pm.plate.Plate('000000003')]
         self.assertEqual(obs, exp)
 
+    def test_plates_finalized(self):
+        obs = pm.plate.Plate.plates(finalized=True)
+        self.assertEqual(obs, [])
+
+        pm.plate.Plate('000000003').finalize()
+        obs = pm.plate.Plate.plates(finalized=True)
+        exp = [pm.plate.Plate('000000003')]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         self.assertFalse(pm.util.check_barcode_assigned('000000009'))
         obs = pm.plate.Plate.create('000000009', 'new test plate',

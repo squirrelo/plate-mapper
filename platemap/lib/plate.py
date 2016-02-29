@@ -12,8 +12,13 @@ class Plate(pm.base.PMObject):
     _table = 'plate'
 
     @classmethod
-    def plates(cls):
+    def plates(cls, finalized=False):
         """Returns all plates available in the system
+
+        Parameters
+        ----------
+        finalized: bool, optional
+            Whether to only grab finalized plates. Default False.
 
         Returns
         -------
@@ -21,6 +26,8 @@ class Plate(pm.base.PMObject):
             All plates in the system
         """
         sql = "SELECT plate_id FROM barcodes.plate"
+        if finalized:
+            sql += " WHERE finalized = TRUE"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql)
             return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
