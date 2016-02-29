@@ -15,6 +15,11 @@ class TestPlate(TestCase):
     def setUp(self):
         self.plate = pm.plate.Plate('000000003')
 
+    def test_plates(self):
+        obs = pm.plate.Plate.plates()
+        exp = [pm.plate.Plate('000000003')]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         self.assertFalse(pm.util.check_barcode_assigned('000000009'))
         obs = pm.plate.Plate.create('000000009', 'new test plate',
