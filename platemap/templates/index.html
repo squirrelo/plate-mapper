@@ -7,11 +7,11 @@ $(document).ready(function () {
 </script>
 {% end %}
 {% block content %}
+	<span style="color: red">{{msg}}</span>
   {% if current_user is not None%}
   <h3>Please select and action from the left menu</h3>
   {% else %}
   <form method="POST" action="/auth/login/" id="login-form">
-		<span style="color: red">{{msg}}</span>
 		<p>Enter Username <input type="text" name="username" id="username" required></p>
 		<p>Enter password <input type="password" name="password" id="password" required></p>
 		<p><input type="submit" value="Login"></p>

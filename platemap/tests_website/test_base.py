@@ -14,7 +14,7 @@ from platemap.lib.util import rollback_tests
 @rollback_tests()
 class TestBaseHandler(TestHandlerBase):
     def test_error(self):
-        obs = self.post('/auth/login/', {}, mocked=False)
+        obs = self.post('/auth/login/', {})
         self.assertEqual(obs.code, 400)
         self.assertIn('HTTP 400: Bad Request (Missing argument username)',
                       obs.body.decode('utf-8'))
