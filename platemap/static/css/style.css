@@ -1,0 +1,47 @@
+body {
+  font-family: Helvetica;
+}
+
+.menu {
+  position:fixed;
+  width: 210px;
+  height: 100%;
+  float: left;
+  z-index: 9999999;
+}
+
+.inner-menu {
+  border: solid 1px black;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.template-content {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  align-content: left;
+  padding-left: 220px;
+}
+
+/* specific styling for how to show plate map tables */
+.plate th {
+  font-weight: bold;
+}
+
+.truncated {
+  white-space: nowrap;
+  width:300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ .topfloat{
+    position: fixed;
+    padding-top: 5px;
+    height:55px;
+    top:50px;
+    z-index:6;
+    background:white;
+    width:100%;
+  }
