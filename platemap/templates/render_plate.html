@@ -35,17 +35,27 @@
 
   function update(elem) {
     var obj = $("#" + elem.id);
+    if(obj.val() === "") { return; }
     $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: elem.id, sample: obj.val()})
         .done(function (data) {
-          if(data !== "") { 
-            obj.css("background", "red");
+          if(data !== "") {
+            fade(obj, "red");
+            obj.val("");
             $("#message").css("color", "red");
-            $("#message").text(data); 
+            $("#message").text(data);
           } else {
+            fade(obj, "green");
             $("#message").css("color", "green");
-            obj.css("background", "white");
             $("#message").text("Successfully edited " + obj.val());
           }
         });
+  }
+
+  function fade(obj, color) {
+    obj.css("background", color);
+    setTimeout(function(){
+        obj.css("background-color", "white"); // reset background
+        obj.effect("highlight", {color: color}, 200); // animate
+    },200);
   }
 </script>
