@@ -31,7 +31,7 @@ class SampleCreateHandler(BaseHandler):
         sample_location = self.get_argument('location')
 
         pm.sample.Sample.create(name, sample_type, sample_location, sample_set,
-                                self.current_user, None, barcode)
+                                self.current_user.person, None, barcode)
 
         sets = ['Sample Set 1', 'Sample Set 2']
         types = pm.sample.Sample.types()

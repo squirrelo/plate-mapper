@@ -3,8 +3,8 @@
 <script type="text/javascript">
   $(document).ready(function () {
     $("#sample-form").validate();
-    $("#type").autofill({% raw types %});
-    $("#location").autofill({% raw locations %});
+    $("#type").autocomplete({ source: {% raw types %} });
+    $("#location").autocomplete({ source: {% raw locations %} });
   });
 </script>
 {% end %}
