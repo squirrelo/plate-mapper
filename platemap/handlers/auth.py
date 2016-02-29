@@ -26,8 +26,8 @@ class AuthLoginHandler(AuthBasehandler):
         self.redirect('/')
 
     def post(self):
-        username = self.get_argument('username', '')
-        password = self.get_argument('password', '')
+        username = self.get_argument('username')
+        password = self.get_argument('password')
 
         try:
             login = pm.person.User(username).authenticate(password)

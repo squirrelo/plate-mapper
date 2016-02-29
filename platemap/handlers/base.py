@@ -44,6 +44,7 @@ class BaseHandler(RequestHandler):
                                ">Request Info\n%s\n\n" %
                                (user, error, trace_info, request_info))
             other = formatted_error.replace('\n', '<br/>')
+        self.set_status(status_code)
         self.render('error.html', code=status_code, other=other)
 
         logging.exception(kwargs["exc_info"])
