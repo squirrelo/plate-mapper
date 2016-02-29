@@ -13,6 +13,13 @@ from platemap.lib.util import rollback_tests
 
 @rollback_tests()
 class TestAuthLoginHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/auth/login/')
+        self.assertEqual(obs.code, 200)
+        # Make sure redirected back to index page
+        self.assertRegex(obs.effective_url,
+                         'http:\/\/[A-Za-z](.*):[0-9]{5}\/$')
+
     def test_post(self):
         obs = self.post('/auth/login/', {'username': 'User1',
                                          'password': 'password'})
