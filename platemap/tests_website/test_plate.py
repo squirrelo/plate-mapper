@@ -34,6 +34,7 @@ class TestPlateCreateHandler(TestHandlerBase):
         self.assertEqual(len(pm.plate.Plate.plates()), 2)
 
 
+@rollback_tests()
 class TestPlateEditHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/plate/edit/')
@@ -42,6 +43,7 @@ class TestPlateEditHandler(TestHandlerBase):
                       'Test plate 1</option>', obs.body.decode('utf-8'))
 
 
+@rollback_tests()
 class TestPlateRenderHandler(TestHandlerBase):
     def test_get(self):
             obs = self.get('/plate/render/000000003')
@@ -53,6 +55,16 @@ class TestPlateRenderHandler(TestHandlerBase):
         obs = self.get('/plate/render/')
         self.assertEqual(obs.code, 200)
         self.assertEqual('', obs.body.decode('utf-8'))
+
+
+@rollback_tests()
+class TestPlateUpdateHandler(TestHandlerBase):
+    def test_post_update(self):
+        pass
+
+    def test_post_finalize(self):
+        pass
+
 
 if __name__ == '__main__':
     main()

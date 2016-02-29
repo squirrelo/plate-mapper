@@ -5,7 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from tornado.web import authenticated
+from tornado.web import authenticated, HTTPError
 
 from platemap.handlers.base import BaseHandler
 import platemap as pm
@@ -53,3 +53,32 @@ class PlateRenderHandler(BaseHandler):
         self.render('render_plate.html', platemap=plate.platemap,
                     plate_id=plate_id, plate_name=plate.name,
                     finalized=plate.finalized)
+
+
+class PlateUpdateHandler(BaseHandler):
+    @authenticated
+    def post(self):
+        plate_id = self.get_argument('plate_id')
+        action = self.get_argument('action')
+
+        if action == 'finalize':
+            pm.plate.Plate(plate_id).finalize()
+            return
+        elif action == 'update':
+            row, col = map(int, self.get_argument('rowcol').split('-', 1))
+            samp_name = self.get_argument('sample')
+
+            sample = pm.sample.Sample.search(name=samp_name)
+            if not sample:
+                self.write('Could not find sample "%s"' % samp_name)
+                return
+
+            try:
+                pm.plate.Plate(plate_id)[row, col] = sample[0]
+                self.write('')
+            except Exception as e:
+                # Catch any error and show to user
+                self.write(str(e))
+            return
+        else:
+            raise HTTPError(400, 'Unknown action %s' % action)

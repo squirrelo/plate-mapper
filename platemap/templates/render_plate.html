@@ -2,16 +2,50 @@
 <table class="table plate">
 <tr><th></th>
 {% for col in range(len(platemap[0])) %}
-	<th>{{ col + 1 }}</th>
+  <th>{{ col + 1 }}</th>
 {% end %}
 </tr>
 {% for row_pos, row in enumerate(platemap) %}
-	<tr><th>{% raw chr(65 + row_pos) %}</th>
-	{% for col_pos, col in enumerate(row) %}
-	<td><input type="text" size=12 value="{% raw col.id if col is not None else '' %}" {% if not finalized %}onblur="update(this)"{% else %}disabled{% end %}></td>
-	{% end %}
-	</tr>
+  <tr><th>{% raw chr(65 + row_pos) %}</th>
+  {% for col_pos, col in enumerate(row) %}
+  <td><input type="text" size=12 class="well" id="{{row_pos}}-{{col_pos}}" value="{% raw col.name if col is not None else '' %}" {% if not finalized %}onblur="update(this)"{% else %}disabled{% end %}></td>
+  {% end %}
+  </tr>
 {% end %}
 </table>
-<input type="hidden" value="{{plate_id}}" name="plate-id">
-<input type="button" value="Update" name="update" id="update"> <input type="button" value="Finalize" name="finalize" id="finalize" onclick="check_finalize()">
+{% if not finalized %}
+<p><input type="button" value="Finalize" name="finalize" id="finalize" onclick="check_finalize()"></p>
+{% end %}
+<p style="color: red" id="message"></p>
+
+<script type="text/javascript">
+  function check_finalize() {
+    if(confirm('Are you sure you want to finalize the plate? You will not be able to add or remove samples once you do so.')) {
+      $.post('/plate/update/', { action: 'finalize', plate_id: "{{plate_id}}" })
+        .done(function (data) {
+          $(".well").each(function (index, elem) {
+            var obj = $("#" + elem.id);
+            obj.attr("disabled", "disabled");
+            obj.prop( "onblur", null );
+            $("#finalize").remove();
+          });
+        });
+    }
+  }
+
+  function update(elem) {
+    var obj = $("#" + elem.id);
+    $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: elem.id, sample: obj.val()})
+        .done(function (data) {
+          if(data !== "") { 
+            obj.css("background", "red");
+            $("#message").css("color", "red");
+            $("#message").text(data); 
+          } else {
+            $("#message").css("color", "green");
+            obj.css("background", null);
+            $("#message").text("Successfully edited " + obj.val());
+          }
+        });
+  }
+</script>
