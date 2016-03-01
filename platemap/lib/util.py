@@ -133,6 +133,39 @@ def check_barcode_assigned(barcode):
         return True
 
 
+def get_barcodes(num_barcodes):
+    """Gets a list of unassigned barcodes
+
+    Parameters
+    ----------
+    num_barcodes : int
+        Number of barcodes to return
+
+    Returns
+    -------
+    list of str
+        Barcodes
+
+    Raises
+    ------
+    ValueError
+        Number of barcodes requested excededs number of unassigned barcodes
+    """
+    sql = """SELECT DISTINCT barcode
+             FROM barcodes.barcode
+             LEFT JOIN barcodes.project_barcodes USING (barcode)
+             WHERE assigned_on IS NULL AND project_id IS NULL
+             ORDER BY barcode ASC LIMIT %s
+          """
+    with TRN:
+        TRN.add(sql, [num_barcodes])
+        barcodes = TRN.execute_fetchflatten()
+        if len(barcodes) != num_barcodes:
+            raise ValueError('%d barcodes requested, only %d available' %
+                             (num_barcodes, len(barcodes)))
+        return barcodes
+
+
 def rollback_tests():
     """Decorator for rolling back tests as they finish"""
     def class_modifier(cls):

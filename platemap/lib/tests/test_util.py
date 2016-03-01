@@ -8,7 +8,7 @@
 from unittest import TestCase, main
 from platemap.lib.util import (
     check_barcode_assigned, convert_from_id, convert_to_id, get_count,
-    rollback_tests)
+    rollback_tests, get_barcodes)
 
 
 class TestUtil(TestCase):
@@ -52,6 +52,13 @@ class TestUtil(TestCase):
     def test_check_barcode_assigned_no_exist(self):
         with self.assertRaises(ValueError):
             check_barcode_assigned('100000001')
+
+    def test_get_barcodes(self):
+        obs = get_barcodes(2)
+        self.assertEqual(obs, ['000000005', '000000006'])
+
+        obs = get_barcodes(3)
+        self.assertEqual(obs, ['000000005', '000000006', '000000007'])
 
     def test_rollback_tests(self):
         @rollback_tests()
