@@ -110,8 +110,16 @@ class Project(pm.base.PMObject):
     def pi(self):
         raise NotImplementedError()
 
+    @pi.setter
+    def pi(self, value):
+        raise NotImplementedError()
+
     @property
     def contact(self):
+        raise NotImplementedError()
+
+    @contact.setter
+    def contact(self, value):
         raise NotImplementedError()
 
     # ---------- functions ------------------
