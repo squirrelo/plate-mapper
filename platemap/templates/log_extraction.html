@@ -5,19 +5,28 @@
     $.get('/plate/html/' + plate_id)
       .done(function (data) {
         $("#plate-render").html(data);
-        if(data !== "") { $("#form-div").show(); }
-        else { $("#form-div").hide(); }
+        if(data !== "") { 
+          $("#form-div").show();
+          $("#plate-id").val(plate_id);
+        }
+        else {
+          $("#form-div").hide();
+          $("#plate-id").val("");
+        }
       });
   }
 
   $(document).ready(function () {
     $("#platemap-select").chosen();
+    $("#pcr-form").validate();
+
   });
 </script>
 {% end %}
 {% block content %}
 <div id="select">
   <h3>Log Extraction Run</h3>
+  <div id="message">{{msg}}</div>
   Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
   <option value=""></option>
   {% for p in plates %}
@@ -26,5 +35,15 @@
   </select>
 </div>
 <div id="plate-render" style="padding: 5px"></div>
-<div id="form-div" hidden>FORM</div>
+<div id="form-div" hidden>
+  <form method="POST" action="/log/extraction/" id="pcr-form">
+  <input type="hidden" name="plate-id" id="plate-id">
+  <table id="form-table">
+  <tr><td>Extraction Kit Lot</td><td><input type="text" name="extractionkit_lot" required></td></tr>
+  <tr><td>Extraction Robot</td><td><input type="text" name="extraction_robot" required></td></tr>
+  <tr><td>tm1000_8 Tool</td><td><input type="text" name="tm1000_8_tool" required></td></tr>
+  </table>
+  <input type="submit" value="Log PCR run">
+  </form>
+</div>
 {% end %}

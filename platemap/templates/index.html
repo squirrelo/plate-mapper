@@ -7,7 +7,6 @@ $(document).ready(function () {
 </script>
 {% end %}
 {% block content %}
-	<span style="color: red">{{msg}}</span>
   {% if current_user is not None%}
   <h3>Please select and action from the left menu</h3>
   {% else %}
@@ -17,4 +16,5 @@ $(document).ready(function () {
 		<p><input type="submit" value="Login"></p>
 	</form>
   {% end %}
+  <span style="color: red">{{msg}}</span>
 {% end %}
