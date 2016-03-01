@@ -210,13 +210,6 @@ class Plate(pm.base.PMObject):
             else:
                 pm.sql.TRN.add(delete_sql, [self.id, row, col])
 
-    def _get_property(self, column):
-        sql = "Select {} from barcodes.plate WHERE plate_id = %s".format(
-            column)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
-            return pm.sql.TRN.execute_fetchlast()
-
     @property
     def name(self):
         """Name of the plate

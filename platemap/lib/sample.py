@@ -245,13 +245,6 @@ class Sample(pm.base.PMObject):
         raise NotImplementedError()
 
     # ----------Properties---------------
-    def _get_property(self, column):
-        sql = "Select {} from barcodes.sample WHERE sample_id = %s".format(
-            column)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
-            return pm.sql.TRN.execute_fetchlast()
-
     @property
     def name(self):
         return self._get_property('sample')

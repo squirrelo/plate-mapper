@@ -61,15 +61,6 @@ class ProtocolBase(pm.base.PMObject):
             pm.sql.TRN.add(sql, [sid, pid, person.id])
             return pm.sql.TRN.execute_fetchlast()
 
-    def _get_property(self, column):
-        sql = """Select {0}
-                 FROM barcodes.{1}
-                 WHERE protocol_settings_id = %s""".format(
-            column, self._table)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
-            return pm.sql.TRN.execute_fetchlast()
-
     def _get_subproperty(self, column):
         if self._subtable is None:
             raise pm.exceptions.DeveloperError('No subtable given!')

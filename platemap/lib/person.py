@@ -85,58 +85,45 @@ class Person(pm.base.PMObject):
             pm.sql.TRN.add(sql, [email.lower()])
             return pm.sql.TRN.execute_fetchlast()
 
-    def _get_property_person(self, column):
-        sql = "Select {} from barcodes.person WHERE person_id = %s".format(
-            column)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
-            return pm.sql.TRN.execute_fetchlast()
-
-    def _set_property_person(self, column, value):
-        sql = "UPDATE barcodes.person SET {} = %s WHERE person_id = %s".format(
-            column)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [value, self.id])
-
     @property
     def name(self):
-        return self._get_property_person('name')
+        return self._get_property('name')
 
     @name.setter
     def name(self, name):
-        self._set_property_person('name', name)
+        self._set_property('name', name)
 
     @property
     def email(self):
-        return self._get_property_person('email')
+        return self._get_property('email')
 
     @email.setter
     def email(self, email):
-        self._set_property_person('email', email)
+        self._set_property('email', email)
 
     @property
     def address(self):
-        return self._get_property_person('address')
+        return self._get_property('address')
 
     @address.setter
     def address(self, address):
-        self._set_property_person('address', address)
+        self._set_property('address', address)
 
     @property
     def affiliation(self):
-        return self._get_property_person('affiliation')
+        return self._get_property('affiliation')
 
     @affiliation.setter
     def affiliation(self, affiliation):
-        self._set_property_person('affiliation', affiliation)
+        self._set_property('affiliation', affiliation)
 
     @property
     def phone(self):
-        return self._get_property_person('phone')
+        return self._get_property('phone')
 
     @phone.setter
     def phone(self, phone):
-        self._set_property_person('phone', phone)
+        self._set_property('phone', phone)
 
 
 class User(pm.base.PMObject):
@@ -255,12 +242,6 @@ class User(pm.base.PMObject):
             pm.sql.TRN.add(sql, [username])
             return pm.sql.TRN.execute_fetchlast()
 
-    def _get_property_user(self, column):
-        sql = "Select {} from barcodes.user WHERE user_id = %s".format(column)
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
-            return pm.sql.TRN.execute_fetchlast()
-
     @property
     def person(self):
         """Gets associated Person object
@@ -270,11 +251,11 @@ class User(pm.base.PMObject):
         Person object
             The person object associated with the user
         """
-        return Person(self._get_property_user('person_id'))
+        return Person(self._get_property('person_id'))
 
     @property
     def access(self):
-        return self._get_property_user('access')
+        return self._get_property('access')
 
     # ---------- Functions --------------
     def authenticate(self, password):

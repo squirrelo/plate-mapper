@@ -159,6 +159,20 @@ class PMObject(object):
         r"""The hash of an object is based on the id"""
         return hash(str(self.id))
 
+    def _get_property(self, column):
+        sql = "SELECT {0} FROM barcodes.{1} WHERE {1}_id = %s".format(
+            column, self._table)
+        with TRN:
+            TRN.add(sql, [self.id])
+            return TRN.execute_fetchlast()
+
+    def _set_property(self, column, value):
+        sql = """UPDATE barcodes.{0}
+                 SET {1} = %s
+                 WHERE {0}_id = %s""".format(self._table, column)
+        with TRN:
+            TRN.add(sql, [value, self.id])
+
     @property
     def id(self):
         r"""The object id on the storage system"""

@@ -95,22 +95,21 @@ class Project(pm.base.PMObject):
         raise NotImplementedError()
 
     # --------- properties -------------------
-
     @property
     def name(self):
-        raise NotImplementedError()
+        self._set_propery('project')
 
     @property
     def samples(self):
-        raise NotImplementedError()
+        self._set_propery('')
 
     @property
     def sample_sets(self):
-        raise NotImplementedError()
+        self._set_propery()
 
     @property
     def pi(self):
-        raise NotImplementedError()
+        self._set_propery('pi')
 
     @pi.setter
     def pi(self, value):
@@ -125,6 +124,24 @@ class Project(pm.base.PMObject):
         raise NotImplementedError()
 
     # ---------- functions ------------------
+    def add_samples(samples):
+        """Add samples not part of the initial sample set to the project
+
+        Parameters
+        ----------
+        samples : list of Sample projects
+            Samples to add to the project
+        """
+
+    def remove_samples(samples):
+        """Add samples not part of the initial sample set to the project
+
+        Parameters
+        ----------
+        samples : list of Sample projects
+            Samples to add to the project
+        """
+
     def add_sample_set(self, sample_set, person):
         """Adds a new sample set to the project
 
