@@ -1,0 +1,55 @@
+{% extends sitebase.html%}
+{% block head %}
+<script type="text/javascript">
+  function render_plate(plate_info) {
+    var info = plate_info.split(" ");
+    $.get('/plate/html/' + info[1])
+      .done(function (data) {
+        $("#plate-render").html(data);
+        if(data !== "") {
+          $("#form-div").show();
+          $("#plate-id").val(info[1]);
+          $("#extraction-id").val(info[0]);
+        }
+        else {
+          $("#form-div").hide();
+          $("#plate-id").val("");
+          $("#extraction-id").val("");
+        }
+      });
+  }
+
+  $(document).ready(function () {
+    $("#platemap-select").chosen();
+    $("#pcr-form").validate();
+  });
+</script>
+{% end %}
+{% block content %}
+<div id="select">
+  <h3>Log PCR Run</h3>
+  <div id="message">{% raw msg %}</div>
+  Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
+  <option value=""></option>
+  {% for pid, pname, exid, exdate in plates %}
+    <option value="{{exid}} {{pid}}">{{pid}} - {{exdate}} - {{pname}}</option>
+  {% end %}
+  </select>
+</div>
+<div id="plate-render" style="padding: 5px"></div>
+<div id="form-div" hidden>
+  <form method="POST" action="/log/pcr/" id="pcr-form">
+  <input type="hidden" name="plate-id" id="plate-id">
+  <input type="hidden" name="extraction-id" id="extraction-id">
+  <table id="form-table">
+    <tr><td>Primer Lot</td><td><input type="text" name="primer_lot" required></td></tr>
+    <tr><td>Master Mix Lot</td><td><input type="text" name="mastermix_lot" required></td></tr>
+    <tr><td>Water Lot</td><td><input type="text" name="water_lot" required></td></tr>
+    <tr><td>Processing Robot</td><td><input type="text" name="processing_robot" required></td></tr>
+    <tr><td>tm300_8 Tool</td><td><input type="text" name="tm300_8_tool" required></td></tr>
+    <tr><td>tm50_8 Tool</td><td><input type="text" name="tm50_8_tool" required></td></tr>
+  </table>
+  <input type="submit" value="Log PCR run">
+  </form>
+</div>
+{% end %}

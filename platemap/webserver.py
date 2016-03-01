@@ -20,7 +20,7 @@ from platemap.handlers.plate import (PlateCreateHandler, PlateEditHandler,
                                      PlateEditableRenderHandler,
                                      PlateStaticRenderHandler,
                                      PlateUpdateHandler)
-from platemap.handlers.protocol import LogExtractionHandler
+from platemap.handlers.protocol import LogExtractionHandler, LogPCRHandler
 
 define("port", default=7778, help="run on the given port", type=int)
 
@@ -44,6 +44,7 @@ class PMApplication(Application):
             (r'/plate/html/(.*)', PlateStaticRenderHandler),
             (r'/plate/update/', PlateUpdateHandler),
             (r'/log/extraction/', LogExtractionHandler),
+            (r'/log/pcr/', LogPCRHandler),
             # 404 PAGE MUST BE LAST IN THIS LIST!
             (r".*", NoPageHandler)
         ]
