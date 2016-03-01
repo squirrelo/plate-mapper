@@ -30,8 +30,7 @@ class LogExtractionHandler(BaseHandler):
                 tm_tool, plate=pm.plate.Plate(plate_id))
         except Exception as e:
             # Render any error to the user interface
-            msg = self.write(str(e))
             plates = pm.plate.Plate.plates(finalized=True)
-            self.render('log_extraction.html', plates=plates, msg=msg)
+            self.render('log_extraction.html', plates=plates, msg=str(e))
         else:
             self.redirect('/?msg=Successfully+logged+PCR+run')

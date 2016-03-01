@@ -58,6 +58,40 @@ class TestPlateRenderHandler(TestHandlerBase):
 
 
 @rollback_tests()
+class TestPlateStaticRenderHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/plate/html/000000003')
+        exp = ('<table class="plate"><tr><th></th><th>1</th><th>2</th><th>3'
+               '</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9'
+               '</th><th>10</th><th>11</th><th>12</th></tr><tr><th>A</th><td>'
+               '</td><td></td><td></td><td></td><td></td><td></td><td></td>'
+               '<td></td><td></td><td></td><td></td><td></td></tr><tr><th>B'
+               '</th><td></td><td>Sample 1</td><td>Sample 2</td><td></td><td>'
+               '</td><td></td><td></td><td></td><td></td><td></td><td></td>'
+               '<td></td></tr><tr><th>C</th><td></td><td></td><td></td><td>'
+               'Sample 3</td><td></td><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td></tr><tr><th>D</th><td></td><td></td>'
+               '<td></td><td></td><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td><td></td></tr><tr><th>E</th><td></td>'
+               '<td></td><td></td><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td><td></td><td></td></tr><tr><th>F</th>'
+               '<td></td><td></td><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td><td></td><td></td><td></td></tr><tr>'
+               '<th>G</th><td></td><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td><td></td><td></td><td></td><td></td>'
+               '</tr><tr><th>H</th><td></td><td></td><td></td><td></td><td>'
+               '</td><td></td><td></td><td></td><td></td><td></td><td></td>'
+               '<td></td></tr></table>')
+        self.assertEqual(obs.code, 200)
+        self.assertEqual(obs.body.decode('utf-8'), exp)
+
+    def test_get_blank(self):
+        obs = self.get('/plate/html/')
+        self.assertEqual(obs.code, 200)
+        self.assertEqual(obs.body.decode('utf-8'), '')
+
+
+@rollback_tests()
 class TestPlateUpdateHandler(TestHandlerBase):
     plate = pm.plate.Plate('000000003')
 

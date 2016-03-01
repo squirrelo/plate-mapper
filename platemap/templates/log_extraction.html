@@ -26,7 +26,7 @@
 {% block content %}
 <div id="select">
   <h3>Log Extraction Run</h3>
-  <div id="message">{{msg}}</div>
+  <div id="message">{% raw msg %}</div>
   Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
   <option value=""></option>
   {% for p in plates %}
