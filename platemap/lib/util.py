@@ -99,7 +99,7 @@ def get_count(table):
 
 
 def check_barcode_assigned(barcode):
-    """Checks if barcode is already assigned
+    """Checks if barcode is already assigned to sample or project
 
     Parameters
     ----------
@@ -116,8 +116,9 @@ def check_barcode_assigned(barcode):
     ValueError
         Barcode does not exist in database
     """
-    sql = """SELECT barcode, assigned_on
+    sql = """SELECT barcode, assigned_on, project_id
         FROM barcodes.barcode
+        LEFT JOIN barcodes.project_barcodes USING (barcode)
         WHERE barcode = %s
         """
     with TRN:
@@ -126,7 +127,10 @@ def check_barcode_assigned(barcode):
         if not barcode_info:
             raise ValueError('Barcode %s does not exist in the DB' % barcode)
         # Check if barcode retrieved has set assigned on date or not
-        return False if barcode_info[0]['assigned_on'] is None else True
+        if barcode_info[0]['assigned_on'] is None and \
+                barcode_info[0]['project_id'] is None:
+            return False
+        return True
 
 
 def rollback_tests():

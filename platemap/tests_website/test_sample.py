@@ -64,10 +64,6 @@ class TestSampleCreateHandler(TestHandlerBase):
         self.assertIn('Barcode 000000001 already assigned!',
                       obs.body.decode('utf-8'))
 
-        search = pm.sample.Sample.search(barcode='000000007')
-        self.assertEqual(len(search), 1)
-        self.assertEqual(search[0].barcode, '000000007')
-
     def test_post_file(self):
         file = StringIO('sample_name\tother_col\ntest1\tval1\ntest2\tval2\n')
         m = MultipartEncoder(
