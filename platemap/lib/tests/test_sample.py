@@ -7,6 +7,7 @@
 # -----------------------------------------------------------------------------
 from unittest import TestCase, main
 from datetime import datetime
+from io import StringIO
 
 import platemap as pm
 
@@ -26,6 +27,30 @@ class TestSample(TestCase):
         obs = pm.sample.Sample.locations()
         exp = ['the freezer', 'the other freezer']
         self.assertEqual(obs, exp)
+
+    def test_from_file(self):
+        file = StringIO('sample_name\tother_col\ntest1\tval1\ntest2\tval2\n')
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
+        pm.sample.Sample.from_file(file, 'test', 'freezer', 'Sample Set 1',
+                                   pm.person.Person(1))
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
+
+    def test_from_file_comma_sep(self):
+        file = StringIO('sample_name,other_col\ntest1,val1\ntest2,val2\n')
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
+        pm.sample.Sample.from_file(file, 'test', 'freezer', 'Sample Set 1',
+                                   pm.person.Person(1), sep=',')
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
+
+    def test_from_file_barcodes(self):
+        file = StringIO('sample_name\tother\tbarcode\ntest1\t1\t000000008\n'
+                        'test2\t2\t000000009\n')
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
+        pm.sample.Sample.from_file(file, 'test', 'freezer', 'Sample Set 1',
+                                   pm.person.Person(1))
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
+        self.assertEqual(len(pm.sample.Sample.search(barcode='000000008')), 1)
+        self.assertEqual(len(pm.sample.Sample.search(barcode='000000009')), 1)
 
     def test_search(self):
         obs = pm.sample.Sample.search(name='Sample 1')
