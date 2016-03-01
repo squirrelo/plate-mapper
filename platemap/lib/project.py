@@ -94,6 +94,8 @@ class Project(pm.base.PMObject):
     def delete():
         raise NotImplementedError()
 
+    # --------- properties -------------------
+
     @property
     def name(self):
         raise NotImplementedError()

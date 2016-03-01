@@ -191,6 +191,18 @@ COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane 
 
 COMMENT ON COLUMN barcodes.pool.pool IS 'Name of the pool';
 
+CREATE TABLE barcodes.project_sample_sets ( 
+	project_id           bigint  NOT NULL,
+	sample_set_id        bigint  NOT NULL,
+	CONSTRAINT idx_project_sample_sets_1 PRIMARY KEY ( project_id, sample_set_id ),
+	CONSTRAINT fk_project_sample_sets FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    ,
+	CONSTRAINT fk_project_sample_sets_0 FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
+ );
+
+CREATE INDEX idx_project_sample_sets ON barcodes.project_sample_sets ( project_id );
+
+CREATE INDEX idx_project_sample_sets_0 ON barcodes.project_sample_sets ( sample_set_id );
+
 CREATE TABLE barcodes.sample ( 
 	sample_id            bigserial  NOT NULL,
 	sample               varchar(100)  NOT NULL,

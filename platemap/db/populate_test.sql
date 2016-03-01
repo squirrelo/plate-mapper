@@ -20,7 +20,10 @@ INSERT INTO barcodes.project (project, description, pi, contact_person, created_
 ('Project 2', 'Second test project', 1, 2, '2016-02-22 8:53:00'),
 ('Project 3', 'Third test project', 3, 2, '2016-02-22 8:54:00');
 
-INSERT INTO barcodes.sample_set (sample_set, created_on, created_by) VALUES ('Sample Set 1', '2016-02-22 8:52:00', 1), ('Sample Set 2', '2016-02-22 8:53:00', 1);
+INSERT INTO barcodes.sample_set (sample_set, created_on, created_by) VALUES
+('Sample Set 1', '2016-02-22 8:52:00', 1),
+('Sample Set 2', '2016-02-22 8:53:00', 1),
+('Sample Set 3', '2016-02-22 8:54:00', 1);
 
 INSERT INTO barcodes.sample (sample, barcode, sample_type, sample_location, created_on, created_by, last_scanned, last_scanned_by, sample_set_id, biomass_remaining) VALUES
 ('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1, 'T'),
@@ -28,15 +31,17 @@ INSERT INTO barcodes.sample (sample, barcode, sample_type, sample_location, crea
 ('Sample 3', NULL, 'skin', 'the other freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1, 'F'),
 ('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T');
 
+INSERT INTO barcodes.project_sample_sets (project_id, sample_set_id) VALUES (1, 1), (2, 2), (3, 3);
+
+INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (3, 1), (4, 2), (2, 2);
+
+INSERT INTO barcodes.project_barcodes (project_id, barcode) VALUES (1, '000000001'), (1, '000000002'), (3, '000000004');
+
 INSERT INTO barcodes.plate (plate_id, plate, created_on, finalized, person_id, rows, cols) VALUES
 ('000000003', 'Test plate 1', '2016-02-22 8:55:00', 'F', 1, 8, 12);
 
 INSERT INTO barcodes.plates_samples (plate_id, sample_id, plate_row, plate_col) VALUES
 ('000000003', 1, 1, 1), ('000000003', 2, 1, 2), ('000000003', 3, 2, 3);
-
-INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (2, 2);
-
-INSERT INTO barcodes.project_barcodes (project_id, barcode) VALUES (1, '000000001'), (1, '000000002'), (3, '000000004');
 
 INSERT INTO barcodes.primer_set (primer_set, company, linker, fwd_primer, rev_primer, barcodes) VALUES
 ('Primer Set 1', 'IDT', 'CT', 'AAAAAAAACCCCTTTTTT', 'GGGGGGGGAAAAAAAACC', '{"A1": "CCTCGCATGACC","A10": "GCGCGGCGTTGC","A11": "GTCGCTTGCACA","A12": "TCCGCCTAGTCG","A2": "GGCGTAACGGCA","A3": "GCGAGGAAGTCC","A4": "CAAATTCGGGAT","A5": "TTGTGTCTCCCT","A6": "CAATGTAGACAC","A7": "AACCACTAACCG","A8": "AACTTTCAGGAG","A9": "CCAGGACAGGAA","B1": "CGCGCAAGTATT","B10": "AGACTTCTCAGG","B11": "TCTTGCGGAGTC","B12": "CTATCTCCTGTC","B2": "AATACAGACCTG","B3": "GGACAAGTGCGA","B4": "TACGGTCTGGAT","B5": "TTCAGTTCGTTA","B6": "CCGCGTCTCAAC","B7": "CCGAGGTATAAT","B8": "AGATTCGCTCGA","B9": "TTGCCGCTCTGG","C1": "AAGGCGCTCCTT","C10": "AGTTCTCATTAA","C11": "GAGCCATCTGTA","C12": "GATATACCAGTG","C2": "GATCTAATCGAG","C3": "CTGATGTACACG","C4": "ACGTATTCGAAG","C5": "GACGTTAAGAAT","C6": "TGGTGGAGTTTC","C7": "TTAACAAGGCAA","C8": "AACCGCATAAGT","C9": "CCACAACGATCA","D1": "CGCAATGAGGGA","D10": "GTGTCGAGGGCA","D11": "TTCCACACGTGG","D12": "AGAATCCACCAC","D2": "CCGCAGCCGCAG","D3": "TGGAGCCTTGTC","D4": "TTACTTATCCGA","D5": "ATGGGACCTTCA","D6": "TCCGATAATCGG","D7": "AAGTCACACACA","D8": "GAAGTAGCGAGC","D9": "CACCATCTCCGG","E1": "ACGGCGTTATGT","E10": "AGTGTTTCGGAC","E11": "ATTTCCGCTAAT","E12": "CAAACCTATGGC","E2": "GAACCGTGCAGG","E3": "ACGTGCCTTAGA","E4": "AGTTGTAGTCCG","E5": "AGGGACTTCAAT","E6": "CGGCCAGAAGCA","E7": "TGGCAGCGAGCC","E8": "GTGAATGTTCGA","E9": "TATGTTGACGGC","F1": "CATTTGACGACG","F10": "AGTGCAGGAGCC","F11": "GTACTCGAACCA","F12": "ATAGGAATAACC","F2": "ACTAAGTACCCG","F3": "CACCCTTGCGAC","F4": "GATGCCTAATGA","F5": "GTACGTCACTGA","F6": "TCGCTACAGATG","F7": "CCGGCTTATGTG","F8": "ATAGTCCTTTAA","F9": "TCGAGCCGATCT","G1": "GCTGCGTATACC","G10": "GTTGCTGAGTCC","G11": "ACACCGCACAAT","G12": "CACAACCACAAC","G2": "CTCAGCGGGACG","G3": "ATGCCTCGTAAG","G4": "TTAGTTTGTCAC","G6": "ATTATGATTATG","G7": "CGAATACTGACA","G8": "TCTTATAACGCT","G9": "TAAGGTCGATAA","H1": "GAGAAGCTTATA","H10": "CGGAGAGACATG","H11": "CAGCCCTACCCA","H12": "TCGTTGGGACTA","H2": "GTTAACTTACTA","H3": "GTTGTTCTGGGA","H4": "AGGGTGACTTTA","H5": "GCCGCCAGGGTC","H6": "GCCACCGCCGGA","H7": "ACACACCCTGAC","H8": "TATAGGCTCCGC","H9": "ATAATTGCCGAG"}');
