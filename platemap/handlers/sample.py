@@ -5,6 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
+from io import StringIO
 from tornado.web import authenticated
 
 from platemap.handlers.base import BaseHandler
@@ -22,19 +23,40 @@ class SampleCreateHandler(BaseHandler):
 
     @authenticated
     def post(self):
-        name = self.get_argument('sample')
-        barcode = self.get_argument('barcode', None)
-        if not barcode:
-            barcode = None
         sample_set = self.get_argument('sample-set')
         sample_type = self.get_argument('type')
         sample_location = self.get_argument('location')
 
-        pm.sample.Sample.create(name, sample_type, sample_location, sample_set,
-                                self.current_user.person, None, barcode)
+        # check if file or single sample
+        fileinfo = self.request.files['file']
+        if len(fileinfo) != 0:
+            file = StringIO(fileinfo[0]['body'].decode('utf-8'))
+            try:
+                pm.sample.Sample.from_file(
+                    file, sample_type, sample_location, sample_set,
+                    self.current_user.person, None)
+            except Exception as e:
+                # Catch any error and show to user
+                msg = str(e)
+            else:
+                msg = 'Created samples from %s' % fileinfo[0]['filename']
+        else:
+            name = self.get_argument('sample')
+            barcode = self.get_argument('barcode', None)
+            if not barcode:
+                barcode = None
+            try:
+                pm.sample.Sample.create(
+                    name, sample_type, sample_location, sample_set,
+                    self.current_user.person, None, barcode)
+            except Exception as e:
+                # Catch any error and show to user
+                msg = str(e)
+            else:
+                msg = 'Created sample %s' % name
 
         sets = ['Sample Set 1', 'Sample Set 2']
         types = pm.sample.Sample.types()
         locations = pm.sample.Sample.locations()
         self.render('add_sample.html', sets=sets, types=types,
-                    locations=locations, msg='Created sample %s' % name)
+                    locations=locations, msg=msg)

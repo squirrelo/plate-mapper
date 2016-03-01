@@ -11,10 +11,9 @@
 {% block content %}
 <span style="color:red;">{{msg}}</span>
 <h3> Add a new sample</h3>
-<form method="POST" action="/sample/add/">
+<form enctype="multipart/form-data" method="POST" action="/sample/add/">
 <table class="table">
-<tr><td>Sample Name</td><td><input type="text" name="sample" id="sample" required></td></tr>
-<tr><td>Sample Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
+<tr><td colspan=2><h4>Universal Sample Info</h4></td></tr>
 <tr><td>Sample Set</td><td>
   <select name="sample-set" id="sample-set" required>
     <option value=""></option>
@@ -25,7 +24,13 @@
 </td></tr>
 <tr><td>Sample Type</td><td><input type="text" name="type" id="type" required></td></tr>
 <tr><td>Sample Location</td><td><input type="text" name="location" id="location" required></td></tr>
+<tr><td colspan=2><hr><h4>Single Sample</h4></td></tr>
+<tr><td>Sample Name</td><td><input type="text" name="sample" id="sample"></td></tr>
+<tr><td>Sample Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
+<tr><td colspan=2><hr><h4>Samples File</h4>File must be formatted as follows: <ul><li>Tab seperated format</li><li>Sample name in first column</li><li>Barcodes, if given, must be in column named 'barcode'</li></ul></td></tr>
+<tr><td>Samples file</td><td><input type="file" name="file" id="file"></td></tr>
 </table>
-<input type="submit" value="Create sample">
+<hr>
+<input type="submit" value="Create sample(s)">
 </form>
 {% end %}
