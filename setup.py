@@ -27,7 +27,7 @@ classes = """
 """
 classifiers = [s.strip() for s in classes.split('\n') if s]
 
-long_description = """Knight lab source tracking project"""
+long_description = 'Knight lab source tracking project'
 
 setup(name='plate-mapper',
       cmdclass={'build_py': build_py},
@@ -35,17 +35,18 @@ setup(name='plate-mapper',
       license='BSD',
       description='plate-mapper: simplified sample and run tracking',
       long_description=long_description,
-      author="Joshua Shorenstein",
-      author_email="jshorens@gmail.com",
-      maintainer="Joshua Shorenstein",
-      maintainer_email="jshorens@gmail.com",
+      author='Joshua Shorenstein',
+      author_email='jshorens@gmail.com',
+      maintainer='Joshua Shorenstein',
+      maintainer_email='jshorens@gmail.com',
       url='https://github.com/squirrelo/plate-tracker',
       packages=find_packages(),
       package_data={
           'platemap': ['db/*.sql']
       },
       scripts=glob('scripts/*'),
-      extras_require={'test': ["nose >= 0.10.1", "flake8", 'mock']},
+      extras_require={'test': ['nose >= 0.10.1', 'flake8', 'mock',
+                               'requests_toolbelt']},
       install_requires=['tornado', 'psycopg2', 'passlib', 'bcrypt', 'wtforms',
                         'click'],
       classifiers=classifiers)

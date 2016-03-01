@@ -9,7 +9,7 @@
 </script>
 {% end %}
 {% block content %}
-<span style="color:red;">{{msg}}</span>
+<span style="color:red;">{% raw msg %}</span>
 <h3> Add a new sample</h3>
 <form enctype="multipart/form-data" method="POST" action="/sample/add/">
 <table class="table">

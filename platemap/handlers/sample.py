@@ -28,9 +28,9 @@ class SampleCreateHandler(BaseHandler):
         sample_location = self.get_argument('location')
 
         # check if file or single sample
-        fileinfo = self.request.files['file']
-        if len(fileinfo) != 0:
-            file = StringIO(fileinfo[0]['body'].decode('utf-8'))
+        if len(self.request.files) != 0:
+            fileinfo = self.request.files['file'][0]
+            file = StringIO(fileinfo['body'].decode('utf-8'))
             try:
                 pm.sample.Sample.from_file(
                     file, sample_type, sample_location, sample_set,
@@ -39,7 +39,7 @@ class SampleCreateHandler(BaseHandler):
                 # Catch any error and show to user
                 msg = str(e)
             else:
-                msg = 'Created samples from %s' % fileinfo[0]['filename']
+                msg = 'Created samples from %s' % fileinfo['filename']
         else:
             name = self.get_argument('sample')
             barcode = self.get_argument('barcode', None)

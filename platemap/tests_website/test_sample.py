@@ -6,6 +6,9 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 from unittest import main
+from io import StringIO
+
+from requests_toolbelt import MultipartEncoder
 
 from platemap.tests_website.tornado_test_base import TestHandlerBase
 from platemap.lib.util import rollback_tests
@@ -49,6 +52,57 @@ class TestSampleCreateHandler(TestHandlerBase):
         search = pm.sample.Sample.search(barcode='000000007')
         self.assertEqual(len(search), 1)
         self.assertEqual(search[0].barcode, '000000007')
+
+    def test_post_barcode_error(self):
+        self.assertEqual(len(pm.sample.Sample.search(barcode='000000007')), 0)
+        obs = self.post('/sample/add/', {'sample': 'new posted sample',
+                                         'barcode': '000000001',
+                                         'sample-set': 'Sample Set 1',
+                                         'type': 'stool',
+                                         'location': 'the freezer'})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Barcode 000000001 already assigned!',
+                      obs.body.decode('utf-8'))
+
+        search = pm.sample.Sample.search(barcode='000000007')
+        self.assertEqual(len(search), 1)
+        self.assertEqual(search[0].barcode, '000000007')
+
+    def test_post_file(self):
+        file = StringIO('sample_name\tother_col\ntest1\tval1\ntest2\tval2\n')
+        m = MultipartEncoder(
+            fields={
+                'sample-set': 'Sample Set 1',
+                'type': 'test',
+                'location': 'the freezer',
+                'file': ('test_bc.txt', file, 'text/plain')}
+        )
+
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
+        obs = self.post('/sample/add/', m.to_string(),
+                        headers={'Content-Type': m.content_type})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Created samples from test_bc.txt',
+                      obs.body.decode('utf-8'))
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
+
+    def test_post_file_error(self):
+        file = StringIO('sample_name\tbarcode\nSample 1\t000000001\n')
+        m = MultipartEncoder(
+            fields={
+                'sample-set': 'Sample Set 1',
+                'type': 'test',
+                'location': 'the freezer',
+                'file': ('test_bc.txt', file, 'text/plain')}
+        )
+
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
+        obs = self.post('/sample/add/', m.to_string(),
+                        headers={'Content-Type': m.content_type})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with name \'Sample 1\' already exists in '
+                      'table \'sample\'', obs.body.decode('utf-8'))
+        self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
 
 
 if __name__ == '__main__':
