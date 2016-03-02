@@ -121,10 +121,13 @@ CREATE TABLE barcodes.run (
 	finalized_by         bigint  ,
 	CONSTRAINT idx_run_0 UNIQUE ( run ) ,
 	CONSTRAINT pk_run PRIMARY KEY ( run_id ),
-	CONSTRAINT fk_run FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    
+	CONSTRAINT fk_run FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    ,
+	CONSTRAINT fk_run_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    
  );
 
 CREATE INDEX idx_run ON barcodes.run ( finalized_by );
+
+CREATE INDEX idx_run_1 ON barcodes.run ( created_by );
 
 COMMENT ON TABLE barcodes.run IS 'Full run, equivalent to a multi-lane sequencing run';
 
@@ -173,12 +176,13 @@ CREATE TABLE barcodes.pool (
 	created_by           bigint  NOT NULL,
 	finalized            bool DEFAULT 'F' NOT NULL,
 	finalized_on         timestamp  ,
-	finalized_by         bigint  NOT NULL,
+	finalized_by         bigint  ,
 	CONSTRAINT idx_pool_2 UNIQUE ( pool ) ,
 	CONSTRAINT pk_pool PRIMARY KEY ( pool_id ),
 	CONSTRAINT fk_pool FOREIGN KEY ( run_id ) REFERENCES barcodes.run( run_id )    ,
 	CONSTRAINT fk_pool_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_pool_1 FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    
+	CONSTRAINT fk_pool_1 FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    ,
+	CONSTRAINT fk_pool_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    
  );
 
 CREATE INDEX idx_pool ON barcodes.pool ( run_id );

@@ -160,7 +160,7 @@ class TestPCRProtocol(TestCase):
 
     def test_create(self):
         obs = pm.protocol.PCRProtocol.create(
-            pm.person.Person(3), pm.protocol.ExtractionProtocol(2), 'pr002',
+            pm.person.Person(3), pm.protocol.ExtractionProtocol(2), 'pr001',
             'mm004', 'wat004', 'prrb004', 'tm38004', 'tm58004',
             sample=pm.sample.Sample(4))
         obs = obs.summary()
@@ -173,7 +173,7 @@ class TestPCRProtocol(TestCase):
                'mastermix_lot': 'mm004',
                'created_by': pm.person.Person(3),
                'sample': pm.sample.Sample(4),
-               'primer_lot': 'pr002',
+               'primer_lot': 'pr001',
                'tm50_8_tool': 'tm58004',
                'plate': None,
                'water_lot': 'wat004',
@@ -188,10 +188,10 @@ class TestPCRProtocol(TestCase):
 
     def test_primer_lot(self):
         obs = self.pcr_protocol3.primer_lot
-        self.assertEqual(obs, 'pr001')
+        self.assertEqual(obs, 'pr002')
 
         obs = self.pcr_protocol4.primer_lot
-        self.assertEqual(obs, 'pr002')
+        self.assertEqual(obs, 'pr001')
 
     def test_mastermix_lot(self):
         obs = self.pcr_protocol3.mastermix_lot
@@ -261,15 +261,15 @@ class TestPCRProtocol(TestCase):
                'mastermix_lot': 'mm002',
                'protocol_id': 1,
                'tm50_8_tool': 'tm58002',
-               'primer_lot': 'pr002',
+               'primer_lot': 'pr001',
                'created_on': datetime(2016, 2, 28, 0, 0),
                'created_by': pm.person.Person(2),
                'processing_robot': 'prrb002'}
         self.assertEqual(obs, exp)
 
-    def test_metadata_summary(self):
+    def test_metadata_summary_plate(self):
         obs = self.pcr_protocol4.metadata_summary()
-        exp = {'Sample 1': {'primer_lot': 'pr002',
+        exp = {'Sample 1': {'primer_lot': 'pr001',
                             'extractionkit_lot': 'exkl002',
                             'biomass_remaining': True,
                             'tm1000_8_tool': 'tm18002',
@@ -281,8 +281,9 @@ class TestPCRProtocol(TestCase):
                             'plate_well': 'B2',
                             'mastermix_lot': 'mm002',
                             'tm300_8_tool': 'tm38002',
-                            'processing_robot': 'prrb002'},
-               'Sample 2': {'primer_lot': 'pr002',
+                            'processing_robot': 'prrb002',
+                            'plate_id': '000000003'},
+               'Sample 2': {'primer_lot': 'pr001',
                             'extractionkit_lot': 'exkl002',
                             'biomass_remaining': False,
                             'tm1000_8_tool': 'tm18002',
@@ -294,8 +295,9 @@ class TestPCRProtocol(TestCase):
                             'plate_well': 'B3',
                             'mastermix_lot': 'mm002',
                             'tm300_8_tool': 'tm38002',
-                            'processing_robot': 'prrb002'},
-               'Sample 3': {'primer_lot': 'pr002',
+                            'processing_robot': 'prrb002',
+                            'plate_id': '000000003'},
+               'Sample 3': {'primer_lot': 'pr001',
                             'extractionkit_lot': 'exkl002',
                             'biomass_remaining': False,
                             'tm1000_8_tool': 'tm18002',
@@ -307,7 +309,27 @@ class TestPCRProtocol(TestCase):
                             'plate_well': 'C4',
                             'mastermix_lot': 'mm002',
                             'tm300_8_tool': 'tm38002',
-                            'processing_robot': 'prrb002'}}
+                            'processing_robot': 'prrb002',
+                            'plate_id': '000000003'}}
+        self.assertEqual(obs, exp)
+
+    def test_metadata_summary_sample(self):
+        obs = self.pcr_protocol3.metadata_summary()
+        print(obs)
+        exp = {'Sample 1': {'primer_lot': 'pr002',
+                            'biomass_remaining': True,
+                            'plate_id': '',
+                            'extractionkit_lot': 'exkl001',
+                            'barcode': '000000001',
+                            'tm50_8_tool': 'tm58001',
+                            'tm300_8_tool': 'tm38001',
+                            'plate_well': '',
+                            'mastermix_lot': 'mm001',
+                            'water_lot': 'wat001',
+                            'tm1000_8_tool': 'tm18001',
+                            'sample_type': 'stool',
+                            'extraction_robot': 'exrb001',
+                            'processing_robot': 'prrb001'}}
         self.assertEqual(obs, exp)
 
 

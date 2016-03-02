@@ -13,7 +13,7 @@ class Run(pm.base.PMObject):
 
     @classmethod
     def create(cls, name, person):
-        """Creates a new pool on the system
+        """Creates a new run on the system
 
         Parameters
         ----------
@@ -52,7 +52,7 @@ class Run(pm.base.PMObject):
         bool
             Whether the run already exists (True) or not (False)
         """
-        sql = "SELECT EXISTS(SELECT * FROM barcodes.run WHERE name = %s"
+        sql = "SELECT EXISTS(SELECT * FROM barcodes.run WHERE run = %s)"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [name])
             return pm.sql.TRN.execute_fetchlast()
@@ -70,7 +70,7 @@ class Run(pm.base.PMObject):
 
     @property
     def name(self):
-        return self._get_property('pool')
+        return self._get_property('run')
 
     @property
     def pools(self):
@@ -80,7 +80,7 @@ class Run(pm.base.PMObject):
             return [Pool(p) for p in pm.sql.TRN.execute_fetchflatten()]
 
     @property
-    def finalized(self, person):
+    def finalized(self):
         return self._get_property('finalized')
 
     def finalize(self, person):
@@ -114,6 +114,91 @@ class Run(pm.base.PMObject):
         if not self.finalized:
             raise pm.exceptions.DeveloperError('Generating prep metadata for '
                                                'non-finalized run!')
+
+        primer_lot_sql = """SELECT
+                           linker, fwd_primer, rev_primer, barcodes
+                           FROM barcodes.primer_set_lots
+                           JOIN barcodes.primer_set USING (primer_set_id)
+                           WHERE primer_lot = %s
+                         """
+        protocols_sql = """SELECT protocol_settings_id
+                           FROM barcodes.pcr_settings
+                           RIGHT JOIN barcodes.pool_samples
+                               USING (protocol_settings_id)
+                           LEFT JOIN barcodes.pool USING (pool_id)
+                           WHERE run_id = %s
+                        """
+        metadata = {}
+        duplicates = {}
+        primer_lots_info = {}
+        primer_lots_barcodes = {}
+        with pm.sql.TRN:
+            pm.sql.TRN.add(protocols_sql, [self.id])
+            for pid in pm.sql.TRN.execute_fetchflatten():
+                protocol = pm.protocol.PCRProtocol(pid)
+                protocol_meta = protocol.metadata_summary()
+                meta_keys = set(protocol_meta.keys())
+
+                # take care of duplicate sample names that already exist
+                sample_overlap = meta_keys.intersection(duplicates.keys())
+                if len(sample_overlap) > 0:
+                    for sample in sample_overlap:
+                        # Add letter to end and delete existing sample name
+                        new = '.'.join(sample, chr(sample_overlap[sample]))
+                        protocol_meta[new] = protocol_meta[sample]
+                        del protocol_meta[sample]
+                        sample_overlap[sample] += 1
+
+                # take care of newly overlapping samples
+                sample_overlap = meta_keys.intersection(metadata.keys())
+                if len(sample_overlap) > 0:
+                    for sample in sample_overlap:
+                        # Log as new overlap, then add letter to end and delete
+                        # existing sample names.
+                        metadata[sample + '.A'] = metadata[sample]
+                        del metadata[sample]
+                        protocol_meta[sample + '.B'] = protocol_meta[sample]
+                        del protocol_meta[sample]
+                        # 67 for ASCII capital C conversion using chr above
+                        duplicates[sample] = 67
+                metadata.update(protocol_meta)
+
+            # At this point we have the varying metadata dict built
+            # so build the full dict with primer and barcode info
+            ret = []
+            headers = sorted(list(metadata.values())[0].keys())
+            for sample in sorted(metadata.keys()):
+                meta = metadata[sample]
+                # Get primer info if not already grabbed
+                primer_lot = meta['primer_lot']
+                if primer_lot not in primer_lots_info:
+                    pm.sql.TRN.add(primer_lot_sql, [primer_lot])
+                    info = dict(pm.sql.TRN.execute_fetchindex()[0])
+                    primer_lots_barcodes[primer_lot] = info['barcodes']
+                    del info['barcodes']
+                    primer_lots_info[primer_lot] = info
+
+                # build static ordered info
+                row = [sample,
+                       primer_lots_info[primer_lot]['linker'],
+                       primer_lots_info[primer_lot]['fwd_primer'],
+                       primer_lots_info[primer_lot]['rev_primer']]
+                if meta['plate_well']:
+                    row.append(
+                        primer_lots_barcodes[primer_lot][meta['plate_well']])
+                else:
+                    row.append(primer_lots_barcodes[primer_lot]['barcode'])
+
+                # Build rest of info, ordered correctly
+                for h in headers:
+                    row.append(meta[h])
+                ret.append('\t'.join(map(str, row)))
+
+            # add static header names and create file using joins
+            headers[headers.index('barcode')] = 'sample_barcode'
+            headers = '\t'.join(['sample_name', 'linker', 'fwd_primer',
+                                 'rev_primer', 'barcode'] + headers)
+            return '\n'.join([headers] + ret)
 
 
 class Pool(pm.base.PMObject):
@@ -194,27 +279,20 @@ class Pool(pm.base.PMObject):
     def finalize(self):
         """Finalize the run so no more pools can be added"""
 
-    def add_protocol(self, pool):
+    def add_protocol(self, pcr_protocol):
         """Adds a PCR protocol run to the pool
 
         Parameters
         ----------
-        pool : Pool object
-            The pool to add to the run
-
-        Raises
-        ------
-        DeveloperError
-            Trying to add a pool that is not finalized
+        pcr_protocol : PCRProtocol object
+            The protocol to add to the run
         """
-        if not pool.finalized:
-            raise pm.exceptions.DeveloperError('Adding non-finalized pool!')
 
-    def remove_protocol(self, pool):
+    def remove_protocol(self, pcr_protocol):
         """Adds a PCR protocol run to the pool
 
         Parameters
         ----------
-        pool : Pool object
-            The pool to remove from the run
+        pcr_protocol : PCRProtocol object
+            The pcr_protocol to remove from the run
         """

@@ -281,18 +281,35 @@ class PCRProtocol(ProtocolBase):
         dict of dict of objects
             Values for each sample, as {sample: {property: value, ...}, ...}
         """
-        sql = """SELECT *
-                 FROM barcodes.protocol_settings
-                 JOIN barcodes.pcr_settings ps USING (protocol_settings_id)
+        sql1 = """SELECT *
+                 FROM (SELECT protocol_settings_id, plate_id
+                       FROM barcodes.protocol_settings
+                       WHERE sample_id IS NULL) AS prot
+                 JOIN barcodes.plates_samples USING (plate_id)
+                 JOIN barcodes.sample USING (sample_id)
+                 JOIN barcodes.pcr_settings ps USING (
+                  protocol_settings_id)
                  JOIN barcodes.extraction_settings es ON (
                   ps.extraction_protocol_settings_id = es.protocol_settings_id)
-                 LEFT JOIN barcodes.plates_samples pls USING (plate_id)
-                 LEFT JOIN barcodes.sample s ON pls.sample_id = s.sample_id
+                 WHERE ps.protocol_settings_id = %s
+              """
+        sql2 = """SELECT *
+                 FROM (SELECT protocol_settings_id, sample_id
+                       FROM barcodes.protocol_settings
+                       WHERE sample_id IS NOT NULL) AS prot
+                 LEFT JOIN barcodes.sample USING (sample_id)
+                 LEFT JOIN barcodes.pcr_settings ps USING (
+                  protocol_settings_id)
+                 LEFT JOIN barcodes.extraction_settings es ON (
+                  ps.extraction_protocol_settings_id = es.protocol_settings_id)
                  WHERE ps.protocol_settings_id = %s
               """
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
+            # Get the plate based and sample based protocol run info
+            pm.sql.TRN.add(sql1, [self.id])
             rows = pm.sql.TRN.execute_fetchindex()
+            pm.sql.TRN.add(sql2, [self.id])
+            rows.extend(pm.sql.TRN.execute_fetchindex())
             info = {}
             for row in rows:
                 row = dict(row)
@@ -305,19 +322,19 @@ class PCRProtocol(ProtocolBase):
                     row['barcode'] = ''
 
                 # Convert plate info if needed
-                if row['plate_id'] is not None:
+                if 'plate_id' in row:
+                    # 65 for ASCII capital A
                     row['plate_well'] = '%s%d' % (chr(65 + row['plate_row']),
                                                   row['plate_col'] + 1)
+                    del row['plate_row']
+                    del row['plate_col']
                 else:
                     row['plate_id'] = ''
                     row['plate_well'] = ''
-                del row['plate_row']
-                del row['plate_col']
 
                 # Remove non-metadata housekeeping information
                 for key in ['protocol_settings_id', 'created_on', 'created_by',
-                            'plate_id', 'sample_id', 'protocol_id',
-                            'extraction_protocol_settings_id',
+                            'sample_id', 'extraction_protocol_settings_id',
                             'sample_location', 'last_scanned',
                             'last_scanned_by', 'sample_set_id']:
                     del row[key]
