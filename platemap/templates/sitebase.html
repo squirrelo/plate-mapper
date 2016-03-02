@@ -22,17 +22,19 @@
     <p>Hello {{current_user.id}}! <a href="/auth/logout/">Logout</a></p>
     <div id="menu-sample" class="inner-menu">
         <h4>Sample Sets &amp; Projects</h4>
-        <a href="#">Add Project</a><br/>
-        <a href="#">Delete Project</a><br/>
-        <a href="#">View Project</a><br/>
-      </div>
+        <a href="/project/add/">Add Project</a><br/>
+        <a href="/project/delete/">Delete Project</a><br/>
+        <a href="/project/view/">View Project</a><br/>
+        <a href="/sampleset/add/">Add Sample Set</a><br/>
+        <a href="/sampleset/delete/">Delete Sample Set</a><br/>
+       </div>
       <p> </p>
       <div id="menu-sample" class="inner-menu">
         <h4>Samples &amp; Plates</h4>
         <a href="/sample/add/">Add Sample</a><br/>
         <a href="#">Edit Sample</a><br/>
         <a href="/plate/add/">Create Platemap</a><br/>
-        <a href="/plate/edit/">View/Edit Platemap</a><br/>
+        <a href="/plate/edit/">View/Edit Platemap</a>
       </div>
       <p> </p>
       <div id="menu-protocols" class="inner-menu">
@@ -43,7 +45,7 @@
         <a href="#">View/Edit Pool</a><br/>
         <a href="#">Create Run</a><br/>
         <a href="#">View/Edit Run</a><br/>
-        <a href="#">Generate Prep Info</a><br/>
+        <a href="#">Generate Prep Info</a>
       </div>
       <p> </p>
       <div id="menu-admin" class="inner-menu">
@@ -51,7 +53,7 @@
         <a href="#">Add user</a><br/>
         <a href="#">Edit user permissions</a><br/>
         <a href="#">Delete user</a><br/>
-        <a href="#">Revert plate</a><br/>
+        <a href="#">Revert plate</a>
       </div>
     {% else %}
     LOGIN

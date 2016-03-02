@@ -1,0 +1,16 @@
+{% extends sitebase.html %}
+{% block content %}
+<h3> Add a new project</h3>
+<span style="color: red;">{% raw msg %}</span>
+<form method="POST" action="/project/add/">
+<table class="table">
+<tr><td>Project Name</td><td><input type="text" name="name" id="name" required></td></tr>
+<tr><td>Project Description</td><td><input type="text" name="description" id="description" required></td></tr>
+<tr><td>Project PI</td><td><input type="text" name="pi" id="pi" required></td></tr>
+<tr><td>Project Contact</td><td><input type="text" name="contact" id="contact" required></td></tr>
+<tr><td>Sample Set Name</td><td><input type="text" name="sample_set" id="sample_set" required></td></tr>
+<tr><td># Barcodes (optional)</td><td><input type="number" name="barcodes" id="barcodes"></td></tr>
+</table>
+<input type="submit" value="Create Project">
+</form>
+{% end %}
