@@ -757,11 +757,10 @@ timestamp</title></a>
 <a xlink:href='#sample_set'><text x='349' y='416'>sample_set</text><title>Table barcodes.sample_set
 Distinct set of samples that must have unique sample names in them</title></a>
   <use id='nn' x='302' y='432' xlink:href='#nn'/><a xlink:href='#sample_set.sample_set_id'><use id='pk' x='302' y='431' xlink:href='#pk'/><title>Pk pk_sample_set ( sample_set_id ) </title></a>
-<a xlink:href='#sample_set.sample_set_id'><text id='barcodes.sample_set.sample_set_id' x='318' y='442' onmouseover="hghl(['sample_fk_samples_0','project_sample_sets_fk_project_sample_sets_0','project_sample_sets_fk_project_sample_sets_0'])" onmouseout="uhghl(['sample_fk_samples_0','project_sample_sets_fk_project_sample_sets_0','project_sample_sets_fk_project_sample_sets_0'])">sample_set_id</text><text x='450' y='442' text-anchor='end' class='colType'>bigserial</text><title>sample_set_id
+<a xlink:href='#sample_set.sample_set_id'><text id='barcodes.sample_set.sample_set_id' x='318' y='442' onmouseover="hghl(['project_sample_sets_fk_project_sample_sets_0','sample_fk_samples_0'])" onmouseout="uhghl(['project_sample_sets_fk_project_sample_sets_0','sample_fk_samples_0'])">sample_set_id</text><text x='450' y='442' text-anchor='end' class='colType'>bigserial</text><title>sample_set_id
 * bigserial</title></a>
-<a xlink:href='#sample_set.sample_set_id'><use id='ref' x='453' y='431' xlink:href='#ref'/><title>Referred by sample ( sample_set_id ) 
-Referred by project_sample_sets ( sample_set_id ) 
-Referred by project_sample_sets ( sample_set_id ) </title></a>
+<a xlink:href='#sample_set.sample_set_id'><use id='ref' x='453' y='431' xlink:href='#ref'/><title>Referred by project_sample_sets ( sample_set_id ) 
+Referred by sample ( sample_set_id ) </title></a>
   <use id='nn' x='302' y='447' xlink:href='#nn'/><a xlink:href='#sample_set.sample_set'><text id='barcodes.sample_set.sample_set' x='318' y='457'>sample_set</text><text x='450' y='457' text-anchor='end' class='colType'>varchar(100)</text><title>sample_set
 * varchar(100)</title></a>
   <a xlink:href='#sample_set.created_on'><text id='barcodes.sample_set.created_on' x='318' y='472'>created_on</text><text x='450' y='472' text-anchor='end' class='colType'>timestamp</text><title>created_on
@@ -985,33 +984,6 @@ Whether test environment or not.</title></a>
 * bigint</title></a>
 <a xlink:href='#project_sample_sets.sample_set_id'><use id='fk' x='438' y='566' xlink:href='#fk'/><title>References sample_set ( sample_set_id ) </title></a>
 
-<!-- ============= Table 'project' ============= -->
-<rect class='table' x='300' y='608' width='150' height='135' rx='7' ry='7' />
-<line class='delim' x1='300.500000' y1='634.500000' x2='449.500000' y2='634.500000'/>
-<line class='delim' x1='315.500000' y1='634.500000' x2='315.500000' y2='742.500000'/>
-<line class='delim' x1='438.500000' y1='634.500000' x2='438.500000' y2='742.500000'/>
-<path d='M 300.50 634.50 L 300.50 615.50 Q 300.50 608.50 307.50 608.50 L 442.50 608.50 Q 449.50 608.50 449.50 615.50 L 449.50 634.50 L300.50 634.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#project'><text x='353' y='626'>project</text><title>Table barcodes.project
-Project information</title></a>
-  <use id='nn' x='302' y='642' xlink:href='#nn'/><a xlink:href='#project.project_id'><use id='pk' x='302' y='641' xlink:href='#pk'/><title>Pk project_pkey ( project_id ) </title></a>
-<a xlink:href='#project.project_id'><text id='barcodes.project.project_id' x='318' y='652' onmouseover="hghl(['project_barcodes_fk_project_barcode','project_samples_fk_project_sample_set_0','project_sample_sets_fk_project_sample_sets','project_sample_sets_fk_project_sample_sets'])" onmouseout="uhghl(['project_barcodes_fk_project_barcode','project_samples_fk_project_sample_set_0','project_sample_sets_fk_project_sample_sets','project_sample_sets_fk_project_sample_sets'])">project_id</text><text x='435' y='652' text-anchor='end' class='colType'>bigserial</text><title>project_id
-* bigserial</title></a>
-<a xlink:href='#project.project_id'><use id='ref' x='438' y='641' xlink:href='#ref'/><title>Referred by project_barcodes ( project_id ) 
-Referred by project_samples ( project_id ) 
-Referred by project_sample_sets ( project_id ) 
-Referred by project_sample_sets ( project_id ) </title></a>
-  <use id='nn' x='302' y='657' xlink:href='#nn'/><a xlink:href='#project.project'><text id='barcodes.project.project' x='318' y='667'>project</text><text x='435' y='667' text-anchor='end' class='colType'>varchar(1000)</text><title>project
-* varchar(1000)</title></a>
-  <a xlink:href='#project.description'><text id='barcodes.project.description' x='318' y='682'>description</text><text x='435' y='682' text-anchor='end' class='colType'>varchar</text><title>description
-varchar</title></a>
-  <a xlink:href='#project.pi'><text id='barcodes.project.pi' x='318' y='697'>pi</text><text x='435' y='697' text-anchor='end' class='colType'>bigint</text><title>pi
-bigint
-primary investigator on the study</title></a>
-  <a xlink:href='#project.contact_person'><text id='barcodes.project.contact_person' x='318' y='712'>contact_person</text><text x='435' y='712' text-anchor='end' class='colType'>bigint</text><title>contact_person
-bigint</title></a>
-  <use id='nn' x='302' y='717' xlink:href='#nn'/><a xlink:href='#project.created_on'><text id='barcodes.project.created_on' x='318' y='727'>created_on</text><text x='435' y='727' text-anchor='end' class='colType'>timestamp</text><title>created_on
-* timestamp default current_timestamp</title></a>
-
 <!-- ============= Table 'project_samples' ============= -->
 <rect class='table' x='75' y='518' width='120' height='75' rx='7' ry='7' />
 <line class='delim' x1='75.500000' y1='544.500000' x2='194.500000' y2='544.500000'/>
@@ -1027,6 +999,32 @@ bigint</title></a>
 <a xlink:href='#project_samples.project_id'><text id='barcodes.project_samples.project_id' x='93' y='577' onmouseover="hghl(['project_samples_fk_project_sample_set_0'])" onmouseout="uhghl(['project_samples_fk_project_sample_set_0'])">project_id</text><text x='180' y='577' text-anchor='end' class='colType'>bigint</text><title>project_id
 * bigint</title></a>
 <a xlink:href='#project_samples.project_id'><use id='fk' x='183' y='566' xlink:href='#fk'/><title>References project ( project_id ) </title></a>
+
+<!-- ============= Table 'project' ============= -->
+<rect class='table' x='300' y='608' width='165' height='135' rx='7' ry='7' />
+<line class='delim' x1='300.500000' y1='634.500000' x2='464.500000' y2='634.500000'/>
+<line class='delim' x1='315.500000' y1='634.500000' x2='315.500000' y2='742.500000'/>
+<line class='delim' x1='453.500000' y1='634.500000' x2='453.500000' y2='742.500000'/>
+<path d='M 300.50 634.50 L 300.50 615.50 Q 300.50 608.50 307.50 608.50 L 457.50 608.50 Q 464.50 608.50 464.50 615.50 L 464.50 634.50 L300.50 634.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#project'><text x='360' y='626'>project</text><title>Table barcodes.project
+Project information</title></a>
+  <use id='nn' x='302' y='642' xlink:href='#nn'/><a xlink:href='#project.project_id'><use id='pk' x='302' y='641' xlink:href='#pk'/><title>Pk project_pkey ( project_id ) </title></a>
+<a xlink:href='#project.project_id'><text id='barcodes.project.project_id' x='318' y='652' onmouseover="hghl(['project_barcodes_fk_project_barcode','project_sample_sets_fk_project_sample_sets','project_samples_fk_project_sample_set_0'])" onmouseout="uhghl(['project_barcodes_fk_project_barcode','project_sample_sets_fk_project_sample_sets','project_samples_fk_project_sample_set_0'])">project_id</text><text x='450' y='652' text-anchor='end' class='colType'>bigserial</text><title>project_id
+* bigserial</title></a>
+<a xlink:href='#project.project_id'><use id='ref' x='453' y='641' xlink:href='#ref'/><title>Referred by project_barcodes ( project_id ) 
+Referred by project_sample_sets ( project_id ) 
+Referred by project_samples ( project_id ) </title></a>
+  <use id='nn' x='302' y='657' xlink:href='#nn'/><a xlink:href='#project.project'><text id='barcodes.project.project' x='318' y='667'>project</text><text x='450' y='667' text-anchor='end' class='colType'>varchar(1000)</text><title>project
+* varchar(1000)</title></a>
+  <a xlink:href='#project.description'><text id='barcodes.project.description' x='318' y='682'>description</text><text x='450' y='682' text-anchor='end' class='colType'>varchar</text><title>description
+varchar</title></a>
+  <use id='nn' x='302' y='687' xlink:href='#nn'/><a xlink:href='#project.pi'><text id='barcodes.project.pi' x='318' y='697'>pi</text><text x='450' y='697' text-anchor='end' class='colType'>varchar</text><title>pi
+* varchar
+primary investigator on the study</title></a>
+  <use id='nn' x='302' y='702' xlink:href='#nn'/><a xlink:href='#project.contact_person'><text id='barcodes.project.contact_person' x='318' y='712'>contact_person</text><text x='450' y='712' text-anchor='end' class='colType'>varchar</text><title>contact_person
+* varchar</title></a>
+  <use id='nn' x='302' y='717' xlink:href='#nn'/><a xlink:href='#project.created_on'><text id='barcodes.project.created_on' x='318' y='727'>created_on</text><text x='450' y='727' text-anchor='end' class='colType'>timestamp</text><title>created_on
+* timestamp default current_timestamp</title></a>
 
 </g></svg>
 
@@ -2142,57 +2140,6 @@ bigint</title></a>
 <br/><br/>
 <table class='bordered'>
 <thead>
-<tr><th colspan='4'><a name='project'>Table project</a></th></tr>
-<tr><td colspan='3'>Project information </td></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='project.project_id'>project&#95;id</a></td>
-		<td> bigserial   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='project.project'>project</a></td>
-		<td> varchar&#40; 1000 &#41;   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='project.description'>description</a></td>
-		<td> varchar   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='project.pi'>pi</a></td>
-		<td> bigint   </td>
-		<td> primary investigator on the study </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='project.contact_person'>contact&#95;person</a></td>
-		<td> bigint   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='project.created_on'>created&#95;on</a></td>
-		<td> timestamp   DEFO current_timestamp </td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>Pk</td><td>project&#95;pkey</td>
-		<td> ON project&#95;id</td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
 <tr><th colspan='4'><a name='project_samples'>Table project_samples</a></th></tr>
 </thead>
 <tbody>
@@ -2226,6 +2173,57 @@ bigint</title></a>
 	<tr>
 		<td>&nbsp;</td><td>fk_project_samples</td>
 		<td > ( sample&#95;id ) ref <a href='#sample'>sample</a> (sample&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
+<tr><th colspan='4'><a name='project'>Table project</a></th></tr>
+<tr><td colspan='3'>Project information </td></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='project.project_id'>project&#95;id</a></td>
+		<td> bigserial   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='project.project'>project</a></td>
+		<td> varchar&#40; 1000 &#41;   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='project.description'>description</a></td>
+		<td> varchar   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='project.pi'>pi</a></td>
+		<td> varchar   </td>
+		<td> primary investigator on the study </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='project.contact_person'>contact&#95;person</a></td>
+		<td> varchar   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='project.created_on'>created&#95;on</a></td>
+		<td> timestamp   DEFO current_timestamp </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>Pk</td><td>project&#95;pkey</td>
+		<td> ON project&#95;id</td>
 		<td>  </td>
 	</tr>
 </tbody>

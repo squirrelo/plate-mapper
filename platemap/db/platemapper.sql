@@ -87,8 +87,8 @@ CREATE TABLE barcodes.project (
 	project_id           bigserial  NOT NULL,
 	project              varchar(1000)  NOT NULL,
 	description          varchar  ,
-	pi                   bigint  ,
-	contact_person       bigint  ,
+	pi                   varchar  NOT NULL,
+	contact_person       varchar  NOT NULL,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	CONSTRAINT project_pkey PRIMARY KEY ( project_id )
  );

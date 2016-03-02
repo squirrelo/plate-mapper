@@ -60,6 +60,10 @@ class TestUtil(TestCase):
         obs = get_barcodes(3)
         self.assertEqual(obs, ['000000005', '000000006', '000000007'])
 
+    def test_get_barcodes_error(self):
+        with self.assertRaises(ValueError):
+            get_barcodes(2000000)
+
     def test_rollback_tests(self):
         @rollback_tests()
         class TestClass(TestCase):

@@ -12,6 +12,7 @@ import platemap.lib.person as person
 import platemap.lib.plate as plate
 import platemap.lib.sample as sample
 import platemap.lib.protocol as protocol
+import platemap.lib.project as project
 import platemap.lib.util as util
 import platemap.lib.sql_connection as sql
 import platemap.lib.web_helpers as webhelp
@@ -19,4 +20,4 @@ import platemap.lib.web_helpers as webhelp
 __version__ = "0.1.0-dev"
 
 __all__ = ['base', 'environment', 'exceptions', 'person', 'plate', 'sample',
-           'util', 'sql', 'protocol', 'webhelp']
+           'util', 'sql', 'protocol', 'webhelp', 'project']

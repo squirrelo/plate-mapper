@@ -47,9 +47,9 @@ class Project(pm.base.PMObject):
             raise pm.exceptions.DuplicateError(project, 'project')
 
         project_sql = """INSERT INTO barcodes.project
-                         (project, pi, contact_person)
-                         VALUES (%s, %s, %s)
-                         PRETURNING project_id
+                         (project, pi, description, contact_person)
+                         VALUES (%s, %s, %s, %s)
+                         RETURNING project_id
                       """
         project_bc_sql = """INSERT INTO barcodes.project_barcodes
                             (project_id, barcode)
@@ -58,16 +58,25 @@ class Project(pm.base.PMObject):
         sample_set_sql = """INSERT INTO barcodes.sample_set
                             (sample_set, created_by)
                             VALUES (%s, %s)
+                            RETURNING sample_set_id
                         """
+        proj_sample_set_sql = """INSERT INTO barcodes.project_sample_sets
+                                 (project_id, sample_set_id)
+                                 VALUES (%s, %s)
+                              """
         with pm.sql.TRN:
-            pm.sql.TRN.add(project_sql, [project, pi, contact_person])
+            pm.sql.TRN.add(project_sql, [project, pi, description,
+                                         contact_person])
             project_id = pm.sql.TRN.execute_fetchlast()
             pm.sql.TRN.add(sample_set_sql, [sample_set, person.id])
+            sample_set_id = pm.sql.TRN.execute_fetchlast()
+            pm.sql.TRN.add(proj_sample_set_sql, [project_id, sample_set_id])
 
             if num_barcodes is not None:
                 barcodes = pm.util.get_barcodes(num_barcodes)
                 pm.sql.TRN.add(project_bc_sql,
                                [(project_id, b) for b in barcodes], many=True)
+        return cls(project_id)
 
     @staticmethod
     def exists(project_name):
@@ -97,50 +106,79 @@ class Project(pm.base.PMObject):
     # --------- properties -------------------
     @property
     def name(self):
-        self._set_propery('project')
+        return self._get_property('project')
+
+    @property
+    def description(self):
+        return self._get_property('description')
 
     @property
     def samples(self):
-        self._set_propery('')
+        sql = """SELECT sample_id
+                 FROM barcodes.project_samples
+                 WHERE project_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return [pm.sample.Sample(s) for s in
+                    pm.sql.TRN.execute_fetchflatten()]
 
     @property
     def sample_sets(self):
-        self._set_propery()
+        sql = """SELECT sample_set
+                 FROM barcodes.project_sample_sets
+                 JOIN barcodes.sample_set USING (sample_set_id)
+                 WHERE project_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.sql.TRN.execute_fetchflatten()
 
     @property
     def pi(self):
-        self._set_propery('pi')
+        return self._get_property('pi')
 
     @pi.setter
     def pi(self, value):
-        raise NotImplementedError()
+        self._set_property('pi', value)
 
     @property
     def contact(self):
-        raise NotImplementedError()
+        return self._get_property('contact_person')
 
     @contact.setter
     def contact(self, value):
-        raise NotImplementedError()
+        self._set_property('contact_person', value)
 
     # ---------- functions ------------------
-    def add_samples(samples):
+    def add_samples(self, samples):
         """Add samples not part of the initial sample set to the project
 
         Parameters
         ----------
-        samples : list of Sample projects
+        samples : list of Sample objects
             Samples to add to the project
         """
+        sql = """INSERT INTO barcodes.project_samples
+                 (project_id, sample_id)
+                 VALUES (%s, %s)
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [(self.id, s.id) for s in samples], many=True)
 
-    def remove_samples(samples):
-        """Add samples not part of the initial sample set to the project
+    def remove_samples(self, samples):
+        """Remove samples from the project
 
         Parameters
         ----------
-        samples : list of Sample projects
-            Samples to add to the project
+        samples : list of Sample objects
+            Samples to remove from the project
         """
+        sql = """DELETE FROM barcodes.project_samples
+                 WHERE project_id = %s AND sample_id IN %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id, tuple(s.id for s in samples)])
 
     def add_sample_set(self, sample_set, person):
         """Adds a new sample set to the project
@@ -157,6 +195,18 @@ class Project(pm.base.PMObject):
         DuplicateError
             Sample set already exists
         """
+        sql1 = """INSERT INTO barcodes.sample_set
+                  (sample_set, created_by) VALUES (%s, %s)
+                  RETURNING sample_set_id
+               """
+        sql2 = """INSERT INTO barcodes.project_sample_sets
+                  (project_id, sample_set_id)
+                  VALUES (%s, %s)
+               """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql1, [sample_set, person.id])
+            sample_set_id = pm.sql.TRN.execute_fetchlast()
+            pm.sql.TRN.add(sql2, [self.id, sample_set_id])
 
     def remove_sample_set(self, sample_set):
         """Remove a sample set to the project
@@ -171,6 +221,25 @@ class Project(pm.base.PMObject):
         EditError
             Trying to delete a sample set with samples attached
         """
+        check_sql = """SELECT count(*)
+                       FROM barcodes.project_sample_sets
+                       WHERE project_id = %s AND sample_set_id NOT IN (
+                           SELECT sample_set_id
+                           FROM barcodes.sample_set
+                           WHERE sample_set = %s)
+                    """
+        remove_sql = """DELETE FROM barcodes.project_sample_sets
+                        WHERE project_id = %s AND sample_set_id IN (
+                           SELECT sample_set_id
+                           FROM barcodes.sample_set
+                           WHERE sample_set = %s)
+                     """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(check_sql, [self.id, sample_set])
+            if pm.sql.TRN.execute_fetchlast() == 0:
+                raise pm.exceptions.EditError('Can not remove all sample sets '
+                                              'attached to a project')
+            pm.sql.TRN.add(remove_sql, [self.id, sample_set])
 
     def assign_barcodes(self, num_barcodes):
         """Assigns barcodes to the project
@@ -180,6 +249,19 @@ class Project(pm.base.PMObject):
         num_barcodes : str
             Number of barcodes to assign to the project
         """
+        sql = """INSERT INTO barcodes.project_barcodes (project_id, barcode)
+                 VALUES (%s, %s)
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [(self.id, b) for b in
+                                 pm.util.get_barcodes(num_barcodes)],
+                           many=True)
 
     def clear_barcodes(self):
         """Clears all remaining unused barcodes from the project"""
+        sql = """DELETE FROM barcodes.project_barcodes
+                 WHERE barcode NOT IN (SELECT barcode FROM barcodes.sample
+                                       WHERE barcode IS NOT NULL)
+                 AND project_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
