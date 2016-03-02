@@ -281,9 +281,6 @@ class PCRProtocol(ProtocolBase):
         dict of dict of objects
             Values for each sample, as {sample: {property: value, ...}, ...}
         """
-        if self._subtable is None:
-            raise pm.exceptions.DeveloperError('Must be called on subclass!')
-
         sql = """SELECT *
                  FROM barcodes.protocol_settings
                  JOIN barcodes.pcr_settings ps USING (protocol_settings_id)
@@ -307,7 +304,7 @@ class PCRProtocol(ProtocolBase):
                 if row['barcode'] is None:
                     row['barcode'] = ''
 
-                # Add plate info if needed
+                # Convert plate info if needed
                 if row['plate_id'] is not None:
                     row['plate_well'] = '%s%d' % (chr(65 + row['plate_row']),
                                                   row['plate_col'] + 1)
