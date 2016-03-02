@@ -45,7 +45,7 @@ class TestAddProjectHandler(TestHandlerBase):
         self.assertTrue(pm.project.Project.exists('newtestproj'))
 
     def test_post_error(self):
-        obs = self.post('/project/add/', {'name': 'newtestproj',
+        obs = self.post('/project/add/', {'name': 'atestproj',
                                           'description': 'desc',
                                           'pi': 'pi',
                                           'contact': 'cont',
@@ -54,7 +54,7 @@ class TestAddProjectHandler(TestHandlerBase):
         self.assertEqual(obs.code, 200)
         self.assertIn('12 barcodes requested, only 6 available',
                       obs.body.decode('utf-8'))
-        self.assertFalse(pm.project.Project.exists('newtestproj'))
+        self.assertFalse(pm.project.Project.exists('atestproj'))
 
 
 if __name__ == '__main__':

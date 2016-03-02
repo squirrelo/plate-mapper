@@ -44,6 +44,12 @@ class TestProject(TestCase):
                 'Project 1', 'For testing', pm.person.Person(1), 'PI',
                 'contact', 'NewSampleSet')
 
+        with self.assertRaises(ValueError):
+            pm.project.Project.create(
+                'newproj', 'For testing', pm.person.Person(1), 'PI',
+                'contact', 'NewSampleSet', 50)
+        self.assertFalse(pm.project.Project.exists('newproj'))
+
     def test_exists(self):
         self.assertTrue(pm.project.Project.exists('Project 1'))
 

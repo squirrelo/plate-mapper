@@ -45,6 +45,8 @@ class Project(pm.base.PMObject):
         """
         if cls.exists(project):
             raise pm.exceptions.DuplicateError(project, 'project')
+        if num_barcodes is not None:
+            barcodes = pm.util.get_barcodes(num_barcodes)
 
         project_sql = """INSERT INTO barcodes.project
                          (project, pi, description, contact_person)
@@ -68,14 +70,15 @@ class Project(pm.base.PMObject):
             pm.sql.TRN.add(project_sql, [project, pi, description,
                                          contact_person])
             project_id = pm.sql.TRN.execute_fetchlast()
+
+            if num_barcodes is not None:
+                pm.sql.TRN.add(project_bc_sql,
+                               [(project_id, b) for b in barcodes], many=True)
+
             pm.sql.TRN.add(sample_set_sql, [sample_set, person.id])
             sample_set_id = pm.sql.TRN.execute_fetchlast()
             pm.sql.TRN.add(proj_sample_set_sql, [project_id, sample_set_id])
 
-            if num_barcodes is not None:
-                barcodes = pm.util.get_barcodes(num_barcodes)
-                pm.sql.TRN.add(project_bc_sql,
-                               [(project_id, b) for b in barcodes], many=True)
         return cls(project_id)
 
     @staticmethod
