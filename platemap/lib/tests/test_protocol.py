@@ -267,6 +267,49 @@ class TestPCRProtocol(TestCase):
                'processing_robot': 'prrb002'}
         self.assertEqual(obs, exp)
 
+    def test_metadata_summary(self):
+        obs = self.pcr_protocol4.metadata_summary()
+        exp = {'Sample 1': {'primer_lot': 'pr002',
+                            'extractionkit_lot': 'exkl002',
+                            'biomass_remaining': True,
+                            'tm1000_8_tool': 'tm18002',
+                            'tm50_8_tool': 'tm58002',
+                            'water_lot': 'wat002',
+                            'extraction_robot': 'exrb002',
+                            'sample_type': 'stool',
+                            'barcode': '000000001',
+                            'plate_well': 'B2',
+                            'mastermix_lot': 'mm002',
+                            'tm300_8_tool': 'tm38002',
+                            'processing_robot': 'prrb002'},
+               'Sample 2': {'primer_lot': 'pr002',
+                            'extractionkit_lot': 'exkl002',
+                            'biomass_remaining': False,
+                            'tm1000_8_tool': 'tm18002',
+                            'tm50_8_tool': 'tm58002',
+                            'water_lot': 'wat002',
+                            'extraction_robot': 'exrb002',
+                            'sample_type': 'stool',
+                            'barcode': '000000002',
+                            'plate_well': 'B3',
+                            'mastermix_lot': 'mm002',
+                            'tm300_8_tool': 'tm38002',
+                            'processing_robot': 'prrb002'},
+               'Sample 3': {'primer_lot': 'pr002',
+                            'extractionkit_lot': 'exkl002',
+                            'biomass_remaining': False,
+                            'tm1000_8_tool': 'tm18002',
+                            'tm50_8_tool': 'tm58002',
+                            'water_lot': 'wat002',
+                            'extraction_robot': 'exrb002',
+                            'sample_type': 'skin',
+                            'barcode': '',
+                            'plate_well': 'C4',
+                            'mastermix_lot': 'mm002',
+                            'tm300_8_tool': 'tm38002',
+                            'processing_robot': 'prrb002'}}
+        self.assertEqual(obs, exp)
+
 
 if __name__ == "__main__":
     main()

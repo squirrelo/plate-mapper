@@ -7,7 +7,6 @@
 <tr><td>Plate Barcode</td><td><input type="text" name="barcode" id="barcode"></td></tr>
 <tr><td>Plate Type</td><td>
   <select name="plate" id="plate" required>
-    <option value=""></option>
     {% for plate in plates %}
     <option value="{{plate}}">{{plate}}</option>
     {% end %}

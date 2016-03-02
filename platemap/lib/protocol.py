@@ -272,3 +272,57 @@ class PCRProtocol(ProtocolBase):
             summary['extraction_protocol_settings_id'])
         del summary['extraction_protocol_settings_id']
         return summary
+
+    def metadata_summary(self):
+        """Returns dict of full settings for PCR and Extraction
+
+        Returns
+        -------
+        dict of dict of objects
+            Values for each sample, as {sample: {property: value, ...}, ...}
+        """
+        if self._subtable is None:
+            raise pm.exceptions.DeveloperError('Must be called on subclass!')
+
+        sql = """SELECT *
+                 FROM barcodes.protocol_settings
+                 JOIN barcodes.pcr_settings ps USING (protocol_settings_id)
+                 JOIN barcodes.extraction_settings es ON (
+                  ps.extraction_protocol_settings_id = es.protocol_settings_id)
+                 LEFT JOIN barcodes.plates_samples pls USING (plate_id)
+                 LEFT JOIN barcodes.sample s ON pls.sample_id = s.sample_id
+                 WHERE ps.protocol_settings_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            rows = pm.sql.TRN.execute_fetchindex()
+            info = {}
+            for row in rows:
+                row = dict(row)
+                sample = row['sample']
+                info[sample] = {}
+                del row['sample']
+
+                # Replace empty barcode with string
+                if row['barcode'] is None:
+                    row['barcode'] = ''
+
+                # Add plate info if needed
+                if row['plate_id'] is not None:
+                    row['plate_well'] = '%s%d' % (chr(65 + row['plate_row']),
+                                                  row['plate_col'] + 1)
+                else:
+                    row['plate_id'] = ''
+                    row['plate_well'] = ''
+                del row['plate_row']
+                del row['plate_col']
+
+                # Remove non-metadata housekeeping information
+                for key in ['protocol_settings_id', 'created_on', 'created_by',
+                            'plate_id', 'sample_id', 'protocol_id',
+                            'extraction_protocol_settings_id',
+                            'sample_location', 'last_scanned',
+                            'last_scanned_by', 'sample_set_id']:
+                    del row[key]
+                info[sample] = row
+            return info
