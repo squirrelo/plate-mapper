@@ -7,6 +7,12 @@ class TestProject(TestCase):
     def setUp(self):
         self.project = pm.project.Project(1)
 
+    def test_projects(self):
+        obs = pm.project.Project.projects()
+        exp = [pm.project.Project(1), pm.project.Project(2),
+               pm.project.Project(3)]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         obs = pm.project.Project.create(
             'NewTestProj', 'For testing', pm.person.Person(1), 'PI', 'contact',

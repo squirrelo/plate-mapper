@@ -1,0 +1,11 @@
+<h3>Project: {{project}}</h3>
+{% for set, samps in samples.items() %}
+<div width="200px" class='menu'>
+	<h4>{{set}}</h4>
+	<ul>
+	{% for s in samps %}
+	<li>{{s.name}}</li>
+	{% end %}
+	</ul>
+</div>
+{% end %}

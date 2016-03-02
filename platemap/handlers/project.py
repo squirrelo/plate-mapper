@@ -37,11 +37,15 @@ class CreateProjectHandler(BaseHandler):
         self.render('add_project.html', msg=msg)
 
 
-class EditProjectHandler(BaseHandler):
+class ViewProjectHandler(BaseHandler):
     @authenticated
     def get(self):
-        pass
+        projects = pm.project.Project.projects()
+        self.render('view_project.html', projects=projects)
 
     @authenticated
     def post(self):
-        pass
+        pid = int(self.get_argument('project-id'))
+        project = pm.project.Project(pid)
+        self.render('render_project.html', samples=project.samples,
+                    project=project.name)

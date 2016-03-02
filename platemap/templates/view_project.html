@@ -1,0 +1,28 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+function render_project(project_id) {
+	$.post("/project/view/", {"project-id": project_id})
+		.done(function (data) {
+			$("#render").html(data);
+		});
+}
+
+	$(document).ready(function () {
+		$("#project").chosen();
+	});
+</script>
+{% end %}
+
+{% block content %}
+<div id="select">
+	<h3>View Project</h3>
+	Select project: <select style="width:350px;" name="project" id="project" onchange="render_project(this.value)">
+	<option value=""></option>
+	{% for p in projects %}
+		<option value="{{p.id}}">{{p.name}}</option>
+	{% end %}
+	</select>
+</div>
+<div id="render"></div>
+{% end %}

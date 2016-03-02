@@ -12,6 +12,20 @@ class Project(pm.base.PMObject):
     _table = 'project'
 
     @classmethod
+    def projects(cls):
+        """Returns all projects in the DB
+
+        Returns
+        -------
+        list of Project objects
+            All projects in the DB
+        """
+        sql = "SELECT project_id FROM barcodes.project"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
+
+    @classmethod
     def create(cls, project, description, person, pi, contact_person,
                sample_set, num_barcodes=None):
         """Creates a project and the initial sample set
