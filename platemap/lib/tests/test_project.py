@@ -16,7 +16,7 @@ class TestProject(TestCase):
         self.assertEqual(obs.description, 'For testing')
         self.assertEqual(obs.pi, 'PI')
         self.assertEqual(obs.contact, 'contact')
-        self.assertEqual(obs.samples, [])
+        self.assertEqual(obs.samples, {})
         self.assertEqual(obs.sample_sets, ['NewSampleSet'])
 
     def test_create_barcodes(self):
@@ -35,7 +35,7 @@ class TestProject(TestCase):
         self.assertEqual(obs.description, 'For testing')
         self.assertEqual(obs.pi, 'PI')
         self.assertEqual(obs.contact, 'contact')
-        self.assertEqual(obs.samples, [])
+        self.assertEqual(obs.samples, {})
         self.assertEqual(obs.sample_sets, ['NewSampleSet'])
 
     def test_create_error(self):
@@ -64,8 +64,9 @@ class TestProject(TestCase):
 
     def test_get_samples(self):
         self.assertEqual(self.project.samples,
-                         [pm.sample.Sample(1), pm.sample.Sample(2),
-                          pm.sample.Sample(3)])
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
 
     def test_get_sample_sets(self):
         self.assertEqual(self.project.sample_sets, ['Sample Set 1'])
@@ -86,21 +87,25 @@ class TestProject(TestCase):
 
     def test_add_samples(self):
         self.assertEqual(self.project.samples,
-                         [pm.sample.Sample(1), pm.sample.Sample(2),
-                          pm.sample.Sample(3)])
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
 
         self.project.add_samples([pm.sample.Sample(4)])
-
         self.assertEqual(self.project.samples,
-                         [pm.sample.Sample(1), pm.sample.Sample(2),
-                          pm.sample.Sample(3), pm.sample.Sample(4)])
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)],
+                          'Sample Set 2': [pm.sample.Sample(4)]})
 
     def test_remove_samples(self):
         self.assertEqual(self.project.samples,
-                         [pm.sample.Sample(1), pm.sample.Sample(2),
-                          pm.sample.Sample(3)])
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
         self.project.remove_samples([pm.sample.Sample(2), pm.sample.Sample(3)])
-        self.assertEqual(self.project.samples, [pm.sample.Sample(1)])
+        self.assertEqual(self.project.samples,
+                         {'Sample Set 1': [pm.sample.Sample(1)]})
 
     def test_add_sample_set(self):
         self.project.add_sample_set('New Test Sample Set', pm.person.Person(1))

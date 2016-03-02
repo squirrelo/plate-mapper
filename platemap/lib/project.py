@@ -117,14 +117,31 @@ class Project(pm.base.PMObject):
 
     @property
     def samples(self):
-        sql = """SELECT sample_id
+        """Returns samples keyed by sample set
+
+        Returns
+        -------
+        dict of lists of Sample objects
+            Samples in the form {sample_set: [samp1, samp2, ...], ...}
+        """
+        sql = """SELECT sample_set, array_agg(sample_id) as samps
+                 FROM barcodes.sample
+                 LEFT JOIN barcodes.project_sample_sets USING (sample_set_id)
+                 LEFT JOIN barcodes.project USING (project_id)
+                 LEFT JOIN barcodes.sample_set USING (sample_set_id)
+                 WHERE sample_id IN (
+                 SELECT sample_id
                  FROM barcodes.project_samples
-                 WHERE project_id = %s
+                 WHERE project_id = %s)
+                 GROUP BY sample_set
               """
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
-            return [pm.sample.Sample(s) for s in
-                    pm.sql.TRN.execute_fetchflatten()]
+            ret = {}
+            for row in pm.sql.TRN.execute_fetchindex():
+                ret[row['sample_set']] = [pm.sample.Sample(s)
+                                          for s in row['samps']]
+            return ret
 
     @property
     def sample_sets(self):
