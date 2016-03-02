@@ -57,7 +57,7 @@
 				<column name="extraction_protocol_settings_id" />
 			</index>
 			<fk name="fk_hardcode_settings" to_schema="barcodes" to_table="primer_set_lots" >
-				<fk_column name="primer_lot" pk="lot" />
+				<fk_column name="primer_lot" pk="primer_lot" />
 			</fk>
 			<fk name="fk_hardcode_settings_0" to_schema="barcodes" to_table="protocol_settings" >
 				<fk_column name="protocol_settings_id" pk="protocol_settings_id" />
@@ -214,7 +214,7 @@
 		</table>
 		<table name="primer_set_lots" >
 			<column name="primer_set_id" type="bigint" jt="-5" mandatory="y" />
-			<column name="lot" type="varchar" jt="12" />
+			<column name="primer_lot" type="varchar" jt="12" />
 			<column name="created_on" type="timestamp" jt="93" mandatory="y" >
 				<defo>current_timestamp</defo>
 			</column>
@@ -223,7 +223,7 @@
 				<column name="primer_set_id" />
 			</index>
 			<index name="pk_primers_lots" unique="UNIQUE" >
-				<column name="lot" />
+				<column name="primer_lot" />
 			</index>
 			<index name="idx_primers_lots_0" unique="NORMAL" >
 				<column name="person_id" />
@@ -22126,9 +22126,7 @@ AS $function$xpath_exists$function$
 	<layout id="Layout_21c92c9f" name="barcodes" joined_routing="y" show_column_type="y" show_relation_columns="y" >
 		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="930" y="45" />
 		<entity schema="barcodes" name="barcode" color="b7c8e3" x="60" y="405" />
-		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1005" y="675" />
 		<entity schema="barcodes" name="run" color="b7c8e3" x="1140" y="210" />
-		<entity schema="barcodes" name="primer_set_lots" color="b7c8e3" x="780" y="690" />
 		<entity schema="barcodes" name="primer_set" color="b7c8e3" x="585" y="690" />
 		<entity schema="barcodes" name="person" color="b7c8e3" x="510" y="375" />
 		<entity schema="barcodes" name="project_barcodes" color="b7c8e3" x="75" y="615" />
@@ -22145,6 +22143,8 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="project_sample_sets" color="b7c8e3" x="300" y="525" />
 		<entity schema="barcodes" name="project_samples" color="b7c8e3" x="75" y="525" />
 		<entity schema="barcodes" name="project" color="b7c8e3" x="300" y="615" />
+		<entity schema="barcodes" name="primer_set_lots" color="b7c8e3" x="780" y="690" />
+		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1005" y="675" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plate" />

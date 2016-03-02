@@ -71,10 +71,10 @@ COMMENT ON COLUMN barcodes.primer_set.primer_set IS 'Name of the primer set';
 
 CREATE TABLE barcodes.primer_set_lots ( 
 	primer_set_id        bigint  NOT NULL,
-	lot                  varchar  ,
+	primer_lot           varchar  ,
 	created_on           timestamp DEFAULT current_timestamp NOT NULL,
 	person_id            bigint  NOT NULL,
-	CONSTRAINT pk_primers_lots UNIQUE ( lot ) ,
+	CONSTRAINT pk_primers_lots UNIQUE ( primer_lot ) ,
 	CONSTRAINT fk_primers_lots FOREIGN KEY ( primer_set_id ) REFERENCES barcodes.primer_set( primer_set_id )    ,
 	CONSTRAINT fk_primers_lots_0 FOREIGN KEY ( person_id ) REFERENCES barcodes.person( person_id )    
  );
@@ -304,7 +304,7 @@ CREATE TABLE barcodes.pcr_settings (
 	tm50_8_tool          varchar(40)  NOT NULL,
 	CONSTRAINT pk_hardcode_settings UNIQUE ( protocol_settings_id ) ,
 	CONSTRAINT pk_hardcode_settings_0 PRIMARY KEY ( protocol_settings_id ),
-	CONSTRAINT fk_hardcode_settings FOREIGN KEY ( primer_lot ) REFERENCES barcodes.primer_set_lots( lot )    ,
+	CONSTRAINT fk_hardcode_settings FOREIGN KEY ( primer_lot ) REFERENCES barcodes.primer_set_lots( primer_lot )    ,
 	CONSTRAINT fk_hardcode_settings_0 FOREIGN KEY ( protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    ,
 	CONSTRAINT fk_pcr_settings FOREIGN KEY ( extraction_protocol_settings_id ) REFERENCES barcodes.protocol_settings( protocol_settings_id )    
  );
