@@ -11,6 +11,7 @@ from platemap.lib.util import (
     rollback_tests, get_barcodes)
 
 
+@rollback_tests()
 class TestUtil(TestCase):
     def test_convert_to_id(self):
         obs = convert_to_id('Project 2', 'project')
