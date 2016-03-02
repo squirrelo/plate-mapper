@@ -57,5 +57,25 @@ class TestAddProjectHandler(TestHandlerBase):
         self.assertFalse(pm.project.Project.exists('atestproj'))
 
 
+@rollback_tests()
+class TestViewProjectHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/project/view/')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<option value="2">Project 2</option>',
+                      obs.body.decode('utf-8'))
+
+    def test_post(self):
+        obs = self.post('/project/view/', {'project-id': 2})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<h4>Sample Set 2</h4>',
+                      obs.body.decode('utf-8'))
+
+    def test_post_unknown(self):
+        obs = self.post('/project/view/', {'project-id': 12321312})
+        self.assertEqual(obs.code, 200)
+        self.assertEqual('', obs.body.decode('utf-8'))
+
+
 if __name__ == '__main__':
     main()

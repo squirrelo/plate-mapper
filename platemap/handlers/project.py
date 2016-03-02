@@ -46,6 +46,10 @@ class ViewProjectHandler(BaseHandler):
     @authenticated
     def post(self):
         pid = int(self.get_argument('project-id'))
-        project = pm.project.Project(pid)
+        try:
+            project = pm.project.Project(pid)
+        except pm.exceptions.UnknownIDError:
+            self.write('')
+            return
         self.render('render_project.html', samples=project.samples,
                     project=project.name)
