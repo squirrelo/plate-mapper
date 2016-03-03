@@ -274,12 +274,9 @@ class User(pm.base.PMObject):
         sql = "SELECT pass FROM barcodes.user WHERE user_id = %s"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
-            row = pm.sql.TRN.execute_fetchindex()
-            if not row:
-                return False
+            db_pass = pm.sql.TRN.execute_fetchlast()
 
-            results = row[0]
-            return bcrypt.verify(password, results['pass'])
+            return bcrypt.verify(password, db_pass)
 
     def check_access(self, action):
         """Checks if user has access for action specified
