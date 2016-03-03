@@ -46,7 +46,7 @@ function render_pool(pool_id) {
 {% block content %}
 <div id="select">
 	<h3>View pool</h3>
-	<div id="msg">{{msg}}</div>
+	<div id="msg">{% raw msg %}</div>
 
 	<p>Select Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
 	<option value=""></option>

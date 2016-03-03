@@ -71,11 +71,12 @@ class PoolPageHandler(BaseHandler):
         except Exception as e:
             msg = str(e)
         else:
-            msg = 'Successfuly created run "%s"' % name
+            msg = 'Successfuly created pool "%s"' % name
 
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
-        self.render('view_pool.html', runs=runs, pools=pools, msg=msg)
+        self.render('view_pool.html', runs=runs, pools=pools, msg=msg,
+                    pool_id=None)
 
 
 class RenderPoolHandler(BaseHandler):
