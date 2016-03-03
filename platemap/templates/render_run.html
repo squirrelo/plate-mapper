@@ -4,6 +4,11 @@
 <form method="GET" action="/run/gen_prep/{{run.id}}">
   <input type="submit" value="Download Prep Metadata">
 </form>
+{% else %}
+<form method="GET" action="/run/view/">
+  <input type="submit" value="Finalize Run">
+  <input type="hidden" name="action" value="finalize">
+</form>
 {% end %}
 
 <h4>Pools</h4>

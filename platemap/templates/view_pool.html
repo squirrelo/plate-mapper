@@ -60,6 +60,7 @@ function render_pool(pool_id) {
 
 <div id="dialog-form" title="Create new pool">
   <form action="/pool/view/" method="POST" id="create-form">
+      <input type="hidden" name="action" value="create">
       <label for="name">Name</label>
       <p><input type="text" name="name" id="name" class="text" required></p>
       <label for="run">Add to run</label>

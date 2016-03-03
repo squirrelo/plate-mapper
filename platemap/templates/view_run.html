@@ -56,6 +56,7 @@ function render_run(run_id) {
 
 <div id="dialog-form" title="Create new run">
   <form action="/run/view/" method="POST" id="create-form">
+      <input type="hidden" name="action" value="create">
       <label for="name">Name</label>
       <input type="text" name="name" id="name" class="text" required>
       <!-- Allow form submission with keyboard without duplicating the dialog button -->

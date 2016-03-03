@@ -5,7 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from tornado.web import authenticated
+from tornado.web import authenticated, HTTPError
 
 from platemap.handlers.base import BaseHandler
 import platemap as pm
@@ -34,13 +34,27 @@ class RunPageHandler(BaseHandler):
 
     @authenticated
     def post(self):
-        name = self.get_argument('name')
-        try:
-            pm.run.Run.create(name, self.current_user.person)
-        except Exception as e:
-            msg = str(e)
+        action = self.get_argument('action')
+
+        if action == "create":
+            name = self.get_argument('name')
+            try:
+                pm.run.Run.create(name, self.current_user.person)
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = 'Successfuly created run "%s"' % name
+        elif action == "finalize":
+            run_id = int(self.get_argument('run'))
+            try:
+                run = pm.run.Run(run_id)
+                run.finalize(self.current_user.person)
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = 'Successfuly finalized run "%s"' % run.name
         else:
-            msg = 'Successfuly created run "%s"' % name
+            raise HTTPError(400, 'Unknown action %s' % action)
 
         runs = pm.run.Run.runs()
         self.render('view_run.html', runs=runs, msg=msg)
@@ -64,14 +78,28 @@ class PoolPageHandler(BaseHandler):
 
     @authenticated
     def post(self):
-        name = self.get_argument('name')
-        run = int(self.get_argument('run'))
-        try:
-            pm.run.Pool.create(name, pm.run.Run(run), self.current_user.person)
-        except Exception as e:
-            msg = str(e)
+        action = self.get_argument('action')
+        if action == 'create':
+            name = self.get_argument('name')
+            run = int(self.get_argument('run'))
+            try:
+                pm.run.Pool.create(name, pm.run.Run(run),
+                                   self.current_user.person)
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = 'Successfuly created pool "%s"' % name
+        elif action == "finalize":
+            pool_id = int(self.get_argument('pool'))
+            try:
+                pool = pm.run.Pool(pool_id)
+                pool.finalize(self.current_user.person)
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = 'Successfuly finalized pool "%s"' % pool.name
         else:
-            msg = 'Successfuly created pool "%s"' % name
+            raise HTTPError(400, 'Unknown action %s' % action)
 
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()

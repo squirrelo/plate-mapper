@@ -274,7 +274,7 @@ class Pool(pm.base.PMObject):
         if cls.exists(name, run):
             raise pm.exceptions.DuplicateError('name', 'pool')
         if run.finalized:
-            raise pm.exceptions.EditError('Run %s is finalized!' % run.name)
+            raise pm.exceptions.EditError(run.name)
 
         sql = """INSERT INTO barcodes.pool (run_id, pool, created_by)
                  VALUES (%s, %s, %s)

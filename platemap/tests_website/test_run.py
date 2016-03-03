@@ -51,17 +51,37 @@ class TestRunPageHandler(TestHandlerBase):
         self.assertIn('<option value="1">Finalized Run</option>',
                       obs.body.decode('utf-8'))
 
-    def test_post(self):
-        obs = self.post('/run/view/', {'name': 'newtestrun'})
+    def test_post_create(self):
+        obs = self.post('/run/view/', {'action': 'create',
+                                       'name': 'newtestrun'})
         self.assertEqual(obs.code, 200)
         self.assertIn('Successfuly created run "newtestrun"',
                       obs.body.decode('utf-8'))
 
-    def test_post_error(self):
-        obs = self.post('/run/view/', {'name': 'Finalized Run'})
+    def test_post_create_error(self):
+        obs = self.post('/run/view/', {'action': 'create',
+                                       'name': 'Finalized Run'})
         self.assertEqual(obs.code, 200)
         self.assertIn('The object with name \'Finalized Run\' already exists '
                       'in table \'run\'', obs.body.decode('utf-8'))
+
+    def test_post_finalize(self):
+        obs = self.post('/run/view/', {'action': 'finalize',
+                                       'run': 2})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Successfuly finalized run "Non-finalized Run"',
+                      obs.body.decode('utf-8'))
+
+    def test_post_finalize_error(self):
+        obs = self.post('/run/view/', {'action': 'finalize',
+                                       'run': 5})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with ID \'5\' does not exist in table '
+                      '\'run\'', obs.body.decode('utf-8'))
+
+    def test_post_unknown_action(self):
+        obs = self.post('/run/view/', {'action': 'UNKNOWN THING'})
+        self.assertEqual(obs.code, 400)
 
 
 @rollback_tests()
@@ -71,15 +91,16 @@ class TestRenderRunHandler(TestHandlerBase):
         self.assertEqual(obs.code, 200)
         self.assertIn('<input type="submit" value="Download Prep Metadata">',
                       obs.body.decode('utf-8'))
+        self.assertNotIn('<input type="submit" value="Finalize Run">',
+                         obs.body.decode('utf-8'))
 
     def test_get_not_finalized(self):
         obs = self.get('/run/render/2')
         self.assertEqual(obs.code, 200)
-        self.assertIn('<a href="/pool/view/?pool_id=2">Non-finalized Pool</a>',
+        self.assertNotIn('<input type="submit" value="Download Prep '
+                         'Metadata">', obs.body.decode('utf-8'))
+        self.assertIn('<input type="submit" value="Finalize Run">',
                       obs.body.decode('utf-8'))
-        self.assertNotIn(
-            '<input type="submit" value="Download Prep Metadata">',
-            obs.body.decode('utf-8'))
 
 
 @rollback_tests()
@@ -96,17 +117,39 @@ class TestPoolPageHandler(TestHandlerBase):
         self.assertIn('<option value="1">Finalized Pool</option>',
                       obs.body.decode('utf-8'))
 
-    def test_post(self):
-        obs = self.post('/pool/view/', {'name': 'newtestpool', 'run': 2})
+    def test_post_create(self):
+        obs = self.post('/pool/view/', {'action': 'create',
+                                        'name': 'newtestpool',
+                                        'run': 2})
         self.assertEqual(obs.code, 200)
         self.assertIn('Successfuly created pool "newtestpool"',
                       obs.body.decode('utf-8'))
 
-    def test_post_error(self):
-        obs = self.post('/pool/view/', {'name': 'Finalized Pool', 'run': 1})
+    def test_post_create_error(self):
+        obs = self.post('/pool/view/', {'action': 'create',
+                                        'name': 'Finalized Pool',
+                                        'run': 1})
         self.assertEqual(obs.code, 200)
         self.assertIn('The object with name \'name\' already exists in table '
                       '\'pool\'', obs.body.decode('utf-8'))
+
+    def test_post_finalize(self):
+        obs = self.post('/pool/view/', {'action': 'finalize',
+                                        'pool': 2})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Successfuly finalized pool "Non-finalized Pool"',
+                      obs.body.decode('utf-8'))
+
+    def test_post_finalize_error(self):
+        obs = self.post('/pool/view/', {'action': 'finalize',
+                                        'pool': 5})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with ID \'5\' does not exist in table '
+                      '\'pool\'', obs.body.decode('utf-8'))
+
+    def test_post_unknown_action(self):
+        obs = self.post('/pool/view/', {'action': 'UNKNOWN THING'})
+        self.assertEqual(obs.code, 400)
 
 if __name__ == '__main__':
     main()
