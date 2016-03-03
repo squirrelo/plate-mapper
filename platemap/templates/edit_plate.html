@@ -5,6 +5,9 @@ function render_plate(plate_id) {
 	$.get("/plate/render/" + plate_id)
 		.done(function (data) {
 			$("#render").html(data);
+		})
+		.fail(function () {
+			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
 		});
 }
 
@@ -21,6 +24,7 @@ function render_plate(plate_id) {
 {% block content %}
 <div id="select">
 	<h3>View/Edit Platemap</h3>
+	<div id="msg"></div>
 	Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
 	<option value=""></option>
 	{% for p in plates %}

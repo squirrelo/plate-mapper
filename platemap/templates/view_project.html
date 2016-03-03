@@ -5,6 +5,8 @@ function render_project(project_id) {
 	$.post("/project/view/", {"project-id": project_id})
 		.done(function (data) {
 			$("#render").html(data);
+		}).fail(function () {
+			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
 		});
 }
 
@@ -17,6 +19,7 @@ function render_project(project_id) {
 {% block content %}
 <div id="select">
 	<h3>View Project</h3>
+	<div id="msg"></div>
 	Select project: <select style="width:350px;" name="project" id="project" onchange="render_project(this.value)">
 	<option value=""></option>
 	{% for p in projects %}

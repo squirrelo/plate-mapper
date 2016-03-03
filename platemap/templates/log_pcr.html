@@ -16,6 +16,9 @@
           $("#plate-id").val("");
           $("#extraction-id").val("");
         }
+      })
+      .fail(function () {
+        $("#message").text("ERROR: Could not communicate with server. Please try again in a few minutes");
       });
   }
 

@@ -13,6 +13,9 @@
           $("#form-div").hide();
           $("#plate-id").val("");
         }
+      })
+      .fail(function () {
+        $("#message").text("ERROR: Could not communicate with server. Please try again in a few minutes");
       });
   }
 
