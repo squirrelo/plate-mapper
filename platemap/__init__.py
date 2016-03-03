@@ -17,8 +17,9 @@ import platemap.lib.run as run
 import platemap.lib.util as util
 import platemap.lib.sql_connection as sql
 import platemap.lib.web_helpers as webhelp
+import platemap.handlers as handlers
 
 __version__ = "0.1.0-dev"
 
 __all__ = ['base', 'environment', 'exceptions', 'person', 'plate', 'sample',
-           'util', 'sql', 'protocol', 'webhelp', 'project', 'run']
+           'util', 'sql', 'protocol', 'webhelp', 'project', 'run', 'handlers']

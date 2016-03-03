@@ -12,6 +12,27 @@ class Run(pm.base.PMObject):
     _table = 'run'
 
     @classmethod
+    def runs(cls, finalized=False):
+        """Gets all runs in the database
+
+        Parameters
+        ----------
+        finalized : bool, optional
+            Whether to only get finalized runs or not. Default False (get all)
+
+        Returns
+        -------
+        list of Run objects
+            Run objects in the database
+        """
+        sql = "SELECT run_id FROM barcodes.run"
+        if finalized:
+            sql += " WHERE finalized = 'T'"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return [cls(r) for r in pm.sql.TRN.execute_fetchflatten()]
+
+    @classmethod
     def create(cls, name, person):
         """Creates a new run on the system
 

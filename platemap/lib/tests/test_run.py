@@ -8,6 +8,16 @@ class TestRun(TestCase):
         self.run1 = pm.run.Run(1)
         self.run2 = pm.run.Run(2)
 
+    def test_runs(self):
+        obs = pm.run.Run.runs()
+        exp = [pm.run.Run(1), pm.run.Run(2)]
+        self.assertEqual(obs, exp)
+
+    def test_runs_finalized(self):
+        obs = pm.run.Run.runs(finalized=True)
+        exp = [pm.run.Run(1)]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         self.assertFalse(pm.run.Run.exists('NewTestRun'))
         pm.run.Run.create('NewTestRun', pm.person.Person(2))
