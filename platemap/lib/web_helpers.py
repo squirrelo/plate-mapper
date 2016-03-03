@@ -28,3 +28,68 @@ def get_extraction_plates():
     with pm.sql.TRN:
         pm.sql.TRN.add(sql)
         return pm.sql.TRN.execute_fetchindex()
+
+
+def check_create_primer_lot(primer_set_id, lot, person):
+    """Checks if a primer lot exists and, if not, creates it
+
+    Parameters
+    ----------
+    primer_set_id: int
+        Primer set to create new lot for
+    lot : str
+        Lot identifier
+    person : Person object
+        Person doing the check/create
+    """
+    check_sql = """SELECT EXISTS(
+                   SELECT *
+                   FROM barcodes.primer_set_lots
+                   WHERE primer_lot = %s AND primer_set_id = %s)
+                """
+    add_sql = """INSERT INTO barcodes.primer_set_lots
+                 (primer_set_id, primer_lot, person_id)
+                 VALUES (%s, %s, %s)
+              """
+    with pm.sql.TRN:
+        pm.sql.TRN.add(check_sql, [lot, primer_set_id])
+        if pm.sql.TRN.execute_fetchlast():
+            # Lot already exists so don't need to do anything else
+            return
+        pm.sql.TRN.add(add_sql, [primer_set_id, lot, person.id])
+
+
+def get_primer_sets():
+    """Returns all primer sets in the database
+
+    Returns
+    -------
+    list of list of [int, str]
+        list of list of the primer set id and name
+    """
+    sql = "SELECT primer_set_id, primer_set FROM barcodes.primer_set"
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql)
+        return pm.sql.TRN.execute_fetchindex()
+
+
+def get_lots_for_primer_set(primer_set_id):
+    """Returns all primer sets in the database
+
+    Parameter
+    ---------
+    primer_set_id : int
+        ID of the primer set to look for lots from
+
+    Returns
+    -------
+    list of str
+        list of primer lots
+    """
+    sql = """SELECT primer_lot
+             FROM barcodes.primer_set_lots
+             WHERE primer_set_id = %s
+          """
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql, [primer_set_id])
+        return pm.sql.TRN.execute_fetchflatten()

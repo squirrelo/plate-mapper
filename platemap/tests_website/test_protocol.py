@@ -59,7 +59,27 @@ class TestLogPCRHandler(TestHandlerBase):
         pm.plate.Plate('000000003').finalize()
         obs = self.post('/log/pcr/', {'plate-id': '000000003',
                                       'extraction-id': '2',
+                                      'primer_set': 1,
                                       'primer_lot': 'pr001',
+                                      'mastermix_lot': 'mm1',
+                                      'water_lot': 'wat002',
+                                      'processing_robot': 'rob-e',
+                                      'tm300_8_tool': 'tm3002',
+                                      'tm50_8_tool': 'tm5002'
+                                      })
+        self.assertEqual(obs.code, 200)
+        self.assertRegex(
+            obs.effective_url,
+            'http:\/\/[A-Za-z](.*):[0-9]{5}\/\?'
+            'msg=Successfully\+logged\+PCR\+run$'
+        )
+
+    def test_post_new_lot(self):
+        pm.plate.Plate('000000003').finalize()
+        obs = self.post('/log/pcr/', {'plate-id': '000000003',
+                                      'extraction-id': '2',
+                                      'primer_set': 1,
+                                      'primer_lot': 'NEW LOT',
                                       'mastermix_lot': 'mm1',
                                       'water_lot': 'wat002',
                                       'processing_robot': 'rob-e',
@@ -76,6 +96,7 @@ class TestLogPCRHandler(TestHandlerBase):
     def test_post_error(self):
         obs = self.post('/log/pcr/', {'plate-id': '000000012',
                                       'extraction-id': '2',
+                                      'primer_set': 1,
                                       'primer_lot': 'pr001',
                                       'mastermix_lot': 'mm1',
                                       'water_lot': 'wat002',

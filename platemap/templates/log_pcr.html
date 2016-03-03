@@ -24,7 +24,7 @@
   }
 
   $(document).ready(function () {
-    $("#platemap-select").chosen();
+    $(".chosen").chosen();
     $("#pcr-form").validate();
   });
 </script>
@@ -33,7 +33,7 @@
 <div id="select">
   <h3>Log PCR Run</h3>
   <div id="message">{% raw msg %}</div>
-  Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
+  Select platemap: <select style="width:350px;" class="chosen" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
   <option value=""></option>
   {% for pid, pname, exid, exdate in plates %}
     <option value="{{exid}} {{pid}}">{{pid}} - {{exdate}} - {{pname}}</option>
@@ -46,7 +46,13 @@
   <input type="hidden" name="plate-id" id="plate-id">
   <input type="hidden" name="extraction-id" id="extraction-id">
   <table id="form-table">
-    <tr><td>Primer Lot</td><td><input type="text" name="primer_lot" required></td></tr>
+    <tr><td>Primer Set</td><td><select clss="chosen" name="primer_set" id="primer_set">
+      <option value=""></option>
+      {% for pid, set in primer_sets %}
+      <option value="{{pid}}">{{set}}</option>
+      {% end %}
+      </select></td></tr>
+    <tr><td>Primer Set Lot</td><td><input type="text" name="primer_lot" required></td></tr>
     <tr><td>Master Mix Lot</td><td><input type="text" name="mastermix_lot" required></td></tr>
     <tr><td>Water Lot</td><td><input type="text" name="water_lot" required></td></tr>
     <tr><td>Processing Robot</td><td><input type="text" name="processing_robot" required></td></tr>

@@ -40,11 +40,14 @@ class LogPCRHandler(BaseHandler):
     @authenticated
     def get(self):
         plates = pm.webhelp.get_extraction_plates()
-        self.render('log_pcr.html', plates=plates, msg='')
+        primer_sets = pm.webhelp.get_primer_sets()
+        self.render('log_pcr.html', plates=plates, primer_sets=primer_sets,
+                    msg='')
 
     def post(self):
         plate_id = self.get_argument('plate-id')
-        ex_id = self.get_argument('extraction-id')
+        ex_id = int(self.get_argument('extraction-id'))
+        primer_set = int(self.get_argument('primer_set'))
         primer_lot = self.get_argument('primer_lot')
         mastermix_lot = self.get_argument('mastermix_lot')
         water_lot = self.get_argument('water_lot')
@@ -53,6 +56,8 @@ class LogPCRHandler(BaseHandler):
         tm50_8_tool = self.get_argument('tm50_8_tool')
 
         try:
+            pm.webhelp.check_create_primer_lot(primer_set, primer_lot,
+                                               self.current_user.person)
             pm.protocol.PCRProtocol.create(
                 self.current_user.person,
                 pm.protocol.ExtractionProtocol(ex_id), primer_lot,
@@ -61,6 +66,8 @@ class LogPCRHandler(BaseHandler):
         except Exception as e:
             # Render any error to the user interface
             plates = pm.webhelp.get_extraction_plates()
-            self.render('log_pcr.html', plates=plates, msg=str(e))
+            primer_sets = pm.webhelp.get_primer_sets()
+            self.render('log_pcr.html', plates=plates, primer_sets=primer_sets,
+                        msg=str(e))
         else:
             self.redirect('/?msg=Successfully+logged+PCR+run')
