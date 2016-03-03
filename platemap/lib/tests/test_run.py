@@ -13,6 +13,10 @@ class TestRun(TestCase):
         pm.run.Run.create('NewTestRun', pm.person.Person(2))
         self.assertTrue(pm.run.Run.exists('NewTestRun'))
 
+    def test_create_exists(self):
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.run.Run.create('Finalized Run', pm.person.Person(2))
+
     def test_exists(self):
         self.assertFalse(pm.run.Run.exists('NewTestRun'))
         self.assertTrue(pm.run.Run.exists('Non-finalized Run'))
@@ -67,32 +71,68 @@ class TestRun(TestCase):
 
 @pm.util.rollback_tests()
 class TestPool(TestCase):
+    def setUp(self):
+        self.pool1 = pm.run.Pool(1)
+        self.pool2 = pm.run.Pool(2)
+
     def test_create(self):
-        raise NotImplementedError()
+        self.assertFalse(pm.run.Pool.exists('NewTestPool', pm.run.Run(2)))
+        pm.run.Pool.create('NewTestPool', pm.run.Run(2), pm.person.Person(2))
+        self.assertTrue(pm.run.Pool.exists('NewTestPool', pm.run.Run(2)))
+
+    def test_create_exists(self):
+        with self.assertRaises(pm.exceptions.DuplicateError):
+            pm.run.Pool.create('Finalized Pool', pm.run.Run(1),
+                               pm.person.Person(2))
+
+    def test_create_finalized_run(self):
+        with self.assertRaises(pm.exceptions.EditError):
+            pm.run.Pool.create('NewTestPool', pm.run.Run(1),
+                               pm.person.Person(2))
 
     def test_exists(self):
-        raise NotImplementedError()
+        self.assertTrue(pm.run.Pool.exists('Finalized Pool', pm.run.Run(1)))
+        self.assertFalse(pm.run.Pool.exists('Finalized Pool', pm.run.Run(2)))
+        self.assertFalse(pm.run.Pool.exists('NOEXIST', pm.run.Run(1)))
 
     def test_delete(self):
-        raise NotImplementedError()
+        pass
 
     def test_name(self):
-        raise NotImplementedError()
+        self.assertEqual(self.pool1.name, 'Finalized Pool')
 
     def test_run(self):
-        raise NotImplementedError()
+        self.assertEqual(self.pool1.run, pm.run.Run(1))
 
     def test_finalized(self):
-        raise NotImplementedError()
+        self.assertTrue(self.pool1.finalized)
+        self.assertFalse(self.pool2.finalized)
 
     def test_finalize(self):
-        raise NotImplementedError()
+        self.assertFalse(self.pool2.finalized)
+        self.pool2.finalize(pm.person.Person(1))
+        self.assertTrue(self.pool2.finalized)
 
     def test_add_protocol(self):
-        raise NotImplementedError()
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3)])
+        self.pool2.add_protocol(pm.protocol.PCRProtocol(4))
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3),
+                                                pm.protocol.PCRProtocol(4)])
+
+    def test_add_protocol_finalized(self):
+        self.assertTrue(self.pool1.finalized)
+        with self.assertRaises(pm.exceptions.EditError):
+            self.pool1.add_protocol(pm.protocol.PCRProtocol(4))
 
     def test_remove_protocol(self):
-        raise NotImplementedError()
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3)])
+        self.pool2.remove_protocol(pm.protocol.PCRProtocol(3))
+        self.assertEqual(self.pool2.protocols, [])
+
+    def test_remove_protocol_finalized(self):
+        self.assertTrue(self.pool1.finalized)
+        with self.assertRaises(pm.exceptions.EditError):
+            self.pool1.remove_protocol(pm.protocol.PCRProtocol(4))
 
 
 if __name__ == "__main__":

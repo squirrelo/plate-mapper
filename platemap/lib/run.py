@@ -226,9 +226,14 @@ class Pool(pm.base.PMObject):
         ------
         DuplicateError
             The pool already exists for a given Run
+        EditError
+            The run is already finalized
         """
         if cls.exists(name, run):
             raise pm.exceptions.DuplicateError('name', 'pool')
+        if run.finalized:
+            raise pm.exceptions.EditError('Run %s is finalized!' % run.name)
+
         sql = """INSERT INTO barcodes.pool (run_id, pool, created_by)
                  VALUES (%s, %s, %s)
               """
@@ -252,6 +257,13 @@ class Pool(pm.base.PMObject):
         bool
             Whether the pool already exists (True) or not (False)
         """
+        sql = """SELECT EXISTS(
+                     SELECT *
+                     FROM barcodes.pool
+                     WHERE pool = %s AND run_id = %s)"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [name, run.id])
+            return pm.sql.TRN.execute_fetchlast()
 
     @staticmethod
     def delete(id_):
@@ -270,14 +282,36 @@ class Pool(pm.base.PMObject):
 
     @property
     def run(self):
-        return Run(self._get_property('run'))
+        return Run(self._get_property('run_id'))
+
+    @property
+    def protocols(self):
+        sql = """SELECT protocol_settings_id
+                 FROM barcodes.pool_samples
+                 WHERE pool_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return [pm.protocol.PCRProtocol(p) for p in
+                    pm.sql.TRN.execute_fetchflatten()]
 
     @property
     def finalized(self):
         return self._get_property('finalized')
 
-    def finalize(self):
-        """Finalize the run so no more pools can be added"""
+    def finalize(self, person):
+        """Finalize the run so no more pools can be added
+
+        Parameters
+        ----------
+        person : Person object
+            Person finalizing the pool
+        """
+        sql = """UPDATE barcodes.pool
+                 SET finalized = TRUE, finalized_by = %s
+                 WHERE pool_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [person.id, self.id])
 
     def add_protocol(self, pcr_protocol):
         """Adds a PCR protocol run to the pool
@@ -286,7 +320,22 @@ class Pool(pm.base.PMObject):
         ----------
         pcr_protocol : PCRProtocol object
             The protocol to add to the run
+
+        Raises
+        ------
+        EditError
+            Pool object is finalized so can't edit
         """
+        if self.finalized:
+            raise pm.exceptions.EditError('Pool %s already finalized!' %
+                                          self.name)
+
+        sql = """INSERT INTO barcodes.pool_samples
+                 (pool_id, protocol_settings_id)
+                 VALUES (%s, %s)
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id, pcr_protocol.id])
 
     def remove_protocol(self, pcr_protocol):
         """Adds a PCR protocol run to the pool
@@ -295,4 +344,18 @@ class Pool(pm.base.PMObject):
         ----------
         pcr_protocol : PCRProtocol object
             The pcr_protocol to remove from the run
+
+        Raises
+        ------
+        EditError
+            Pool object is finalized so can't edit
         """
+        if self.finalized:
+            raise pm.exceptions.EditError('Pool %s already finalized!' %
+                                          self.name)
+
+        sql = """DELETE FROM barcodes.pool_samples
+                 WHERE pool_id =%s AND protocol_settings_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id, pcr_protocol.id])
