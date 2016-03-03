@@ -5,6 +5,7 @@
     var info = plate_info.split(" ");
     $.get('/plate/html/' + info[1])
       .done(function (data) {
+        $("#message").text("");
         $("#plate-render").html(data);
         if(data !== "") {
           $("#form-div").show();

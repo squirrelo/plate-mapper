@@ -4,6 +4,7 @@
   function render_plate(plate_id) {
     $.get('/plate/html/' + plate_id)
       .done(function (data) {
+        $("#message").text("");
         $("#plate-render").html(data);
         if(data !== "") {
           $("#form-div").show();

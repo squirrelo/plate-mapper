@@ -4,6 +4,7 @@
 function render_project(project_id) {
 	$.post("/project/view/", {"project-id": project_id})
 		.done(function (data) {
+			$("#msg").text("");
 			$("#render").html(data);
 		}).fail(function () {
 			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");

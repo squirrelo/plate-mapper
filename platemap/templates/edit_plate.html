@@ -5,6 +5,7 @@ function render_plate(plate_id) {
 	$.get("/plate/render/" + plate_id)
 		.done(function (data) {
 			$("#render").html(data);
+			$("#msg").text("");
 		})
 		.fail(function () {
 			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
