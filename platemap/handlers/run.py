@@ -11,6 +11,21 @@ from platemap.handlers.base import BaseHandler
 import platemap as pm
 
 
+class GeneratePrepTemplate(BaseHandler):
+    @authenticated
+    def get(self, run_id):
+        # write out prep metadata
+        self.add_header('Content-type', 'application/octet-stream')
+        self.add_header('Content-Transfer-Encoding', 'binary')
+        self.add_header('Accept-Ranges', 'bytes')
+        self.add_header('Content-Encoding', 'none')
+        self.add_header('Content-Disposition',
+                        'attachment; filename=prep_metadata.txt')
+        self.write(pm.run.Run(int(run_id)).generate_prep_metadata())
+        self.flush()
+        self.finish()
+
+
 class RunPageHandler(BaseHandler):
     @authenticated
     def get(self):

@@ -1,5 +1,11 @@
 <h3>Run {{run.name}}</h3>
 
+{% if run.finalized %}
+<form method="GET" action="/run/gen_prep/{{run.id}}">
+  <input type="submit" value="Download Prep Metadata">
+</form>
+{% end %}
+
 <h4>Pools</h4>
 <ul>
 {% for pool in run.pools %}
