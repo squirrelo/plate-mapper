@@ -12,8 +12,12 @@ function render_pool(pool_id) {
 }
 
 	$(document).ready(function () {
-		$(".chosen").chosen();
+    {% if pool_id %}
+    $("#pool").val({{pool_id}});
+    render_pool({{pool_id}});
+    {% end %}
 
+		$(".chosen").chosen();
 		dialog = $( "#dialog-form" ).dialog({
       autoOpen: false,
       height: 500,

@@ -41,9 +41,11 @@ class RenderRunHandler(BaseHandler):
 class PoolPageHandler(BaseHandler):
     @authenticated
     def get(self):
+        pool_id = self.get_argument('pool_id', None)
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
-        self.render('view_pool.html', runs=runs, pools=pools, msg='')
+        self.render('view_pool.html', runs=runs, pools=pools, pool_id=pool_id,
+                    msg='')
 
     @authenticated
     def post(self):

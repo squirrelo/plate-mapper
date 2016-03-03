@@ -1,0 +1,8 @@
+<h3>Run {{run.name}}</h3>
+
+<h4>Pools</h4>
+<ul>
+{% for pool in run.pools %}
+	<li><a href="/pool/view/?pool_id={{pool.id}}">{{pool.name}}</a></li>
+{% end %}
+</ul>
