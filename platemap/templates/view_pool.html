@@ -1,8 +1,8 @@
 {% extends sitebase.html %}
 {% block head %}
 <script type="text/javascript">
-function render_run(run_id) {
-	$.get("/run/render/" + run_id)
+function render_pool(pool_id) {
+	$.get("/pool/render/" + pool_id)
 		.done(function (data) {
 			$("#msg").text("");
 			$("#render").html(data);
@@ -12,15 +12,15 @@ function render_run(run_id) {
 }
 
 	$(document).ready(function () {
-		$("#run").chosen();
+		$(".chosen").chosen();
 
 		dialog = $( "#dialog-form" ).dialog({
       autoOpen: false,
-      height: 300,
+      height: 500,
       width: 350,
       modal: true,
       buttons: {
-        "Create a Run": function () {
+        "Create a Pool": function () {
           $("#create-form").submit();
         },
         Cancel: function() {
@@ -32,7 +32,7 @@ function render_run(run_id) {
       }
     });
 
-    $( "#create-run" ).on( "click", function() {
+    $( "#create-pool" ).on( "click", function() {
       dialog.dialog( "open" );
     });
 	});
@@ -41,25 +41,33 @@ function render_run(run_id) {
 
 {% block content %}
 <div id="select">
-	<h3>View run</h3>
+	<h3>View pool</h3>
 	<div id="msg">{{msg}}</div>
 
-	<p>Select Run: <select style="width:350px;" name="run" id="run" onchange="render_run(this.value)">
+	<p>Select Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
 	<option value=""></option>
-	{% for r in runs %}
-		<option value="{{r.id}}">{{r.name}}</option>
+	{% for p in pools %}
+		<option value="{{p.id}}">{{p.name}}</option>
 	{% end %}
 	</select></p>
-	<button id="create-run">Create Run</button>
+	<button id="create-pool">Create Pool</button>
 </div>
 <div id="render"></div>
 
-<div id="dialog-form" title="Create new run">
-  <form action="/run/view/" method="POST" id="create-form">
+<div id="dialog-form" title="Create new pool">
+  <form action="/pool/view/" method="POST" id="create-form">
       <label for="name">Name</label>
-      <input type="text" name="name" id="name" class="text" required>
+      <p><input type="text" name="name" id="name" class="text" required></p>
+      <label for="run">Add to run</label>
+      <select style="width:300px;" name="run" id="run" class="chosen">
+        <option value=""></option>
+        {% for r in runs %}
+        <option value="{{r.id}}">{{r.name}}</option>
+        {% end %}
+      </select>
       <!-- Allow form submission with keyboard without duplicating the dialog button -->
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
   </form>
 </div>
 

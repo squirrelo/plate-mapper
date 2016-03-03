@@ -41,7 +41,24 @@ class RenderRunHandler(BaseHandler):
 class PoolPageHandler(BaseHandler):
     @authenticated
     def get(self):
-        pass
+        pools = pm.run.Pool.pools()
+        runs = pm.run.Run.runs()
+        self.render('view_pool.html', runs=runs, pools=pools, msg='')
+
+    @authenticated
+    def post(self):
+        name = self.get_argument('name')
+        run = int(self.get_argument('run'))
+        try:
+            pm.run.Pool.create(name, pm.run.Run(run), self.current_user.person)
+        except Exception as e:
+            msg = str(e)
+        else:
+            msg = 'Successfuly created run "%s"' % name
+
+        pools = pm.run.Pool.pools()
+        runs = pm.run.Run.runs()
+        self.render('view_pool.html', runs=runs, pools=pools, msg=msg)
 
 
 class RenderPoolHandler(BaseHandler):

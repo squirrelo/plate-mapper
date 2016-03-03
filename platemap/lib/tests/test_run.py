@@ -85,6 +85,16 @@ class TestPool(TestCase):
         self.pool1 = pm.run.Pool(1)
         self.pool2 = pm.run.Pool(2)
 
+    def test_pools(self):
+        obs = pm.run.Pool.pools()
+        exp = [pm.run.Pool(1), pm.run.Pool(2)]
+        self.assertEqual(obs, exp)
+
+    def test_pools_finalized(self):
+        obs = pm.run.Pool.pools(finalized=True)
+        exp = [pm.run.Pool(1)]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         self.assertFalse(pm.run.Pool.exists('NewTestPool', pm.run.Run(2)))
         pm.run.Pool.create('NewTestPool', pm.run.Run(2), pm.person.Person(2))

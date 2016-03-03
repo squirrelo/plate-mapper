@@ -226,6 +226,27 @@ class Pool(pm.base.PMObject):
     _table = 'pool'
 
     @classmethod
+    def pools(cls, finalized=False):
+        """Gets all pools in the database
+
+        Parameters
+        ----------
+        finalized : bool, optional
+            Whether to only get finalized pools or not. Default False (get all)
+
+        Returns
+        -------
+        list of Pool objects
+            Pool objects in the database
+        """
+        sql = "SELECT pool_id FROM barcodes.pool"
+        if finalized:
+            sql += " WHERE finalized = 'T'"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
+
+    @classmethod
     def create(cls, name, run, person):
         """Creates a new pool on the system
 
