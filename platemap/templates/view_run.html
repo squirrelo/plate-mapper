@@ -1,0 +1,69 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+function render_run(run_id) {
+	$.get("/run/render/" + run_id)
+		.done(function (data) {
+			$("#msg").text("");
+			$("#render").html(data);
+		}).fail(function () {
+			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
+		});
+}
+
+	$(document).ready(function () {
+		$("#run").chosen();
+
+		dialog = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 300,
+      width: 350,
+      modal: true,
+      buttons: {
+        "Create a Run": function () {
+        	$("#create-form").submit();
+        },
+        Cancel: function() {
+          dialog.dialog( "close" );
+        }
+      },
+      close: function() {
+        form[ 0 ].reset();
+        allFields.removeClass( "ui-state-error" );
+      }
+    });
+
+    $( "#create-run" ).on( "click", function() {
+      dialog.dialog( "open" );
+    });
+	});
+</script>
+{% end %}
+
+{% block content %}
+<div id="select">
+	<h3>View run</h3>
+	<div id="msg">{{msg}}</div>
+
+	<p>Select Run: <select style="width:350px;" name="run" id="run" onchange="render_run(this.value)">
+	<option value=""></option>
+	{% for r in runs %}
+		<option value="{{r.id}}">{{r.name}}</option>
+	{% end %}
+	</select></p>
+	<button id="create-run">Create Run</button>
+</div>
+<div id="render"></div>
+
+<div id="dialog-form" title="Create new run">
+  <form action="/run/view/" method="POST" id="create-form">
+    <fieldset>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" class="text" required>
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+
+{% end %}

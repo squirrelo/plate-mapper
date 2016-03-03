@@ -1,0 +1,32 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+function render(obj_id) {
+	$.post("{{render_url}}", {"obj-id": obj_id})
+		.done(function (data) {
+			$("#msg").text("");
+			$("#render").html(data);
+		}).fail(function () {
+			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
+		});
+}
+
+	$(document).ready(function () {
+		$("#chosen-select").chosen();
+	});
+</script>
+{% end %}
+
+{% block content %}
+<div id="select">
+	<h3>View chosen-select</h3>
+	<div id="msg"></div>
+	Select {{obj_type}}: <select style="width:350px;" name="chosen-select" id="chosen-select" onchange="render(this.value)">
+	<option value=""></option>
+	{% for o in objects %}
+		<option value="{{o.id}}">{{o.name}}</option>
+	{% end %}
+	</select>
+</div>
+<div id="render"></div>
+{% end %}

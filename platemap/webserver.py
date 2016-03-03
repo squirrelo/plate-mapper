@@ -22,6 +22,8 @@ from platemap.handlers.plate import (PlateCreateHandler, PlateEditHandler,
                                      PlateUpdateHandler)
 from platemap.handlers.protocol import LogExtractionHandler, LogPCRHandler
 from platemap.handlers.project import CreateProjectHandler, ViewProjectHandler
+from platemap.handlers.run import (RunPageHandler, RenderRunHandler,
+                                   PoolPageHandler, RenderPoolHandler)
 
 define("port", default=7778, help="run on the given port", type=int)
 
@@ -48,6 +50,10 @@ class PMApplication(Application):
             (r'/project/view/', ViewProjectHandler),
             (r'/log/extraction/', LogExtractionHandler),
             (r'/log/pcr/', LogPCRHandler),
+            (r'/run/view/', RunPageHandler),
+            (r'/run/render/(.*)', RenderRunHandler),
+            (r'/pool/view/', PoolPageHandler),
+            (r'/pool/render/(.*)', RenderPoolHandler),
             # 404 PAGE MUST BE LAST IN THIS LIST!
             (r".*", NoPageHandler)
         ]
