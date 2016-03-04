@@ -134,10 +134,10 @@ class TestPool(TestCase):
         self.assertTrue(self.pool2.finalized)
 
     def test_add_protocol(self):
-        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3)])
-        self.pool2.add_protocol(pm.protocol.PCRProtocol(4))
-        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3),
-                                                pm.protocol.PCRProtocol(4)])
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+        self.pool2.add_protocol(pm.protocol.PCRProtocol(3))
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4),
+                                                pm.protocol.PCRProtocol(3)])
 
     def test_add_protocol_finalized(self):
         self.assertTrue(self.pool1.finalized)
@@ -145,8 +145,8 @@ class TestPool(TestCase):
             self.pool1.add_protocol(pm.protocol.PCRProtocol(4))
 
     def test_remove_protocol(self):
-        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(3)])
-        self.pool2.remove_protocol(pm.protocol.PCRProtocol(3))
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+        self.pool2.remove_protocol(pm.protocol.PCRProtocol(4))
         self.assertEqual(self.pool2.protocols, [])
 
     def test_remove_protocol_finalized(self):

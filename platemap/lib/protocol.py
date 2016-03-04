@@ -246,6 +246,18 @@ class PCRProtocol(ProtocolBase):
         return self._get_subproperty('primer_lot')
 
     @property
+    def primer_set(self):
+        sql = """SELECT primer_set
+                 FROM barcodes.pcr_settings
+                 JOIN barcodes.primer_set_lots USING (primer_lot)
+                 JOIN barcodes.primer_set USING (primer_set_id)
+                 WHERE protocol_settings_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return pm.sql.TRN.execute_fetchlast()
+
+    @property
     def mastermix_lot(self):
         return self._get_subproperty('mastermix_lot')
 

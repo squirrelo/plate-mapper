@@ -193,6 +193,10 @@ class TestPCRProtocol(TestCase):
         obs = self.pcr_protocol4.primer_lot
         self.assertEqual(obs, 'pr001')
 
+    def test_primer_set(self):
+        obs = self.pcr_protocol4.primer_set
+        self.assertEqual(obs, 'Primer Set 1')
+
     def test_mastermix_lot(self):
         obs = self.pcr_protocol3.mastermix_lot
         self.assertEqual(obs, 'mm001')

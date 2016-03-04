@@ -73,4 +73,4 @@ INSERT INTO barcodes.pool (run_id, pool, created_on, created_by, finalized, fina
 (1, 'Finalized Pool', '2016-03-02 1:20:00', 2, 'T', '2016-03-02 1:21:00', 2),
 (2, 'Non-finalized Pool', '2016-03-02 1:22:00', 2, 'F', NULL, NULL);
 
-INSERT INTO barcodes.pool_samples (pool_id, protocol_settings_id) VALUES (1, 3), (1, 4), (2, 3);
+INSERT INTO barcodes.pool_samples (pool_id, protocol_settings_id) VALUES (1, 3), (1, 4), (2, 4);

@@ -1,0 +1,8 @@
+<h3>Pool {{pool.name}}</h3>
+<table class="table pool-table">
+	<tr><th>Plate</th><th>Summary</th></tr>
+{% for protocol in pool.protocols %}
+	{% set plate = protocol.plate %}
+	<tr><td>{% raw plate.to_html() %}</td><td>{{plate.name}}<br/>{{plate.id}}<br/>{{protocol.primer_set}}<br/>{{protocol.primer_lot}}</td></tr>
+{% end %}
+</table>

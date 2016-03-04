@@ -110,4 +110,5 @@ class PoolPageHandler(BaseHandler):
 class RenderPoolHandler(BaseHandler):
     @authenticated
     def get(self, pool_id):
-        pass
+        pool = pm.run.Pool(int(pool_id))
+        self.render('render_pool.html', pool=pool)
