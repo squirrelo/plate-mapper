@@ -13,6 +13,11 @@ class TestProject(TestCase):
                pm.project.Project(3)]
         self.assertEqual(obs, exp)
 
+    def test_sample_sets(self):
+        obs = pm.project.Project.all_sample_sets()
+        exp = ['Sample Set 1', 'Sample Set 2', 'Sample Set 3']
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         obs = pm.project.Project.create(
             'NewTestProj', 'For testing', pm.person.Person(1), 'PI', 'contact',

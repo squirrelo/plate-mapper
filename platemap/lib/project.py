@@ -25,6 +25,20 @@ class Project(pm.base.PMObject):
             pm.sql.TRN.add(sql)
             return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
 
+    @staticmethod
+    def all_sample_sets():
+        """Returns all sample sets in the DB
+
+        Returns
+        -------
+        list of  str
+            All sample set names in the DB
+        """
+        sql = "SELECT sample_set FROM barcodes.sample_set"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return pm.sql.TRN.execute_fetchflatten()
+
     @classmethod
     def create(cls, project, description, person, pi, contact_person,
                sample_set, num_barcodes=None):

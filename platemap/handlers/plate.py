@@ -51,7 +51,7 @@ class PlateEditableRenderHandler(BaseHandler):
 
         override = self.current_user.check_access('Override')
         if override:
-            sets = ['Sample Set 1', 'Sample Set 2']
+            sets = pm.project.Project.all_sample_sets()
             types = pm.sample.Sample.types()
             locations = pm.sample.Sample.locations()
         else:

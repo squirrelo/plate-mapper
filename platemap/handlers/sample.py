@@ -15,7 +15,7 @@ import platemap as pm
 class SampleCreateHandler(BaseHandler):
     @authenticated
     def get(self):
-        sets = ['Sample Set 1', 'Sample Set 2']
+        sets = sets = pm.project.Project.all_sample_sets()
         types = pm.sample.Sample.types()
         locations = pm.sample.Sample.locations()
         self.render('add_sample.html', sets=sets, types=types,
@@ -55,7 +55,7 @@ class SampleCreateHandler(BaseHandler):
             else:
                 msg = 'Created sample %s' % name
 
-        sets = ['Sample Set 1', 'Sample Set 2']
+        sets = sets = pm.project.Project.all_sample_sets()
         types = pm.sample.Sample.types()
         locations = pm.sample.Sample.locations()
         self.render('add_sample.html', sets=sets, types=types,
