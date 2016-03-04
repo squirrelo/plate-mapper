@@ -15,13 +15,35 @@
 </table>
 {% if override %}
 <p><input type="checkbox" name="override" id="override"> <label for="override"> Override Sample Check</label></p>
+
+<p style="color: red" id="message"></p>
+
+<div id="dialog-form" title="Create Override Sample">
+  <form id="create-sample-form">
+      <input type="hidden" name="name" id="sample-name">
+      <table class="Table">
+        <tr><td>Sample Name</td><td id='view-sample-name'></td></tr>
+        <tr><td>Sample Set</td><td>
+        <select name="sample-set" id="sample-set" required>
+          <option value=""></option>
+          {% for set in sets %}
+          <option value="{{set}}">{{set}}</option>
+          {% end %}
+        </select><br/>
+      </td></tr>
+      <tr><td>Sample Type</td><td><input type="text" name="type" id="type" required></td></tr>
+      <tr><td>Sample Location</td><td><input type="text" name="location" id="location" required></td></tr>
+    </table>
+    <input type="submit" value="Add sample">
+  </form>
+</div>
 {% end %}
 {% if not finalized %}
 <p><input type="button" value="Finalize" name="finalize" id="finalize" onclick="check_finalize()"></p>
 {% end %}
-<p style="color: red" id="message"></p>
 
 <script type="text/javascript">
+{% if not finalized %}
   function check_finalize() {
     if(confirm('Are you sure you want to finalize the plate? You will not be able to add or remove samples once you do so.')) {
       $.post('/plate/update/', { action: 'finalize', plate_id: "{{plate_id}}" })
@@ -35,6 +57,7 @@
         });
     }
   }
+{% end %}
 
   function update(elem) {
     var obj = $("#" + elem.id);
@@ -42,23 +65,70 @@
     $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: elem.id, sample: obj.val()})
         .done(function (data) {
           if(data !== "") {
-            fade(obj, "red");
-            obj.val("");
-            $("#message").css("color", "red");
-            $("#message").text(data);
+            if($("#override") != null && $("#override").prop('checked')) {
+              target = obj;
+              obj.css("background-color", "yellow");
+              dialog.dialog( "open" );
+              $("#sample-name").val(obj.val());
+              $("#view-sample-name").text(obj.val());
+              $("#message").text("");
+            } else {
+              fade(obj, "red");
+              obj.val("");
+              $("#message").css("color", "red");
+              $("#message").text(data);
+            }
           } else {
             fade(obj, "green");
             $("#message").css("color", "green");
             $("#message").text("Successfully edited " + obj.val());
           }
         });
+    }
+
+
+    function fade(obj, color) {
+      obj.css("background", color);
+      setTimeout(function(){
+          obj.css("background-color", "white"); // reset background
+          obj.effect("highlight", {color: color}, 200); // animate
+      },200);
+    }
+
+  {% if override %}
+  function clear_override() {
+    target.val("")
+    target.css("background-color", "white");
+    $("#sample-name").val("");
+    $("#sample-set").val("");
+    $("#type").val("");
+    $("#location").val("");
+    $("#view-sample-name").text("");
   }
 
-  function fade(obj, color) {
-    obj.css("background", color);
-    setTimeout(function(){
-        obj.css("background-color", "white"); // reset background
-        obj.effect("highlight", {color: color}, 200); // animate
-    },200);
-  }
+  dialog = $( "#dialog-form" ).dialog({
+    autoOpen: false,
+    height: 400,
+    width: 400,
+    modal: true,
+    buttons: {
+      "Add Sample": function () {
+        $("#create-form").submit();
+      },
+      Cancel: function() {
+        clear_override();
+        dialog.dialog( "close" );
+
+      }
+    },
+    close: function() {
+      clear_override();
+    }
+  });
+
+  $(document).ready(function () {
+    $("#type").autocomplete({ source: {% raw types %} });
+    $("#location").autocomplete({ source: {% raw locations %} });
+  });
+  {% end %}
 </script>
