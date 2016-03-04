@@ -20,7 +20,7 @@
 
 <div id="dialog-form" title="Create Override Sample">
   <form id="create-sample-form">
-      <input type="hidden" name="name" id="sample-name">
+      <input type="hidden" name="sample" id="sample-name">
       <table class="Table">
         <tr><td>Sample Name</td><td id='view-sample-name'></td></tr>
         <tr><td>Sample Set</td><td>
@@ -34,7 +34,6 @@
       <tr><td>Sample Type</td><td><input type="text" name="type" id="type" required></td></tr>
       <tr><td>Sample Location</td><td><input type="text" name="location" id="location" required></td></tr>
     </table>
-    <input type="submit" value="Add sample">
   </form>
 </div>
 {% end %}
@@ -59,15 +58,17 @@
   }
 {% end %}
 
+  var rowcol = null;
   function update(elem) {
     var obj = $("#" + elem.id);
     if(obj.val() === "") { return; }
+    rowcol = elem.id;
     $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: elem.id, sample: obj.val()})
         .done(function (data) {
           if(data !== "") {
             if($("#override") != null && $("#override").prop('checked')) {
-              target = obj;
               obj.css("background-color", "yellow");
+              clear_override();
               dialog.dialog( "open" );
               $("#sample-name").val(obj.val());
               $("#view-sample-name").text(obj.val());
@@ -97,8 +98,6 @@
 
   {% if override %}
   function clear_override() {
-    target.val("")
-    target.css("background-color", "white");
     $("#sample-name").val("");
     $("#sample-set").val("");
     $("#type").val("");
@@ -106,27 +105,53 @@
     $("#view-sample-name").text("");
   }
 
+  function add_sample(elem) {
+    $.post('/sample/add/', $("#create-sample-form").serialize())
+      .done(function (data) {
+        console.log({ action: 'update', plate_id: "{{plate_id}}", rowcol: rowcol, sample: $("#sample-name").val()});
+        $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: rowcol, sample: $("#sample-name").val()})
+          .done(function(data){
+            if(data != "") {
+              $("#message").css("color", "red");
+              $("#message").text(data);
+            } else {
+              $("#message").css("color", "green");
+              $("#message").text("Added sample " + $("#sample-name").val());
+            }
+            $("#" + rowcol).css("background-color", "white");
+          })
+          .fail(function() {
+            $("#message").text("Could not add sample " + $("#sample-name").val() + " to plate {{plate_id}}");
+          });
+      })
+      .fail(function () {
+        $("#message").text("Could not add sample " + $("#sample-name").val());
+      });
+  }
+
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
     height: 400,
-    width: 400,
+    width: 600,
     modal: true,
     buttons: {
       "Add Sample": function () {
-        $("#create-form").submit();
+        if($("#create-sample-form").valid()) {
+          add_sample();
+          dialog.dialog( "close" );
+          }
       },
       Cancel: function() {
-        clear_override();
         dialog.dialog( "close" );
 
       }
     },
     close: function() {
-      clear_override();
     }
   });
 
   $(document).ready(function () {
+    $("#create-sample-form").validate();
     $("#type").autocomplete({ source: {% raw types %} });
     $("#location").autocomplete({ source: {% raw locations %} });
   });
