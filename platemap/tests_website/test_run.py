@@ -151,5 +151,14 @@ class TestPoolPageHandler(TestHandlerBase):
         obs = self.post('/pool/view/', {'action': 'UNKNOWN THING'})
         self.assertEqual(obs.code, 400)
 
+
+@rollback_tests()
+class TestPoolHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/pool/render/2')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<td>Test plate 1<br/>000000003<br/>Primer Set 1<br/>'
+                      'pr001</td>', obs.body.decode('utf-8'))
+
 if __name__ == '__main__':
     main()
