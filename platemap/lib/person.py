@@ -290,6 +290,11 @@ class User(pm.base.PMObject):
         -------
         bool
             If the action is allowed (True) or not (False)
+
+        Raises
+        ------
+        DeveloperError
+            Unknown action passed
         """
         sql = """SELECT (access & (
                     SELECT access_value
@@ -301,7 +306,10 @@ class User(pm.base.PMObject):
               """
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [action, self.id])
-            return pm.sql.TRN.execute_fetchlast()
+            access = pm.sql.TRN.execute_fetchlast()
+            if access is None:
+                raise pm.exceptions.DeveloperError('Unknown action passed!')
+            return access
 
     def add_access(self, actions):
         """Adds ability for user to do action

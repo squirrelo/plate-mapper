@@ -164,6 +164,10 @@ class TestUser(TestCase):
         self.assertTrue(self.user1.check_access('Override'))
         self.assertTrue(self.user1.check_access('Admin'))
 
+    def test_check_access_no_exists(self):
+        with self.assertRaises(pm.exceptions.DeveloperError):
+            self.user1.check_access('NOT A THING')
+
     def test_check_access_no_access(self):
         self.assertFalse(self.user2.check_access('Admin'))
 
@@ -178,6 +182,10 @@ class TestUser(TestCase):
         self.user2.add_access(['Override'])
         self.assertEqual(self.user2.access, 3)
 
+    def test_add_access_no_exists(self):
+        with self.assertRaises(pm.exceptions.DeveloperError):
+            self.user1.add_access(['NOT A THING'])
+
     def test_remove_access(self):
         # Remove access user doesn't have
         self.assertEqual(self.user2.access, 1)
@@ -188,6 +196,10 @@ class TestUser(TestCase):
         self.assertEqual(self.user1.access, 7)
         self.user1.remove_access(['Override', 'Admin'])
         self.assertEqual(self.user1.access, 1)
+
+    def test_remove_access_no_exists(self):
+        with self.assertRaises(pm.exceptions.DeveloperError):
+            self.user1.remove_access(['NOT A THING'])
 
 
 if __name__ == "__main__":
