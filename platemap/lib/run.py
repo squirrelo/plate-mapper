@@ -28,6 +28,7 @@ class Run(pm.base.PMObject):
         sql = "SELECT run_id FROM barcodes.run"
         if finalized:
             sql += " WHERE finalized = 'T'"
+        sql += " ORDER BY run"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql)
             return [cls(r) for r in pm.sql.TRN.execute_fetchflatten()]

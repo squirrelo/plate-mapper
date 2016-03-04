@@ -188,9 +188,9 @@ class TestPlate(TestCase):
         self.assertEqual(obs, exp)
 
     def test_finalize(self):
-        self.assertEqual(self.plate.finalized, False)
+        self.assertFalse(self.plate.finalized)
         self.plate.finalize()
-        self.assertEqual(self.plate.finalized, True)
+        self.assertTrue(self.plate.finalized)
 
 
 if __name__ == "__main__":

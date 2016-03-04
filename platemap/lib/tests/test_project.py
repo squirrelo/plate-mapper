@@ -75,9 +75,9 @@ class TestProject(TestCase):
 
     def test_get_samples(self):
         self.assertEqual(self.project.samples,
-                         {'Sample Set 1': [pm.sample.Sample(3),
-                                           pm.sample.Sample(1),
-                                           pm.sample.Sample(2)]})
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
 
     def test_get_sample_sets(self):
         self.assertEqual(self.project.sample_sets, ['Sample Set 1'])
@@ -98,9 +98,9 @@ class TestProject(TestCase):
 
     def test_add_samples(self):
         self.assertEqual(self.project.samples,
-                         {'Sample Set 1': [pm.sample.Sample(3),
-                                           pm.sample.Sample(1),
-                                           pm.sample.Sample(2)]})
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
 
         self.project.add_samples([pm.sample.Sample(4)])
         self.assertEqual(self.project.samples,
@@ -111,9 +111,9 @@ class TestProject(TestCase):
 
     def test_remove_samples(self):
         self.assertEqual(self.project.samples,
-                         {'Sample Set 1': [pm.sample.Sample(3),
-                                           pm.sample.Sample(1),
-                                           pm.sample.Sample(2)]})
+                         {'Sample Set 1': [pm.sample.Sample(1),
+                                           pm.sample.Sample(2),
+                                           pm.sample.Sample(3)]})
         self.project.remove_samples([pm.sample.Sample(2), pm.sample.Sample(3)])
         self.assertEqual(self.project.samples,
                          {'Sample Set 1': [pm.sample.Sample(1)]})

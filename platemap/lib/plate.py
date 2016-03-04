@@ -28,6 +28,7 @@ class Plate(pm.base.PMObject):
         sql = "SELECT plate_id FROM barcodes.plate"
         if finalized:
             sql += " WHERE finalized = TRUE"
+        sql += " ORDER BY created_on DESC"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql)
             return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]

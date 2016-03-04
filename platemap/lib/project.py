@@ -20,7 +20,7 @@ class Project(pm.base.PMObject):
         list of Project objects
             All projects in the DB
         """
-        sql = "SELECT project_id FROM barcodes.project"
+        sql = "SELECT project_id FROM barcodes.project ORDER BY project"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql)
             return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
@@ -34,7 +34,7 @@ class Project(pm.base.PMObject):
         list of  str
             All sample set names in the DB
         """
-        sql = "SELECT sample_set FROM barcodes.sample_set"
+        sql = "SELECT sample_set FROM barcodes.sample_set ORDER BY sample_set"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql)
             return pm.sql.TRN.execute_fetchflatten()
@@ -152,15 +152,16 @@ class Project(pm.base.PMObject):
         dict of lists of Sample objects
             Samples in the form {sample_set: [samp1, samp2, ...], ...}
         """
-        sql = """SELECT sample_set, array_agg(sample_id) as samps
+        sql = """SELECT
+                     sample_set, array_agg(sample_id ORDER BY sample) AS samps
                  FROM barcodes.sample
                  LEFT JOIN barcodes.project_sample_sets USING (sample_set_id)
                  LEFT JOIN barcodes.project USING (project_id)
                  LEFT JOIN barcodes.sample_set USING (sample_set_id)
                  WHERE sample_id IN (
-                 SELECT sample_id
-                 FROM barcodes.project_samples
-                 WHERE project_id = %s)
+                     SELECT sample_id
+                     FROM barcodes.project_samples
+                     WHERE project_id = %s)
                  GROUP BY sample_set
               """
         with pm.sql.TRN:
