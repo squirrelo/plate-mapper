@@ -1,8 +1,16 @@
 <h3>Pool {{pool.name}}</h3>
+{% if not pool.finalized %}
+<form method="POST" action="/pool/view/">
+  <input type="submit" value="Finalize Run">
+  <input type="hidden" name="action" value="finalize">
+  <input type="hidden" name="pool" value="{{pool.id}}">
+</form>
+{% end %}
+
 <table class="table pool-table">
 	<tr><th>Plate</th><th>Summary</th></tr>
 {% for protocol in pool.protocols %}
 	{% set plate = protocol.plate %}
-	<tr><td>{% raw plate.to_html() %}</td><td>{{plate.name}}<br/>{{plate.id}}<br/>{{protocol.primer_set}}<br/>{{protocol.primer_lot}}</td></tr>
+	<tr><td>{% raw plate.to_html() %}</td><td>{{plate.name}}<br/>{{plate.id}}<br/><br/>{{protocol.primer_set}}<br/>{{protocol.primer_lot}}</td></tr>
 {% end %}
 </table>

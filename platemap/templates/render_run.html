@@ -5,9 +5,10 @@
   <input type="submit" value="Download Prep Metadata">
 </form>
 {% else %}
-<form method="GET" action="/run/view/">
+<form method="POST" action="/run/view/">
   <input type="submit" value="Finalize Run">
   <input type="hidden" name="action" value="finalize">
+  <input type="hidden" name="run" value="{{run.id}}">
 </form>
 {% end %}
 
