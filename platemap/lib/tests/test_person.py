@@ -97,6 +97,7 @@ class TestPerson(TestCase):
 class TestUser(TestCase):
     def setUp(self):
         self.user1 = pm.person.User('User1')
+        self.user2 = pm.person.User('User2')
 
     def test_create_minimal(self):
         obs = pm.person.User.create('NewUser', 'newpass', 'New Person',
@@ -117,10 +118,10 @@ class TestUser(TestCase):
         obs = pm.person.User.create(
             'NewUser', 'newpass', 'New Person', 'new@foo.bar',
             '111 fake street', 'UCSD', '112-2222',
-            ['Create samples', 'Create protocol runs'])
+            ['Override'])
 
         self.assertEqual(obs.id, 'NewUser')
-        self.assertEqual(obs.access, 11)
+        self.assertEqual(obs.access, 3)
         self.assertTrue(obs.authenticate('newpass'))
 
         person = obs.person
@@ -160,24 +161,33 @@ class TestUser(TestCase):
         self.assertFalse(self.user1.authenticate('BADPASS'))
 
     def test_check_access(self):
-        self.assertTrue(self.user1.check_access('Create samples'))
+        self.assertTrue(self.user1.check_access('Override'))
+        self.assertTrue(self.user1.check_access('Admin'))
 
     def test_check_access_no_access(self):
-        self.assertFalse(self.user1.check_access('Create runs'))
+        self.assertFalse(self.user2.check_access('Admin'))
 
     def test_add_access(self):
-        self.user1.add_access(['Create samples'])
+        # Ad existing access
+        self.assertEqual(self.user1.access, 7)
+        self.user1.add_access(['Admin'])
         self.assertEqual(self.user1.access, 7)
 
-        self.user1.add_access(['Generate prep metadata', 'Create runs'])
-        self.assertEqual(self.user1.access, 55)
+        # Add new access
+        self.assertEqual(self.user2.access, 1)
+        self.user2.add_access(['Override'])
+        self.assertEqual(self.user2.access, 3)
 
     def test_remove_access(self):
-        self.user1.remove_access(['Generate prep metadata'])
-        self.assertEqual(self.user1.access, 7)
+        # Remove access user doesn't have
+        self.assertEqual(self.user2.access, 1)
+        self.user2.remove_access(['Admin'])
+        self.assertEqual(self.user2.access, 1)
 
-        self.user1.remove_access(['Generate prep metadata', 'Edit samples'])
-        self.assertEqual(self.user1.access, 3)
+        # Remove access from user
+        self.assertEqual(self.user1.access, 7)
+        self.user1.remove_access(['Override', 'Admin'])
+        self.assertEqual(self.user1.access, 1)
 
 
 if __name__ == "__main__":

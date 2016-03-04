@@ -13,6 +13,9 @@
   </tr>
 {% end %}
 </table>
+{% if override %}
+<p><input type="checkbox" name="override" id="override"> <label for="override"> Override Sample Check</label></p>
+{% end %}
 {% if not finalized %}
 <p><input type="button" value="Finalize" name="finalize" id="finalize" onclick="check_finalize()"></p>
 {% end %}

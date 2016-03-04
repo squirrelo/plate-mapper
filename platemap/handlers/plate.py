@@ -52,7 +52,8 @@ class PlateEditableRenderHandler(BaseHandler):
         plate = pm.plate.Plate(plate_id)
         self.render('render_plate.html', platemap=plate.platemap,
                     plate_id=plate_id, plate_name=plate.name,
-                    finalized=plate.finalized)
+                    finalized=plate.finalized,
+                    override=self.current_user.check_access('override'))
 
 
 class PlateStaticRenderHandler(BaseHandler):

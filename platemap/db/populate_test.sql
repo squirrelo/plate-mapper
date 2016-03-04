@@ -13,7 +13,8 @@ INSERT INTO barcodes.person (name, email, address, affiliation, phone) VALUES
 
 --hashed password is 'password'
 INSERT INTO barcodes.user (user_id, pass, person_id, access, created_on) VALUES
-('User1', '$2a$12$yG/DzvN0eFk5cambflZkEuMBBDz9PsoMnpKVqZbUaOdFwS2PgedrS', 1, 7, '2016-02-24 8:52:00');
+('User1', '$2a$12$yG/DzvN0eFk5cambflZkEuMBBDz9PsoMnpKVqZbUaOdFwS2PgedrS', 1, 7, '2016-02-24 8:52:00'),
+('User2', '$2a$12$yG/DzvN0eFk5cambflZkEuMBBDz9PsoMnpKVqZbUaOdFwS2PgedrS', 1, 1, '2016-02-24 8:52:00');
 
 INSERT INTO barcodes.project (project, description, pi, contact_person, created_on) VALUES
 ('Project 1', 'First test project', 'PI1', 'contact1', '2016-02-22 8:52:00'),
