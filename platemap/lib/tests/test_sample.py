@@ -138,6 +138,12 @@ class TestSample(TestCase):
         with self.assertRaises(pm.exceptions.AssignError):
             pm.sample.Sample.create(
                 'test sample new', 'test', 'in the mail', 'Sample Set 1',
+                pm.person.Person(3), barcode='000000003')
+
+    def test_create_mismatched_barcode_sample_set(self):
+        with self.assertRaises(ValueError):
+            pm.sample.Sample.create(
+                'test sample new', 'test', 'in the mail', 'Sample Set 2',
                 pm.person.Person(3), barcode='000000001')
 
     def test_create_sample_exists(self):
