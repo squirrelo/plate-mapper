@@ -56,12 +56,12 @@ class TestSampleCreateHandler(TestHandlerBase):
     def test_post_barcode_error(self):
         self.assertEqual(len(pm.sample.Sample.search(barcode='000000007')), 0)
         obs = self.post('/sample/add/', {'sample': 'new posted sample',
-                                         'barcode': '000000001',
+                                         'barcode': '000000003',
                                          'sample-set': 'Sample Set 1',
                                          'type': 'stool',
                                          'location': 'the freezer'})
         self.assertEqual(obs.code, 200)
-        self.assertIn('Barcode 000000001 already assigned!',
+        self.assertIn('Barcode 000000003 already assigned!',
                       obs.body.decode('utf-8'))
 
     def test_post_file(self):
