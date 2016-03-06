@@ -210,7 +210,7 @@
 			<column name="linker" type="varchar" jt="12" mandatory="y" />
 			<column name="fwd_primer" type="varchar" jt="12" mandatory="y" />
 			<column name="rev_primer" type="varchar" jt="12" mandatory="y" />
-			<column name="barcodes" type="json" jt="12" mandatory="y" />
+			<column name="barcodes" type="json" jt="2000" mandatory="y" />
 			<index name="pk_primers" unique="PRIMARY_KEY" >
 				<column name="primer_set_id" />
 			</index>
@@ -253,27 +253,6 @@
 			<index name="project_pkey" unique="PRIMARY_KEY" >
 				<column name="project_id" />
 			</index>
-		</table>
-		<table name="project_barcodes" >
-			<comment><![CDATA[Assign barcodes to projects before they are assigned to samples]]></comment>
-			<column name="project_id" type="bigint" jt="-5" mandatory="y" />
-			<column name="barcode" type="varchar" jt="12" mandatory="y" />
-			<index name="idx_project_barcode" unique="NORMAL" >
-				<column name="project_id" />
-			</index>
-			<index name="idx_project_barcode_0" unique="NORMAL" >
-				<column name="barcode" />
-			</index>
-			<index name="idx_project_barcode_1" unique="PRIMARY_KEY" >
-				<column name="project_id" />
-				<column name="barcode" />
-			</index>
-			<fk name="fk_project_barcode_0" to_schema="barcodes" to_table="barcode" >
-				<fk_column name="barcode" pk="barcode" />
-			</fk>
-			<fk name="fk_project_barcode" to_schema="barcodes" to_table="project" >
-				<fk_column name="project_id" pk="project_id" />
-			</fk>
 		</table>
 		<table name="project_sample_sets" >
 			<column name="project_id" type="bigint" jt="-5" mandatory="y" />
@@ -448,6 +427,27 @@
 			<index name="pk_sample_set" unique="PRIMARY_KEY" >
 				<column name="sample_set_id" />
 			</index>
+		</table>
+		<table name="sample_set_barcodes" >
+			<comment><![CDATA[Assign barcodes to sample_sets before they are assigned to samples]]></comment>
+			<column name="sample_set_id" type="bigint" jt="-5" mandatory="y" />
+			<column name="barcode" type="varchar" jt="12" mandatory="y" />
+			<index name="idx_project_barcode" unique="NORMAL" >
+				<column name="sample_set_id" />
+			</index>
+			<index name="idx_project_barcode_0" unique="NORMAL" >
+				<column name="barcode" />
+			</index>
+			<index name="idx_project_barcode_1" unique="PRIMARY_KEY" >
+				<column name="sample_set_id" />
+				<column name="barcode" />
+			</index>
+			<fk name="fk_project_barcode_0" to_schema="barcodes" to_table="barcode" >
+				<fk_column name="barcode" pk="barcode" />
+			</fk>
+			<fk name="fk_sampe_set_barcodes" to_schema="barcodes" to_table="sample_set" >
+				<fk_column name="sample_set_id" pk="sample_set_id" />
+			</fk>
 		</table>
 		<table name="settings" >
 			<column name="test" type="bool" jt="-7" mandatory="y" >
@@ -22133,27 +22133,27 @@ AS $function$xpath_exists$function$
 		</function>
 	</schema>
 	<layout id="Layout_21c92c9f" name="barcodes" joined_routing="y" show_column_type="y" show_relation_columns="y" >
-		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="930" y="45" />
-		<entity schema="barcodes" name="barcode" color="b7c8e3" x="60" y="405" />
-		<entity schema="barcodes" name="primer_set" color="b7c8e3" x="585" y="690" />
-		<entity schema="barcodes" name="person" color="b7c8e3" x="510" y="375" />
-		<entity schema="barcodes" name="project_barcodes" color="b7c8e3" x="75" y="615" />
-		<entity schema="barcodes" name="sample_set" color="b7c8e3" x="300" y="405" />
-		<entity schema="barcodes" name="sample" color="b7c8e3" x="180" y="120" />
-		<entity schema="barcodes" name="user" color="b7c8e3" x="720" y="375" />
-		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="615" y="525" />
-		<entity schema="barcodes" name="plate" color="b7c8e3" x="690" y="105" />
-		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="465" y="105" />
-		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1005" y="420" />
-		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1005" y="570" />
-		<entity schema="barcodes" name="settings" color="b7c8e3" x="45" y="780" />
-		<entity schema="barcodes" name="project_sample_sets" color="b7c8e3" x="300" y="525" />
-		<entity schema="barcodes" name="project_samples" color="b7c8e3" x="75" y="525" />
-		<entity schema="barcodes" name="project" color="b7c8e3" x="300" y="615" />
-		<entity schema="barcodes" name="primer_set_lots" color="b7c8e3" x="780" y="690" />
-		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1005" y="675" />
-		<entity schema="barcodes" name="pool" color="b7c8e3" x="1140" y="45" />
-		<entity schema="barcodes" name="run" color="b7c8e3" x="1140" y="210" />
+		<entity schema="barcodes" name="pool_samples" color="b7c8e3" x="945" y="45" />
+		<entity schema="barcodes" name="barcode" color="b7c8e3" x="45" y="390" />
+		<entity schema="barcodes" name="primer_set" color="b7c8e3" x="600" y="690" />
+		<entity schema="barcodes" name="person" color="b7c8e3" x="525" y="375" />
+		<entity schema="barcodes" name="sample" color="b7c8e3" x="195" y="120" />
+		<entity schema="barcodes" name="user" color="b7c8e3" x="735" y="375" />
+		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="630" y="525" />
+		<entity schema="barcodes" name="plate" color="b7c8e3" x="705" y="105" />
+		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="480" y="105" />
+		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1020" y="420" />
+		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1020" y="570" />
+		<entity schema="barcodes" name="project" color="b7c8e3" x="285" y="600" />
+		<entity schema="barcodes" name="primer_set_lots" color="b7c8e3" x="795" y="690" />
+		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1020" y="675" />
+		<entity schema="barcodes" name="pool" color="b7c8e3" x="1155" y="45" />
+		<entity schema="barcodes" name="run" color="b7c8e3" x="1155" y="210" />
+		<entity schema="barcodes" name="project_samples" color="b7c8e3" x="60" y="630" />
+		<entity schema="barcodes" name="project_sample_sets" color="b7c8e3" x="330" y="525" />
+		<entity schema="barcodes" name="sample_set" color="b7c8e3" x="300" y="390" />
+		<entity schema="barcodes" name="settings" color="b7c8e3" x="375" y="780" />
+		<entity schema="barcodes" name="sample_set_barcodes" color="b7c8e3" x="75" y="510" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plate" />
@@ -22181,11 +22181,11 @@ AS $function$xpath_exists$function$
 		<group name="Group_barcodes" color="c4e0f9" >
 			<entity schema="barcodes" name="barcode" />
 			<entity schema="barcodes" name="project" />
-			<entity schema="barcodes" name="project_barcodes" />
+			<entity schema="barcodes" name="sample_set_barcodes" />
 			<entity schema="barcodes" name="project_samples" />
 			<entity schema="barcodes" name="sample_set" />
 		</group>
-		<script name="Sql" id="SQL_27711d58" >
+		<script name="Sql" id="SQL_27711d58" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -22441,7 +22441,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_001" id="SQL_2f71f310" >
+		<script name="Sql_001" id="SQL_2f71f310" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -22697,7 +22697,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_002" id="SQL_3579d422" >
+		<script name="Sql_002" id="SQL_3579d422" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -22966,7 +22966,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_003" id="SQL_301349c8" >
+		<script name="Sql_003" id="SQL_301349c8" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -23233,7 +23233,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_004" id="SQL_1ea131c4" >
+		<script name="Sql_004" id="SQL_1ea131c4" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -23524,7 +23524,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_005" id="SQL_1227c75e" >
+		<script name="Sql_005" id="SQL_1227c75e" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -23816,7 +23816,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_006" id="SQL_1512e7c1" >
+		<script name="Sql_006" id="SQL_1512e7c1" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -24104,7 +24104,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_007" id="SQL_1ea1a2df" >
+		<script name="Sql_007" id="SQL_1ea1a2df" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -24429,7 +24429,7 @@ ALTER TABLE barcodes."user" ADD CONSTRAINT fk_users FOREIGN KEY ( person_id ) RE
 
 ]]></string>
 		</script>
-		<script name="Sql_008" id="SQL_36a634c2" >
+		<script name="Sql_008" id="SQL_36a634c2" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -24727,7 +24727,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_009" id="SQL_1883d5bf" >
+		<script name="Sql_009" id="SQL_1883d5bf" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -25034,7 +25034,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_010" id="SQL_3932ec8" >
+		<script name="Sql_010" id="SQL_3932ec8" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -25370,7 +25370,7 @@ ALTER TABLE barcodes."user" ADD CONSTRAINT fk_users FOREIGN KEY ( person_id ) RE
 
 ]]></string>
 		</script>
-		<script name="Sql_011" id="SQL_30f40a08" >
+		<script name="Sql_011" id="SQL_30f40a08" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -25679,7 +25679,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_012" id="SQL_24319946" >
+		<script name="Sql_012" id="SQL_24319946" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -26026,7 +26026,7 @@ ALTER TABLE barcodes."user" ADD CONSTRAINT fk_users FOREIGN KEY ( person_id ) RE
 
 ]]></string>
 		</script>
-		<script name="Sql_013" id="SQL_9cdb413" >
+		<script name="Sql_013" id="SQL_9cdb413" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -26345,7 +26345,7 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="Sql_014" id="SQL_faf9b4a" >
+		<script name="Sql_014" id="SQL_faf9b4a" language="SQL" >
 			<string><![CDATA[CREATE SCHEMA barcodes;
 
 CREATE TABLE barcodes.access_controls ( 
@@ -26680,12 +26680,12 @@ COMMENT ON COLUMN barcodes.pool_samples.volume IS 'Volume used from each plate/s
 
 ]]></string>
 		</script>
-		<script name="plate_name" id="SQL_1faed718" >
+		<script name="plate_name" id="SQL_1faed718" language="SQL" >
 			<string><![CDATA[ALTER TABLE barcodes.plates ADD plate_name varchar(100)  NOT NULL;
 
 ]]></string>
 		</script>
-		<script name="primers_lots" id="SQL_31c138e6" confirmed="y" >
+		<script name="primers_lots" id="SQL_31c138e6" language="SQL" confirmed="y" >
 			<string><![CDATA[CREATE TABLE barcodes.primers_lots ( 
 	primer_id            bigint  NOT NULL,
 	lot_number           varchar  ,
@@ -26700,7 +26700,7 @@ ALTER TABLE barcodes.primers_lots ADD CONSTRAINT fk_primers_lots FOREIGN KEY ( p
 
 ]]></string>
 		</script>
-		<script name="run" id="SQL_2e9c1eca" >
+		<script name="run" id="SQL_2e9c1eca" language="SQL" >
 			<string><![CDATA[CREATE TABLE barcodes.run ( 
 	run_id               bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
