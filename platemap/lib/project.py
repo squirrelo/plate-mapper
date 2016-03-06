@@ -81,6 +81,10 @@ class Project(pm.base.PMObject):
                          VALUES (%s, %s, %s, %s)
                          RETURNING project_id
                       """
+        test_bc_sql = """SELECT barcode, sample_set_id
+                         FROM barcodes.sample_set_barcodes
+                         WHERE barcode = %s
+                      """
         project_bc_sql = """INSERT INTO barcodes.project_barcodes
                             (project_id, barcode)
                             values (%s, %s)

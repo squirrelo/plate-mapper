@@ -93,7 +93,7 @@ CREATE TABLE barcodes.project (
 	CONSTRAINT project_pkey PRIMARY KEY ( project_id )
  );
 
-COMMENT ON TABLE barcodes.project IS 'Project information';
+COMMENT ON TABLE barcodes.project IS 'Overarching project information';
 
 COMMENT ON COLUMN barcodes.project.pi IS 'primary investigator on the study';
 
@@ -141,7 +141,8 @@ CREATE INDEX idx_project_barcode ON barcodes.sample_set_barcodes ( sample_set_id
 
 CREATE INDEX idx_project_barcode_0 ON barcodes.sample_set_barcodes ( barcode );
 
-COMMENT ON TABLE barcodes.sample_set_barcodes IS 'Assign barcodes to sample_sets before they are assigned to samples';
+COMMENT ON TABLE barcodes.sample_set_barcodes IS 'Assign barcodes to sample sets before they are assigned to samples
+Barcodes are removed from here as samples with those barcodes are logged.';
 
 CREATE TABLE barcodes.settings (
 	test                 bool DEFAULT 'F' NOT NULL
@@ -221,7 +222,7 @@ CREATE TABLE barcodes.sample (
 	CONSTRAINT idx_samples UNIQUE ( barcode ) ,
 	CONSTRAINT pk_samples PRIMARY KEY ( sample_id ),
 	CONSTRAINT pk_samples_0 UNIQUE ( sample ) ,
-	CONSTRAINT idx_sample UNIQUE ( sample_set_id, sample ) ,
+	CONSTRAINT idx_sample UNIQUE ( sample_id, sample_set_id ) ,
 	CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
 	CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.person( person_id )    ,
 	CONSTRAINT fk_samples_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
@@ -235,6 +236,8 @@ CREATE INDEX idx_samples_2 ON barcodes.sample ( created_by );
 CREATE INDEX idx_samples_0 ON barcodes.sample ( sample_set_id );
 
 COMMENT ON COLUMN barcodes.sample.sample IS 'External name of the sample';
+
+COMMENT ON COLUMN barcodes.sample.sample_set_id IS 'The sample set the sample was INITIALLY collected for.';
 
 COMMENT ON COLUMN barcodes.sample.sample_type IS 'The type of sample collected (stool, soil, etc)';
 
@@ -266,6 +269,8 @@ CREATE TABLE barcodes.project_samples (
 CREATE INDEX idx_project_sample_set ON barcodes.project_samples ( sample_id );
 
 CREATE INDEX idx_project_sample_set_0 ON barcodes.project_samples ( project_id );
+
+COMMENT ON TABLE barcodes.project_samples IS 'Added samples that are not part of a sample set attached to the project.';
 
 CREATE TABLE barcodes.protocol_settings (
 	protocol_settings_id bigserial  NOT NULL,
