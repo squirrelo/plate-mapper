@@ -20,6 +20,14 @@ COMMENT ON COLUMN barcodes.barcode.assigned_on IS 'date barcode assigned to a pr
 
 COMMENT ON COLUMN barcodes.barcode.create_timestamp IS 'Date barcode created on the system';
 
+CREATE TABLE barcodes.instrument ( 
+	instrument_id        bigserial  NOT NULL,
+	platform             varchar  NOT NULL,
+	sequencing_method    varchar  NOT NULL,
+	instrument_model     varchar  NOT NULL,
+	CONSTRAINT pk_instrument PRIMARY KEY ( instrument_id )
+ );
+
 CREATE TABLE barcodes.person ( 
 	person_id            bigserial  NOT NULL,
 	name                 varchar(100)  NOT NULL,
@@ -64,10 +72,14 @@ CREATE TABLE barcodes.primer_set (
 	fwd_primer           varchar  NOT NULL,
 	rev_primer           varchar  NOT NULL,
 	barcodes             json  NOT NULL,
+	target_gene          varchar  NOT NULL,
+	target_subfragment   varchar  ,
 	CONSTRAINT pk_primers PRIMARY KEY ( primer_set_id )
  );
 
 COMMENT ON COLUMN barcodes.primer_set.primer_set IS 'Name of the primer set';
+
+COMMENT ON COLUMN barcodes.primer_set.target_gene IS 'What is being amplified by primers';
 
 CREATE TABLE barcodes.primer_set_lots ( 
 	primer_set_id        bigint  NOT NULL,
@@ -119,15 +131,19 @@ CREATE TABLE barcodes.run (
 	finalized            bool DEFAULT 'F' NOT NULL,
 	finalized_on         timestamp  ,
 	finalized_by         bigint  ,
+	instrument_id        bigint  NOT NULL,
 	CONSTRAINT idx_run_0 UNIQUE ( run ) ,
 	CONSTRAINT pk_run PRIMARY KEY ( run_id ),
 	CONSTRAINT fk_run FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_run_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    
+	CONSTRAINT fk_run_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
+	CONSTRAINT fk_run_1 FOREIGN KEY ( instrument_id ) REFERENCES barcodes.instrument( instrument_id )    
  );
 
 CREATE INDEX idx_run ON barcodes.run ( finalized_by );
 
 CREATE INDEX idx_run_1 ON barcodes.run ( created_by );
+
+CREATE INDEX idx_run_2 ON barcodes.run ( instrument_id );
 
 COMMENT ON TABLE barcodes.run IS 'Full run, equivalent to a multi-lane sequencing run';
 
@@ -148,7 +164,6 @@ CREATE TABLE barcodes.settings (
  );
 
 COMMENT ON COLUMN barcodes.settings.test IS 'Whether test environment or not.';
-INSERT INTO barcodes.settings (test) VALUES ('F');
 
 CREATE TABLE barcodes."user" ( 
 	user_id              varchar  NOT NULL,
