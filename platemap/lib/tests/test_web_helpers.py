@@ -44,6 +44,12 @@ class TestWebHelpers(TestCase):
         exp = ['pr001']
         self.assertEqual(obs, exp)
 
+    def test_get_instruments(self):
+        obs = pm.webhelp.get_instruments()
+        exp = ['454 GS FLX Titanium', '454 GS FLX+', 'Illumina HiSeq 2500',
+               'Illumina MiSeq']
+        self.assertEqual(obs, exp)
+
 
 if __name__ == '__main__':
     main()

@@ -19,13 +19,19 @@ class TestRun(TestCase):
         self.assertEqual(obs, exp)
 
     def test_create(self):
-        self.assertFalse(pm.run.Run.exists('NewTestRun'))
-        pm.run.Run.create('NewTestRun', pm.person.Person(2))
-        self.assertTrue(pm.run.Run.exists('NewTestRun'))
+        run = pm.run.Run.create('NewTestRun', pm.person.Person(2),
+                                'Illumina MiSeq')
+        self.assertEqual(run.name, 'NewTestRun')
+        self.assertEqual(run.instrument, {
+            'instrument_id': 2,
+            'instrument_model': 'Illumina MiSeq',
+            'platform': 'Illumina',
+            'sequencing_method': 'sequencing by synthesis'})
 
     def test_create_exists(self):
         with self.assertRaises(pm.exceptions.DuplicateError):
-            pm.run.Run.create('Finalized Run', pm.person.Person(2))
+            pm.run.Run.create('Finalized Run', pm.person.Person(2),
+                              'Illumina MiSeq')
 
     def test_exists(self):
         self.assertFalse(pm.run.Run.exists('NewTestRun'))
@@ -36,6 +42,13 @@ class TestRun(TestCase):
 
     def test_name(self):
         self.assertEqual(self.run1.name, 'Finalized Run')
+
+    def test_instrument(self):
+        self.assertEqual(self.run1.instrument, {
+            'instrument_id': 1,
+            'instrument_model': 'Illumina HiSeq 2500',
+            'platform': 'Illumina',
+            'sequencing_method': 'sequencing by synthesis'})
 
     def test_pools(self):
         obs = self.run1.pools
@@ -60,23 +73,36 @@ class TestRun(TestCase):
         with self.assertRaises(pm.exceptions.DeveloperError):
             self.run2.generate_prep_metadata()
 
-    meta = ("sample_name\tlinker\tfwd_primer\trev_primer\tbarcode\t"
-            "sample_barcode\tbiomass_remaining\textraction_robot\t"
-            "extractionkit_lot\tmastermix_lot\tplate_id\tplate_well\t"
-            "primer_lot\t""processing_robot\tsample_type\ttm1000_8_tool\t"
-            "tm300_8_tool\ttm50_8_tool\twater_lot\nSample 1.A\tCT\t"
-            "AAAAAAAACCCCTTTTTT\tGGGGGGGGAAAAAAAACC\tCCTCGCATGACC\t000000001\t"
-            "True\texrb001\texkl001\tmm001\t\t\tpr002\tprrb001\tstool\ttm18001"
-            "\ttm38001\ttm58001\twat001\nSample 1.B\tCT\tAAAAAAAACCCCTTTTTT\t"
-            "GGGGGGGGAAAAAAAACC\tAATACAGACCTG\t000000001\tTrue\texrb002\t"
-            "exkl002\tmm002\t000000003\tB2\tpr001\tprrb002\tstool\ttm18002\t"
-            "tm38002\ttm58002\twat002\nSample 2\tCT\tAAAAAAAACCCCTTTTTT\t"
-            "GGGGGGGGAAAAAAAACC\tGGACAAGTGCGA\t000000002\tFalse\texrb002\t"
-            "exkl002\tmm002\t000000003\tB3\tpr001\tprrb002\tstool\ttm18002\t"
-            "tm38002\ttm58002\twat002\nSample 3\tCT\tAAAAAAAACCCCTTTTTT\t"
-            "GGGGGGGGAAAAAAAACC\tACGTATTCGAAG\t\tFalse\texrb002\texkl002\t"
-            "mm002\t000000003\tC4\tpr001\tprrb002\tskin\ttm18002\ttm38002\t"
-            "tm58002\twat002")
+    meta = ('sample_name\tlinker\tprimer\tpcr_primers\ttarget_gene\t'
+            'target_subfragment\tbarcode\tsample_barcode\tbiomass_remaining\t'
+            'center_name\textraction_robot\textractionkit_lot\t'
+            'instrument_model\tmastermix_lot\tplate_id\tplate_well\tplatform\t'
+            'primer_lot\tprocessing_robot\trun_center\trun_date\trun_prefix\t'
+            'sample_type\tsequencing_method\ttm1000_8_tool\ttm300_8_tool\t'
+            'tm50_8_tool\twater_lot\nSample 1.A\tCT\tAAAAAAAACCCCTTTTTT\t'
+            'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\t'
+            'CCTCGCATGACC\t000000001\tTrue\tUCSDMI\texrb001\texkl001\t'
+            'Illumina HiSeq 2500\tmm001\t\t\tIllumina\tpr002\tprrb001\tUCSDMI'
+            '\t2016-03-02 01:26:00\tFinalized Run\tstool\t'
+            'sequencing by synthesis\ttm18001\ttm38001\ttm58001\twat001\n'
+            'Sample 1.B\tCT\tAAAAAAAACCCCTTTTTT\t'
+            'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\t'
+            'AATACAGACCTG\t000000001\tTrue\tUCSDMI\texrb002\texkl002\t'
+            'Illumina HiSeq 2500\tmm002\t000000003\tB2\tIllumina\tpr001\t'
+            'prrb002\tUCSDMI\t2016-03-02 01:26:00\tFinalized Run\tstool\t'
+            'sequencing by synthesis\ttm18002\ttm38002\ttm58002\twat002\n'
+            'Sample 2\tCT\tAAAAAAAACCCCTTTTTT\t'
+            'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\t'
+            'GGACAAGTGCGA\t000000002\tFalse\tUCSDMI\texrb002\texkl002\t'
+            'Illumina HiSeq 2500\tmm002\t000000003\tB3\tIllumina\tpr001\t'
+            'prrb002\tUCSDMI\t2016-03-02 01:26:00\tFinalized Run\tstool\t'
+            'sequencing by synthesis\ttm18002\ttm38002\ttm58002\twat002\n'
+            'Sample 3\tCT\tAAAAAAAACCCCTTTTTT\t'
+            'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\t'
+            'ACGTATTCGAAG\t\tFalse\tUCSDMI\texrb002\texkl002\t'
+            'Illumina HiSeq 2500\tmm002\t000000003\tC4\tIllumina\tpr001\t'
+            'prrb002\tUCSDMI\t2016-03-02 01:26:00\tFinalized Run\tskin\t'
+            'sequencing by synthesis\ttm18002\ttm38002\ttm58002\twat002')
 
 
 @pm.util.rollback_tests()

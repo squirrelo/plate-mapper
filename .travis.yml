@@ -12,7 +12,7 @@ script:
   - export PLATEMAP_CONFIG=`pwd`/platemap/platemap_config.txt.example
   - platemap make -t
   - nosetests --with-doctest --with-coverage
-  - flake8 --max-complexity 11 platemap setup.py
+  - flake8 platemap setup.py
 addons:
   postgresql: "9.3"
 services:

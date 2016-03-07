@@ -93,3 +93,19 @@ def get_lots_for_primer_set(primer_set_id):
     with pm.sql.TRN:
         pm.sql.TRN.add(sql, [primer_set_id])
         return pm.sql.TRN.execute_fetchflatten()
+
+
+def get_instruments():
+    """Returns list of instrument models in the database
+
+    Returns
+    -------
+    list of str
+        Instruments in the database
+    """
+    sql = """SELECT instrument_model
+             FROM barcodes.instrument
+             ORDER BY instrument_model"""
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql)
+        return pm.sql.TRN.execute_fetchflatten()

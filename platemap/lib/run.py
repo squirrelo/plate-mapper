@@ -34,7 +34,7 @@ class Run(pm.base.PMObject):
             return [cls(r) for r in pm.sql.TRN.execute_fetchflatten()]
 
     @classmethod
-    def create(cls, name, person):
+    def create(cls, name, person, instrument):
         """Creates a new run on the system
 
         Parameters
@@ -43,6 +43,8 @@ class Run(pm.base.PMObject):
             The name for the run
         person : Person object
             The person creating the run
+        instrument : str
+            Instrument model used to perform the run
 
         Returns
         -------
@@ -56,9 +58,14 @@ class Run(pm.base.PMObject):
         """
         if cls.exists(name):
             raise pm.exceptions.DuplicateError(name, 'run')
-        sql = "INSERT INTO barcodes.run (run, created_by) VALUES (%s, %s)"
+        sql = """INSERT INTO barcodes.run (run, created_by, instrument_id)
+                 VALUES (%s, %s, %s)
+                 RETURNING run_id"""
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [name, person.id])
+            instrument_id = pm.util.convert_to_id(instrument, 'instrument',
+                                                  'instrument_model')
+            pm.sql.TRN.add(sql, [name, person.id, instrument_id])
+            return cls(pm.sql.TRN.execute_fetchlast())
 
     @staticmethod
     def exists(name):
@@ -93,6 +100,20 @@ class Run(pm.base.PMObject):
     @property
     def name(self):
         return self._get_property('run')
+
+    @property
+    def finalized_on(self):
+        return self._get_property('finalized_on')
+
+    @property
+    def instrument(self):
+        sql = """SELECT I.*
+                 FROM barcodes.instrument I
+                 JOIN barcodes.run USING (instrument_id)
+                 WHERE run_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return dict(pm.sql.TRN.execute_fetchindex()[0])
 
     @property
     def pools(self):
@@ -138,7 +159,8 @@ class Run(pm.base.PMObject):
                                                'non-finalized run!')
 
         primer_lot_sql = """SELECT
-                           linker, fwd_primer, rev_primer, barcodes
+                           linker, fwd_primer, rev_primer, barcodes,
+                           target_gene, target_subfragment
                            FROM barcodes.primer_set_lots
                            JOIN barcodes.primer_set USING (primer_set_id)
                            WHERE primer_lot = %s
@@ -150,6 +172,13 @@ class Run(pm.base.PMObject):
                            LEFT JOIN barcodes.pool USING (pool_id)
                            WHERE run_id = %s
                         """
+        invariant = {'run_center': 'UCSDMI',
+                     'center_name': 'UCSDMI',
+                     'run_prefix': self.name,
+                     'run_date': self.finalized_on}
+        invariant.update(self.instrument)
+        del invariant['instrument_id']
+
         metadata = {}
         duplicates = {}
         primer_lots_info = {}
@@ -183,12 +212,15 @@ class Run(pm.base.PMObject):
                         del protocol_meta[sample]
                         # 67 for ASCII capital C conversion using chr above
                         duplicates[sample] = 67
+                # Add invariant info to all samples and add to metadta dict
+                for key in protocol_meta.keys():
+                    protocol_meta[key].update(invariant)
                 metadata.update(protocol_meta)
 
             # At this point we have the varying metadata dict built
-            # so build the full dict with primer and barcode info
+            # so build the full dict with primer, instrument, and barcode info
             ret = []
-            headers = sorted(list(metadata.values())[0].keys())
+            headers = sorted(next(iter(metadata.values())).keys())
             for sample in sorted(metadata.keys()):
                 meta = metadata[sample]
                 # Get primer info if not already grabbed
@@ -201,10 +233,12 @@ class Run(pm.base.PMObject):
                     primer_lots_info[primer_lot] = info
 
                 # build static ordered info
-                row = [sample,
-                       primer_lots_info[primer_lot]['linker'],
-                       primer_lots_info[primer_lot]['fwd_primer'],
-                       primer_lots_info[primer_lot]['rev_primer']]
+                fwd = primer_lots_info[primer_lot]['fwd_primer']
+                rev = primer_lots_info[primer_lot]['rev_primer']
+                row = [sample, primer_lots_info[primer_lot]['linker'],
+                       fwd, 'FWD:%s;REV:%s' % (fwd, rev),
+                       primer_lots_info[primer_lot]['target_gene'],
+                       primer_lots_info[primer_lot]['target_subfragment']]
                 if meta['plate_well']:
                     row.append(
                         primer_lots_barcodes[primer_lot][meta['plate_well']])
@@ -218,8 +252,9 @@ class Run(pm.base.PMObject):
 
             # add static header names and create file using joins
             headers[headers.index('barcode')] = 'sample_barcode'
-            headers = '\t'.join(['sample_name', 'linker', 'fwd_primer',
-                                 'rev_primer', 'barcode'] + headers)
+            headers = '\t'.join(['sample_name', 'linker', 'primer',
+                                 'pcr_primers', 'target_gene',
+                                 'target_subfragment', 'barcode'] + headers)
             return '\n'.join([headers] + ret)
 
 
