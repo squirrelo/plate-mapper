@@ -18,6 +18,17 @@ class TestProject(TestCase):
         exp = ['Sample Set 1', 'Sample Set 2', 'Sample Set 3']
         self.assertEqual(obs, exp)
 
+    def test_assign_barcodes(self):
+        self.assertFalse(pm.util.check_barcode_assigned('000000005'))
+        self.assertFalse(pm.util.check_barcode_assigned('000000006'))
+        self.assertFalse(pm.util.check_barcode_assigned('000000007'))
+
+        pm.project.Project.assign_barcodes('Sample Set 1', 2)
+
+        self.assertTrue(pm.util.check_barcode_assigned('000000005'))
+        self.assertTrue(pm.util.check_barcode_assigned('000000006'))
+        self.assertFalse(pm.util.check_barcode_assigned('000000007'))
+
     def test_create(self):
         obs = pm.project.Project.create(
             'NewTestProj', 'For testing', pm.person.Person(1), 'PI', 'contact',
@@ -131,16 +142,6 @@ class TestProject(TestCase):
     def test_remove_sample_set_not_zero(self):
         with self.assertRaises(pm.exceptions.EditError):
             self.project.remove_sample_set('Sample Set 1')
-
-    def test_assign_barcodes(self):
-        self.assertFalse(pm.util.check_barcode_assigned('000000005'))
-        self.assertFalse(pm.util.check_barcode_assigned('000000006'))
-        self.assertFalse(pm.util.check_barcode_assigned('000000007'))
-        self.project.assign_barcodes(num_barcodes=2)
-
-        self.assertTrue(pm.util.check_barcode_assigned('000000005'))
-        self.assertTrue(pm.util.check_barcode_assigned('000000006'))
-        self.assertFalse(pm.util.check_barcode_assigned('000000007'))
 
     def test_clear_barcodes(self):
         proj = pm.project.Project(3)

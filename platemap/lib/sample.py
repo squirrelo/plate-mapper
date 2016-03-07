@@ -186,7 +186,23 @@ class Sample(pm.base.PMObject):
         -------
         Sample object
             The new sample
+
+        Raises
+        ------
+        ValueError
+            If a barcode and sample set are given, and the barcode does not
+            match the pre-assigned sample set.
+        AssignError
+            If a barcode is given without pre-assignment, but is already
+            used elsewhere
         """
+        test_barcode_sql = """SELECT barcode, sample_set_id
+                              FROM barcodes.sample_set_barcodes
+                              WHERE barcode = %s
+                           """
+        rem_barcode_sql = """DELETE FROM barcodes.sample_set_barcodes
+                             WHERE barcode = %s AND sample_set_id = %s
+                          """
         sample_sql = """INSERT INTO barcodes.sample
                         (sample, barcode, sample_type, sample_location,
                          sample_set_id, created_by, last_scanned_by)
@@ -204,13 +220,26 @@ class Sample(pm.base.PMObject):
             if cls.exists(name, sample_set):
                 raise pm.exceptions.DuplicateError(name, 'sample')
 
+            sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
             if barcode is not None:
-                if pm.util.check_barcode_assigned(barcode):
+                pm.sql.TRN.add(test_barcode_sql, [barcode])
+                res = pm.sql.TRN.execute_fetchindex()
+                if res:
+                    # Make sure barcode matches the pre-assigned sample set
+                    barcode, db_sample_set = res[0]
+                    if sample_set_id != db_sample_set:
+                        raise ValueError('Barcode does not match pre-assigned '
+                                         'sample set!')
+                    else:
+                        # Remove from pre-assigned table since barcode is now
+                        # attached to a sample
+                        pm.sql.TRN.add(rem_barcode_sql,
+                                       [barcode, sample_set_id])
+                elif pm.util.check_barcode_assigned(barcode):
                     raise pm.exceptions.AssignError(
                         'Barcode %s already assigned!' % barcode)
                 pm.sql.TRN.add(barcode_sql, [barcode])
 
-            sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
             pm.sql.TRN.add(sample_sql, [
                 name, barcode, sample_type, sample_location, sample_set_id,
                 person.id, person.id])

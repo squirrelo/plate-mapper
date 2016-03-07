@@ -36,7 +36,7 @@ INSERT INTO barcodes.project_sample_sets (project_id, sample_set_id) VALUES (1, 
 
 INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (3, 1), (4, 2), (2, 2);
 
-INSERT INTO barcodes.project_barcodes (project_id, barcode) VALUES (1, '000000001'), (1, '000000002'), (3, '000000004');
+INSERT INTO barcodes.sample_set_barcodes (sample_set_id, barcode) VALUES (1, '000000001'), (1, '000000002'), (3, '000000004');
 
 INSERT INTO barcodes.plate (plate_id, plate, created_on, finalized, person_id, rows, cols) VALUES
 ('000000003', 'Test plate 1', '2016-02-22 8:55:00', 'F', 1, 8, 12);

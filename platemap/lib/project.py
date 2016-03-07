@@ -39,6 +39,27 @@ class Project(pm.base.PMObject):
             pm.sql.TRN.add(sql)
             return pm.sql.TRN.execute_fetchflatten()
 
+    @staticmethod
+    def assign_barcodes(sample_set, num_barcodes):
+        """Assigns barcodes to a sample set
+
+        Parameters
+        ----------
+        sample_set : str
+            The sample set in the project to assign barcodes to.
+        num_barcodes : int
+            Number of barcodes to assign to the project
+        """
+        sql = """INSERT INTO barcodes.sample_set_barcodes
+                 (sample_set_id, barcode)
+                 VALUES (%s, %s)
+              """
+        with pm.sql.TRN:
+            sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
+            pm.sql.TRN.add(sql, [(sample_set_id, b) for b in
+                                 pm.util.get_barcodes(num_barcodes)],
+                           many=True)
+
     @classmethod
     def create(cls, project, description, person, pi, contact_person,
                sample_set, num_barcodes=None):
@@ -59,7 +80,7 @@ class Project(pm.base.PMObject):
         sample_set : str
             Name of the initial sample set
         num_barcodes : int, optional
-            Number of barcodes to assign to the project
+            Number of barcodes to assign to the initial sample set
 
         Returns
         -------
@@ -81,8 +102,8 @@ class Project(pm.base.PMObject):
                          VALUES (%s, %s, %s, %s)
                          RETURNING project_id
                       """
-        project_bc_sql = """INSERT INTO barcodes.project_barcodes
-                            (project_id, barcode)
+        project_bc_sql = """INSERT INTO barcodes.sample_set_barcodes
+                            (sample_set_id, barcode)
                             values (%s, %s)
                          """
         sample_set_sql = """INSERT INTO barcodes.sample_set
@@ -98,14 +119,14 @@ class Project(pm.base.PMObject):
             pm.sql.TRN.add(project_sql, [project, pi, description,
                                          contact_person])
             project_id = pm.sql.TRN.execute_fetchlast()
-
-            if num_barcodes is not None:
-                pm.sql.TRN.add(project_bc_sql,
-                               [(project_id, b) for b in barcodes], many=True)
-
             pm.sql.TRN.add(sample_set_sql, [sample_set, person.id])
             sample_set_id = pm.sql.TRN.execute_fetchlast()
             pm.sql.TRN.add(proj_sample_set_sql, [project_id, sample_set_id])
+
+            if num_barcodes is not None:
+                pm.sql.TRN.add(project_bc_sql,
+                               [(sample_set_id, b) for b in barcodes],
+                               many=True)
 
         return cls(project_id)
 
@@ -290,27 +311,15 @@ class Project(pm.base.PMObject):
                                               'attached to a project')
             pm.sql.TRN.add(remove_sql, [self.id, sample_set])
 
-    def assign_barcodes(self, num_barcodes):
-        """Assigns barcodes to the project
-
-        Parameters
-        ----------
-        num_barcodes : str
-            Number of barcodes to assign to the project
-        """
-        sql = """INSERT INTO barcodes.project_barcodes (project_id, barcode)
-                 VALUES (%s, %s)
-              """
-        with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [(self.id, b) for b in
-                                 pm.util.get_barcodes(num_barcodes)],
-                           many=True)
-
     def clear_barcodes(self):
-        """Clears all remaining unused barcodes from the project"""
-        sql = """DELETE FROM barcodes.project_barcodes
-                 WHERE barcode NOT IN (SELECT barcode FROM barcodes.sample
-                                       WHERE barcode IS NOT NULL)
-                 AND project_id = %s"""
+        """Clears all remaining unused barcodes from the project's sample sets
+        """
+        sql = """DELETE FROM barcodes.sample_set_barcodes ssb
+                 USING barcodes.project_sample_sets pss
+                 WHERE pss.sample_set_id = ssb.sample_set_id
+                 AND barcode NOT IN (
+                     SELECT barcode FROM barcodes.sample
+                     WHERE barcode IS NOT NULL)
+                 AND pss.project_id = %s"""
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])

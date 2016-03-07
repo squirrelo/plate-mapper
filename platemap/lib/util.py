@@ -116,9 +116,9 @@ def check_barcode_assigned(barcode):
     ValueError
         Barcode does not exist in database
     """
-    sql = """SELECT barcode, assigned_on, project_id
+    sql = """SELECT barcode, assigned_on, sample_set_id
         FROM barcodes.barcode
-        LEFT JOIN barcodes.project_barcodes USING (barcode)
+        LEFT JOIN barcodes.sample_set_barcodes USING (barcode)
         WHERE barcode = %s
         """
     with TRN:
@@ -128,7 +128,7 @@ def check_barcode_assigned(barcode):
             raise ValueError('Barcode %s does not exist in the DB' % barcode)
         # Check if barcode retrieved has set assigned on date or not
         if barcode_info[0]['assigned_on'] is None and \
-                barcode_info[0]['project_id'] is None:
+                barcode_info[0]['sample_set_id'] is None:
             return False
         return True
 
@@ -153,8 +153,8 @@ def get_barcodes(num_barcodes):
     """
     sql = """SELECT DISTINCT barcode
              FROM barcodes.barcode
-             LEFT JOIN barcodes.project_barcodes USING (barcode)
-             WHERE assigned_on IS NULL AND project_id IS NULL
+             LEFT JOIN barcodes.sample_set_barcodes USING (barcode)
+             WHERE assigned_on IS NULL AND sample_set_id IS NULL
              ORDER BY barcode ASC LIMIT %s
           """
     with TRN:
