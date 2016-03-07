@@ -109,20 +109,6 @@ COMMENT ON TABLE barcodes.project IS 'Project information';
 
 COMMENT ON COLUMN barcodes.project.pi IS 'primary investigator on the study';
 
-CREATE TABLE barcodes.project_barcodes ( 
-	project_id           bigint  NOT NULL,
-	barcode              varchar  NOT NULL,
-	CONSTRAINT idx_project_barcode_1 PRIMARY KEY ( project_id, barcode ),
-	CONSTRAINT fk_project_barcode_0 FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
-	CONSTRAINT fk_project_barcode FOREIGN KEY ( project_id ) REFERENCES barcodes.project( project_id )    
- );
-
-CREATE INDEX idx_project_barcode ON barcodes.project_barcodes ( project_id );
-
-CREATE INDEX idx_project_barcode_0 ON barcodes.project_barcodes ( barcode );
-
-COMMENT ON TABLE barcodes.project_barcodes IS 'Assign barcodes to projects before they are assigned to samples';
-
 CREATE TABLE barcodes.run ( 
 	run_id               bigserial  NOT NULL,
 	run                  varchar(100)  NOT NULL,
@@ -158,6 +144,20 @@ CREATE TABLE barcodes.sample_set (
  );
 
 COMMENT ON TABLE barcodes.sample_set IS 'Distinct set of samples that must have unique sample names in them';
+
+CREATE TABLE barcodes.sample_set_barcodes ( 
+	sample_set_id        bigint  NOT NULL,
+	barcode              varchar  NOT NULL,
+	CONSTRAINT idx_project_barcode_1 PRIMARY KEY ( sample_set_id, barcode ),
+	CONSTRAINT fk_project_barcode_0 FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
+	CONSTRAINT fk_project_barcodes FOREIGN KEY ( sample_set_id ) REFERENCES barcodes.sample_set( sample_set_id )    
+ );
+
+CREATE INDEX idx_project_barcode ON barcodes.sample_set_barcodes ( sample_set_id );
+
+CREATE INDEX idx_project_barcode_0 ON barcodes.sample_set_barcodes ( barcode );
+
+COMMENT ON TABLE barcodes.sample_set_barcodes IS 'Assign barcodes to sample_sets before they are assigned to samples';
 
 CREATE TABLE barcodes.settings ( 
 	test                 bool DEFAULT 'F' NOT NULL
