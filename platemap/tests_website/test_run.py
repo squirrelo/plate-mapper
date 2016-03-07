@@ -24,23 +24,36 @@ class TestGeneratePrepTemplate(TestHandlerBase):
         self.assertEqual(obs.headers['Content-Disposition'],
                          'attachment; filename=prep_metadata.txt')
         self.assertEqual(obs.body.decode(
-            'utf-8'), 'sample_name\tlinker\tfwd_primer\trev_primer\tbarcode\t'
-            'sample_barcode\tbiomass_remaining\textraction_robot\t'
-            'extractionkit_lot\tmastermix_lot\tplate_id\tplate_well\t'
-            'primer_lot\tprocessing_robot\tsample_type\ttm1000_8_tool\t'
-            'tm300_8_tool\ttm50_8_tool\twater_lot\nSample 1.A\tCT\t'
-            'AAAAAAAACCCCTTTTTT\tGGGGGGGGAAAAAAAACC\tCCTCGCATGACC\t000000001\t'
-            'True\texrb001\texkl001\tmm001\t\t\tpr002\tprrb001\tstool\ttm18001'
-            '\ttm38001\ttm58001\twat001\nSample 1.B\tCT\tAAAAAAAACCCCTTTTTT\t'
-            'GGGGGGGGAAAAAAAACC\tAATACAGACCTG\t000000001\tTrue\texrb002\t'
-            'exkl002\tmm002\t000000003\tB2\tpr001\tprrb002\tstool\ttm18002\t'
-            'tm38002\ttm58002\twat002\nSample 2\tCT\tAAAAAAAACCCCTTTTTT\t'
-            'GGGGGGGGAAAAAAAACC\tGGACAAGTGCGA\t000000002\tFalse\texrb002\t'
-            'exkl002\tmm002\t000000003\tB3\tpr001\tprrb002\tstool\ttm18002\t'
-            'tm38002\ttm58002\twat002\nSample 3\tCT\tAAAAAAAACCCCTTTTTT\t'
-            'GGGGGGGGAAAAAAAACC\tACGTATTCGAAG\t\tFalse\texrb002\texkl002\t'
-            'mm002\t000000003\tC4\tpr001\tprrb002\tskin\ttm18002\ttm38002\t'
-            'tm58002\twat002')
+            'utf-8'), self.meta)
+
+    meta = (
+        'sample_name\tlinker\tprimer\tpcr_primers\ttarget_gene\t'
+        'target_subfragment\tbarcode\tsample_barcode\tbiomass_remaining\t'
+        'center_name\texperiment_design_description\textraction_robot\t'
+        'extractionkit_lot\tinstrument_model\tmastermix_lot\tplate_id\t'
+        'plate_well\tplatform\tprimer_lot\tprocessing_robot\trun_center\t'
+        'run_date\trun_prefix\tsequencing_method\ttm1000_8_tool\ttm300_8_tool'
+        '\ttm50_8_tool\twater_lot\nSample 1.A\tCT\tAAAAAAAACCCCTTTTTT\t'
+        'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\tCCTCGCATGACC'
+        '\t000000001\tTrue\tUCSDMI\tINSERT HERE\texrb001\texkl001\t'
+        'Illumina HiSeq 2500\tmm001\t\t\tIllumina\tpr002\tprrb001\tUCSDMI\t'
+        '2016-03-02 01:26:00\tFinalized_Run\tsequencing by synthesis\ttm18001'
+        '\ttm38001\ttm58001\twat001\nSample 1.B\tCT\tAAAAAAAACCCCTTTTTT\t'
+        'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\tAATACAGACCTG'
+        '\t000000001\tTrue\tUCSDMI\tINSERT HERE\texrb002\texkl002\t'
+        'Illumina HiSeq 2500\tmm002\t000000003\tB2\tIllumina\tpr001\tprrb002\t'
+        'UCSDMI\t2016-03-02 01:26:00\tFinalized_Run\tsequencing by synthesis\t'
+        'tm18002\ttm38002\ttm58002\twat002\nSample 2\tCT\tAAAAAAAACCCCTTTTTT\t'
+        'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\tGGACAAGTGCGA'
+        '\t000000002\tFalse\tUCSDMI\tINSERT HERE\texrb002\texkl002\t'
+        'Illumina HiSeq 2500\tmm002\t000000003\tB3\tIllumina\tpr001\tprrb002\t'
+        'UCSDMI\t2016-03-02 01:26:00\tFinalized_Run\tsequencing by synthesis\t'
+        'tm18002\ttm38002\ttm58002\twat002\nSample 3\tCT\tAAAAAAAACCCCTTTTTT\t'
+        'FWD:AAAAAAAACCCCTTTTTT;REV:GGGGGGGGAAAAAAAACC\t16S\tV4\tACGTATTCGAAG'
+        '\t\tFalse\tUCSDMI\tINSERT HERE\texrb002\texkl002\tIllumina HiSeq 2500'
+        '\tmm002\t000000003\tC4\tIllumina\tpr001\tprrb002\tUCSDMI\t'
+        '2016-03-02 01:26:00\tFinalized_Run\tsequencing by synthesis\ttm18002'
+        '\ttm38002\ttm58002\twat002')
 
 
 @rollback_tests()
@@ -53,14 +66,16 @@ class TestRunPageHandler(TestHandlerBase):
 
     def test_post_create(self):
         obs = self.post('/run/view/', {'action': 'create',
-                                       'name': 'newtestrun'})
+                                       'name': 'newtestrun',
+                                       'instrument': 'Illumina MiSeq'})
         self.assertEqual(obs.code, 200)
         self.assertIn('Successfuly created run "newtestrun"',
                       obs.body.decode('utf-8'))
 
     def test_post_create_error(self):
         obs = self.post('/run/view/', {'action': 'create',
-                                       'name': 'Finalized Run'})
+                                       'name': 'Finalized Run',
+                                       'instrument': 'Illumina MiSeq'})
         self.assertEqual(obs.code, 200)
         self.assertIn('The object with name \'Finalized Run\' already exists '
                       'in table \'run\'', obs.body.decode('utf-8'))

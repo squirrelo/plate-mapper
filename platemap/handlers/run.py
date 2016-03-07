@@ -30,7 +30,9 @@ class RunPageHandler(BaseHandler):
     @authenticated
     def get(self):
         runs = pm.run.Run.runs()
-        self.render('view_run.html', runs=runs, msg='')
+        instruments = pm.webhelp.get_instruments()
+        self.render('view_run.html', runs=runs, instruments=instruments,
+                    msg='')
 
     @authenticated
     def post(self):
@@ -38,8 +40,9 @@ class RunPageHandler(BaseHandler):
 
         if action == "create":
             name = self.get_argument('name')
+            instrument = self.get_argument('instrument')
             try:
-                pm.run.Run.create(name, self.current_user.person)
+                pm.run.Run.create(name, self.current_user.person, instrument)
             except Exception as e:
                 msg = str(e)
             else:
@@ -57,7 +60,9 @@ class RunPageHandler(BaseHandler):
             raise HTTPError(400, 'Unknown action %s' % action)
 
         runs = pm.run.Run.runs()
-        self.render('view_run.html', runs=runs, msg=msg)
+        instruments = pm.webhelp.get_instruments()
+        self.render('view_run.html', runs=runs, instruments=instruments,
+                    msg=msg)
 
 
 class RenderRunHandler(BaseHandler):
