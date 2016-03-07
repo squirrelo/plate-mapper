@@ -174,7 +174,8 @@ class Run(pm.base.PMObject):
                         """
         invariant = {'run_center': 'UCSDMI',
                      'center_name': 'UCSDMI',
-                     'run_prefix': self.name,
+                     'experiment_design_description': 'INSERT HERE',
+                     'run_prefix': self.name.replace(' ', '_'),
                      'run_date': self.finalized_on}
         invariant.update(self.instrument)
         del invariant['instrument_id']
@@ -215,6 +216,7 @@ class Run(pm.base.PMObject):
                 # Add invariant info to all samples and add to metadta dict
                 for key in protocol_meta.keys():
                     protocol_meta[key].update(invariant)
+                    del protocol_meta[key]['sample_type']
                 metadata.update(protocol_meta)
 
             # At this point we have the varying metadata dict built
