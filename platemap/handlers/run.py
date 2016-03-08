@@ -80,7 +80,7 @@ class PoolPageHandler(BaseHandler):
         pool_id = self.get_argument('pool_id', None)
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
-        pcr_protocols = pm.protocol.PCRProtocol.protocols()
+        pcr_protocols = pm.webhelp.get_finalized_pcr_protocols()
         self.render('view_pool.html', runs=runs, pools=pools, pool_id=pool_id,
                     protocols=pcr_protocols, msg='')
 
@@ -97,7 +97,17 @@ class PoolPageHandler(BaseHandler):
                 msg = str(e)
             else:
                 msg = 'Successfuly created pool "%s"' % name
-        elif action == "finalize":
+        elif action == 'add':
+            protocol_id = int(self.get_argument('protocol'))
+            pool_id = int(self.get_argument('pool'))
+            try:
+                pool = pm.run.Pool(pool_id)
+                pool.add_protocol(pm.protocol.PCRProtocol(protocol_id))
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = ''
+        elif action == 'finalize':
             pool_id = int(self.get_argument('pool'))
             try:
                 pool = pm.run.Pool(pool_id)
@@ -111,7 +121,7 @@ class PoolPageHandler(BaseHandler):
 
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
-        pcr_protocols = pm.protocol.PCRProtocol.protocols()
+        pcr_protocols = pm.webhelp.get_finalized_pcr_protocols()
         self.render('view_pool.html', runs=runs, pools=pools, msg=msg,
                     protocols=pcr_protocols, pool_id=None)
 

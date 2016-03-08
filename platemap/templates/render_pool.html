@@ -2,7 +2,7 @@
 {% if pool.finalized %}
 Finalized on {{pool.finalized_on}}
 {% else %}
-<button id="add-plate">Add PCR plate</button>
+<button id="add-plate" onclick="show_add()">Add PCR plate</button>
 <form method="POST" action="/pool/view/">
   <input type="submit" value="Finalize Pool">
   <input type="hidden" name="action" value="finalize">

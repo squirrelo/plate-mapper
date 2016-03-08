@@ -1,24 +1,40 @@
 {% extends sitebase.html %}
 {% block head %}
 <script type="text/javascript">
-function render_pool(pool_id) {
-	$.get("/pool/render/" + pool_id)
-		.done(function (data) {
-			$("#msg").text("");
-			$("#render").html(data);
-		}).fail(function () {
-			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
-		});
-}
+  function render_pool(pool_id) {
+    $.get("/pool/render/" + pool_id)
+      .done(function (data) {
+        $("#msg").text("");
+        $("#render").html(data);
+        $("#pool-id").val(pool_id);
+      }).fail(function () {
+        $("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
+      });
+  }
 
-	$(document).ready(function () {
+  function show_add() {
+    dialog_add.dialog( "open" );
+  }
+
+  function render_plate(plate_id) {
+    $.get('/plate/html/' + plate_id)
+      .done(function (data) {
+        $("#platemap").html(data);
+      })
+      .fail(function () {
+        $("#platemap").text("ERROR: could not communicate with server. Please try again in a few minutes");
+      });
+  }
+
+  $(document).ready(function () {
     {% if pool_id %}
     $("#pool").val({{pool_id}});
     render_pool({{pool_id}});
     {% end %}
 
-		$(".chosen").chosen();
-		dialog = $( "#dialog-form" ).dialog({
+    $(".chosen").chosen();
+
+    dialog_create = $( "#dialog-form" ).dialog({
       autoOpen: false,
       height: 500,
       width: 350,
@@ -28,33 +44,60 @@ function render_pool(pool_id) {
           $("#create-form").submit();
         },
         Cancel: function() {
-          dialog.dialog( "close" );
+          dialog_create.dialog( "close" );
         }
       },
       close: function() {
         $("#name").val("");
+        dialog_create.dialog( "close" );
+      }
+    });
+
+    dialog_add = $( "#dialog-form-add-proto" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 900,
+      modal: true,
+      buttons: {
+        "Add PCR Plate": function () {
+          $.post('/pool/view/', $("#add-form").serialize())
+            .done(function (data) {
+              dialog_add.dialog( "close" );
+              render_pool($("#pool").val());
+            })
+            .fail(function (){
+              dialog_add.dialog( "close" );
+              $("#msg").text("ERROR: could not communicate with server. Please try again in a few minutes");
+            });
+        },
+        Cancel: function() {
+          dialog_add.dialog( "close" );
+        }
+      },
+      close: function() {
+        dialog_add.dialog( "close" );
       }
     });
 
     $( "#create-pool" ).on( "click", function() {
-      dialog.dialog( "open" );
+      dialog_create.dialog( "open" );
     });
-	});
+  });
 </script>
 {% end %}
 
 {% block content %}
 <div id="select">
-	<h3>View pool</h3>
-	<div id="msg">{% raw msg %}</div>
+  <h3>View pool</h3>
+  <div id="msg">{% raw msg %}</div>
 
-	View Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
-	<option value=""></option>
-	{% for p in pools %}
-		<option value="{{p.id}}">{{p.name}}</option>
-	{% end %}
-	</select> 
-	Create Pool: <button id="create-pool">Create Pool</button>
+  View Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
+  <option value=""></option>
+  {% for p in pools %}
+    <option value="{{p.id}}">{{p.name}}</option>
+  {% end %}
+  </select>
+  Create Pool: <button id="create-pool">Create Pool</button>
   <hr>
 </div>
 <div id="render"></div>
@@ -78,17 +121,17 @@ function render_pool(pool_id) {
 </div>
 
 <div id="dialog-form-add-proto" title="Create new pool">
-  <form action="/pool/view/" method="POST" id="add-form">
+  <form id="add-form">
       <input type="hidden" name="action" value="add">
+      <input type="hidden" name="pool" id="pool-id">
       PCR Protocol
-      <select style="width:300px;" name="protocol" id="protocol" class="chosen">
+      <select style="width:300px;" name="protocol" id="protocol" class="chosen" onchange="render_plate($(this).children(':selected').attr('barcode'))">
         <option value=""></option>
-        {% for p in protocols %}
-        <option value="{{p.id}}">{{p.created_on}}</option>
+        {% for pid, identifiers in protocols %}
+        <option value="{{pid}}" barcode="{{identifiers.split('-')[1].strip()}}">{{identifiers}}</option>
         {% end %}
       </select>
-      <!-- Allow form submission with keyboard without duplicating the dialog button -->
-      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      <div id="platemap"></div>
     </fieldset>
   </form>
 </div>

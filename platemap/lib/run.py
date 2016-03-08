@@ -454,6 +454,8 @@ class Pool(pm.base.PMObject):
         if self.finalized:
             raise pm.exceptions.EditError('Pool %s already finalized!' %
                                           self.name)
+        if pcr_protocol in self.protocols:
+            return
 
         sql = """INSERT INTO barcodes.pool_samples
                  (pool_id, protocol_settings_id)

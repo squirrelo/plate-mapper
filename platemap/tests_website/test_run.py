@@ -164,6 +164,21 @@ class TestPoolPageHandler(TestHandlerBase):
         self.assertIn('The object with ID \'5\' does not exist in table '
                       '\'pool\'', obs.body.decode('utf-8'))
 
+    def test_post_add(self):
+        obs = self.post('/pool/view/', {'action': 'add',
+                                        'pool': 2,
+                                        'protocol': 4})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Test plate 1', obs.body.decode('utf-8'))
+
+    def test_post_add_error(self):
+        obs = self.post('/pool/view/', {'action': 'add',
+                                        'pool': 2,
+                                        'protocol': 200})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with ID \'200\' does not exist in table '
+                      '\'protocol_settings\'', obs.body.decode('utf-8'))
+
     def test_post_unknown_action(self):
         obs = self.post('/pool/view/', {'action': 'UNKNOWN THING'})
         self.assertEqual(obs.code, 400)

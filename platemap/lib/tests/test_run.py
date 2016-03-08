@@ -187,6 +187,10 @@ class TestPool(TestCase):
 
     def test_add_protocol(self):
         self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+
+        self.pool2.add_protocol(pm.protocol.PCRProtocol(4))
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+
         self.pool2.add_protocol(pm.protocol.PCRProtocol(3))
         self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4),
                                                 pm.protocol.PCRProtocol(3)])
