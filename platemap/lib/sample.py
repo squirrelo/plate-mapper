@@ -353,12 +353,17 @@ class Sample(pm.base.PMObject):
         """
         sql = """SELECT project
                  FROM barcodes.sample
-                 RIGHT JOIN barcodes.project_samples USING (sample_id)
+                 LEFT JOIN barcodes.project_sample_sets USING (sample_set_id)
+                 LEFT JOIN barcodes.project USING (project_id)
+                 WHERE sample_id = %s
+                 UNION
+                 SELECT project
+                 FROM barcodes.project_samples
                  LEFT JOIN barcodes.project USING (project_id)
                  WHERE sample_id = %s
               """
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id])
+            pm.sql.TRN.add(sql, [self.id, self.id])
             projects = pm.sql.TRN.execute_fetchflatten()
             return None if not projects else projects
 
