@@ -64,6 +64,28 @@ class TestRun(TestCase):
         self.run2.finalize(pm.person.Person(1))
         self.assertTrue(self.run2.finalized)
 
+    def test_add_pool(self):
+        pool1 = pm.run.Pool(1)
+        pool2 = pm.run.Pool(2)
+        self.assertEqual(self.run1.pools, [pool1])
+
+        self.run1.add_pool(pool1)
+        self.assertEqual(self.run1.pools, [pool1])
+
+        self.run1.add_pool(pool2)
+        self.assertEqual(self.run1.pools, [pool1, pool2])
+
+    def test_remove_pool(self):
+        pool1 = pm.run.Pool(1)
+        pool2 = pm.run.Pool(2)
+        self.assertEqual(self.run1.pools, [pool1])
+
+        self.run1.remove_pool(pool2)
+        self.assertEqual(self.run1.pools, [pool1])
+
+        self.run1.remove_pool(pool1)
+        self.assertEqual(self.run1.pools, [])
+
     def test_generate_prep_metadata(self):
         self.maxDiff = None
         obs = self.run1.generate_prep_metadata()
@@ -145,8 +167,8 @@ class TestPool(TestCase):
     def test_name(self):
         self.assertEqual(self.pool1.name, 'Finalized Pool')
 
-    def test_run(self):
-        self.assertEqual(self.pool1.run, pm.run.Run(1))
+    def test_runs(self):
+        self.assertEqual(self.pool1.runs, [pm.run.Run(1)])
 
     def test_finalized(self):
         self.assertTrue(self.pool1.finalized)

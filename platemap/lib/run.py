@@ -117,7 +117,7 @@ class Run(pm.base.PMObject):
 
     @property
     def pools(self):
-        sql = "SELECT pool_id FROM barcodes.pool WHERE run_id = %s"
+        sql = "SELECT pool_id FROM barcodes.run_pools WHERE run_id = %s"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
             return [Pool(p) for p in pm.sql.TRN.execute_fetchflatten()]
@@ -140,6 +140,36 @@ class Run(pm.base.PMObject):
               """
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [person.id, self.id])
+
+    def add_pool(self, pool):
+        """Adds a pool to the run
+
+        Parameters
+        ----------
+        pool : Pool object
+            The pool to add to the run
+        """
+        if pool in self.pools:
+            return
+
+        sql = """INSERT INTO barcodes.run_pools (run_id, pool_id)
+                 VALUES (%s, %s)"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id, pool.id])
+
+    def remove_pool(self, pool):
+        """Removes a pool from the run
+
+        Parameters
+        ----------
+        pool : Pool object
+            The pool to remove from the run
+        """
+        sql = """DELETE FROM barcodes.run_pools
+                 WHERE run_id = %s AND pool_id = %s
+              """
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id, pool.id])
 
     def generate_prep_metadata(self):
         """Creates the prep metadata file for the run
@@ -170,6 +200,7 @@ class Run(pm.base.PMObject):
                            RIGHT JOIN barcodes.pool_samples
                                USING (protocol_settings_id)
                            LEFT JOIN barcodes.pool USING (pool_id)
+                           RIGHT JOIN barcodes.run_pools USING (pool_id)
                            WHERE run_id = %s
                         """
         invariant = {'run_center': 'UCSDMI',
@@ -314,11 +345,17 @@ class Pool(pm.base.PMObject):
         if run.finalized:
             raise pm.exceptions.EditError(run.name)
 
-        sql = """INSERT INTO barcodes.pool (run_id, pool, created_by)
-                 VALUES (%s, %s, %s)
-              """
+        pool_sql = """INSERT INTO barcodes.pool (pool, created_by)
+                      VALUES (%s, %s) RETURNING pool_id
+                   """
+        run_sql = """INSERT INTO barcodes.run_pools (run_id, pool_id)
+                     VALUES (%s, %s)
+                  """
+
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [run.id, name, person.id])
+            pm.sql.TRN.add(pool_sql, [name, person.id])
+            pool_id = pm.sql.TRN.execute_fetchlast()
+            pm.sql.TRN.add(run_sql, [run.id, pool_id])
 
     @staticmethod
     def exists(name, run):
@@ -340,6 +377,7 @@ class Pool(pm.base.PMObject):
         sql = """SELECT EXISTS(
                      SELECT *
                      FROM barcodes.pool
+                     JOIN barcodes.run_pools USING (pool_id)
                      WHERE pool = %s AND run_id = %s)"""
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [name, run.id])
@@ -361,8 +399,11 @@ class Pool(pm.base.PMObject):
         return self._get_property('pool')
 
     @property
-    def run(self):
-        return Run(self._get_property('run_id'))
+    def runs(self):
+        sql = "SELECT run_id FROM barcodes.run_pools WHERE pool_id = %s"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])
+            return [Run(r) for r in pm.sql.TRN.execute_fetchflatten()]
 
     @property
     def protocols(self):
