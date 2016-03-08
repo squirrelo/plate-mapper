@@ -64,6 +64,29 @@ COMMENT ON COLUMN barcodes.plate."rows" IS 'Number of rows on plate';
 
 COMMENT ON COLUMN barcodes.plate.cols IS 'Number of columns on plate';
 
+CREATE TABLE barcodes.pool ( 
+	pool_id              bigserial  NOT NULL,
+	pool                 varchar(100)  NOT NULL,
+	created_on           timestamp DEFAULT current_timestamp NOT NULL,
+	created_by           bigint  NOT NULL,
+	finalized            bool DEFAULT 'F' NOT NULL,
+	finalized_on         timestamp  ,
+	finalized_by         bigint  ,
+	CONSTRAINT idx_pool_2 UNIQUE ( pool ) ,
+	CONSTRAINT pk_pool PRIMARY KEY ( pool_id ),
+	CONSTRAINT fk_pool_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
+	CONSTRAINT fk_pool_1 FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    ,
+	CONSTRAINT fk_pool_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    
+ );
+
+CREATE INDEX idx_pool_0 ON barcodes.pool ( created_by );
+
+CREATE INDEX idx_pool_1 ON barcodes.pool ( finalized_by );
+
+COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane for sequencing';
+
+COMMENT ON COLUMN barcodes.pool.pool IS 'Name of the pool';
+
 CREATE TABLE barcodes.primer_set ( 
 	primer_set_id        bigserial  NOT NULL,
 	primer_set           varchar  ,
@@ -135,6 +158,18 @@ COMMENT ON TABLE barcodes.run IS 'Full run, equivalent to a multi-lane sequencin
 
 COMMENT ON COLUMN barcodes.run.run IS 'Name of the run';
 
+CREATE TABLE barcodes.run_pools ( 
+	run_id               bigint  NOT NULL,
+	pool_id              bigint  NOT NULL,
+	CONSTRAINT idx_run_pools PRIMARY KEY ( run_id, pool_id ),
+	CONSTRAINT fk_run_pools FOREIGN KEY ( run_id ) REFERENCES barcodes.run( run_id )    ,
+	CONSTRAINT fk_run_pools_0 FOREIGN KEY ( pool_id ) REFERENCES barcodes.pool( pool_id )    
+ );
+
+CREATE INDEX idx_run_pools_0 ON barcodes.run_pools ( run_id );
+
+CREATE INDEX idx_run_pools_1 ON barcodes.run_pools ( pool_id );
+
 CREATE TABLE barcodes.sample_set ( 
 	sample_set_id        bigserial  NOT NULL,
 	sample_set           varchar(100)  NOT NULL,
@@ -182,33 +217,6 @@ COMMENT ON COLUMN barcodes."user".user_id IS 'username of the user';
 COMMENT ON COLUMN barcodes."user".pass IS 'bcrypt hashed password';
 
 COMMENT ON COLUMN barcodes."user"."access" IS 'What access the user is allowed';
-
-CREATE TABLE barcodes.pool ( 
-	pool_id              bigserial  NOT NULL,
-	run_id               bigint  ,
-	pool                 varchar(100)  NOT NULL,
-	created_on           timestamp DEFAULT current_timestamp NOT NULL,
-	created_by           bigint  NOT NULL,
-	finalized            bool DEFAULT 'F' NOT NULL,
-	finalized_on         timestamp  ,
-	finalized_by         bigint  ,
-	CONSTRAINT idx_pool_2 UNIQUE ( pool ) ,
-	CONSTRAINT pk_pool PRIMARY KEY ( pool_id ),
-	CONSTRAINT fk_pool FOREIGN KEY ( run_id ) REFERENCES barcodes.run( run_id )    ,
-	CONSTRAINT fk_pool_0 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_pool_1 FOREIGN KEY ( finalized_by ) REFERENCES barcodes.person( person_id )    ,
-	CONSTRAINT fk_pool_2 FOREIGN KEY ( created_by ) REFERENCES barcodes.person( person_id )    
- );
-
-CREATE INDEX idx_pool ON barcodes.pool ( run_id );
-
-CREATE INDEX idx_pool_0 ON barcodes.pool ( created_by );
-
-CREATE INDEX idx_pool_1 ON barcodes.pool ( finalized_by );
-
-COMMENT ON TABLE barcodes.pool IS 'Pool of samples, equivalent to a single lane for sequencing';
-
-COMMENT ON COLUMN barcodes.pool.pool IS 'Name of the pool';
 
 CREATE TABLE barcodes.project_sample_sets ( 
 	project_id           bigint  NOT NULL,

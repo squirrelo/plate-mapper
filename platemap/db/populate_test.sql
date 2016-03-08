@@ -70,8 +70,10 @@ INSERT INTO barcodes.run (run, created_on, created_by, finalized, finalized_on, 
 ('Finalized Run', '2016-03-02 1:25:00', 1, 'T', '2016-03-02 1:26:00', 1, 1),
 ('Non-finalized Run', '2016-03-02 1:27:00', 1, 'F', NULL, NULL, 2);
 
-INSERT INTO barcodes.pool (run_id, pool, created_on, created_by, finalized, finalized_on, finalized_by) VALUES
-(1, 'Finalized Pool', '2016-03-02 1:20:00', 2, 'T', '2016-03-02 1:21:00', 2),
-(2, 'Non-finalized Pool', '2016-03-02 1:22:00', 2, 'F', NULL, NULL);
+INSERT INTO barcodes.pool (pool, created_on, created_by, finalized, finalized_on, finalized_by) VALUES
+('Finalized Pool', '2016-03-02 1:20:00', 2, 'T', '2016-03-02 1:21:00', 2),
+('Non-finalized Pool', '2016-03-02 1:22:00', 2, 'F', NULL, NULL);
+
+INSERT INTO barcodes.run_pools (run_id, pool_id) VALUES (1, 1), (2, 2);
 
 INSERT INTO barcodes.pool_samples (pool_id, protocol_settings_id) VALUES (1, 3), (1, 4), (2, 4);

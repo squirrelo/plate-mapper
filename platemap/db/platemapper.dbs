@@ -150,7 +150,6 @@
 		<table name="pool" >
 			<comment><![CDATA[Pool of samples, equivalent to a single lane for sequencing]]></comment>
 			<column name="pool_id" type="bigserial" jt="-5" mandatory="y" />
-			<column name="run_id" type="bigint" jt="-5" />
 			<column name="pool" type="varchar" length="100" jt="12" mandatory="y" >
 				<comment><![CDATA[Name of the pool]]></comment>
 			</column>
@@ -163,9 +162,6 @@
 			</column>
 			<column name="finalized_on" type="timestamp" jt="93" />
 			<column name="finalized_by" type="bigint" jt="-5" />
-			<index name="idx_pool" unique="NORMAL" >
-				<column name="run_id" />
-			</index>
 			<index name="idx_pool_0" unique="NORMAL" >
 				<column name="created_by" />
 			</index>
@@ -178,9 +174,6 @@
 			<index name="pk_pool" unique="PRIMARY_KEY" >
 				<column name="pool_id" />
 			</index>
-			<fk name="fk_pool" to_schema="barcodes" to_table="run" >
-				<fk_column name="run_id" pk="run_id" />
-			</fk>
 			<fk name="fk_pool_0" to_schema="barcodes" to_table="person" >
 				<fk_column name="created_by" pk="person_id" />
 			</fk>
@@ -373,6 +366,26 @@
 			</fk>
 			<fk name="fk_run_1" to_schema="barcodes" to_table="instrument" >
 				<fk_column name="instrument_id" pk="instrument_id" />
+			</fk>
+		</table>
+		<table name="run_pools" >
+			<column name="run_id" type="bigint" jt="-5" mandatory="y" />
+			<column name="pool_id" type="bigint" jt="-5" mandatory="y" />
+			<index name="idx_run_pools" unique="PRIMARY_KEY" >
+				<column name="run_id" />
+				<column name="pool_id" />
+			</index>
+			<index name="idx_run_pools_0" unique="NORMAL" >
+				<column name="run_id" />
+			</index>
+			<index name="idx_run_pools_1" unique="NORMAL" >
+				<column name="pool_id" />
+			</index>
+			<fk name="fk_run_pools" to_schema="barcodes" to_table="run" >
+				<fk_column name="run_id" pk="run_id" />
+			</fk>
+			<fk name="fk_run_pools_0" to_schema="barcodes" to_table="pool" >
+				<fk_column name="pool_id" pk="pool_id" />
 			</fk>
 		</table>
 		<table name="sample" >
@@ -22162,19 +22175,20 @@ AS $function$xpath_exists$function$
 		<entity schema="barcodes" name="access_controls" color="b7c8e3" x="615" y="525" />
 		<entity schema="barcodes" name="plate" color="b7c8e3" x="690" y="105" />
 		<entity schema="barcodes" name="plates_samples" color="b7c8e3" x="465" y="105" />
-		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1005" y="420" />
-		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1005" y="570" />
+		<entity schema="barcodes" name="protocol_settings" color="b7c8e3" x="1005" y="480" />
+		<entity schema="barcodes" name="extraction_settings" color="b7c8e3" x="1005" y="630" />
 		<entity schema="barcodes" name="settings" color="b7c8e3" x="45" y="780" />
 		<entity schema="barcodes" name="project" color="b7c8e3" x="300" y="615" />
 		<entity schema="barcodes" name="primer_set_lots" color="b7c8e3" x="780" y="690" />
-		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1005" y="675" />
-		<entity schema="barcodes" name="pool" color="b7c8e3" x="1140" y="45" />
+		<entity schema="barcodes" name="pcr_settings" color="b7c8e3" x="1005" y="735" />
 		<entity schema="barcodes" name="primer_set" color="b7c8e3" x="585" y="690" />
-		<entity schema="barcodes" name="run" color="b7c8e3" x="1140" y="210" />
-		<entity schema="barcodes" name="instrument" color="b7c8e3" x="1275" y="390" />
 		<entity schema="barcodes" name="project_sample_sets" color="b7c8e3" x="300" y="525" />
 		<entity schema="barcodes" name="sample_set_barcodes" color="b7c8e3" x="75" y="525" />
 		<entity schema="barcodes" name="project_samples" color="b7c8e3" x="75" y="615" />
+		<entity schema="barcodes" name="run" color="b7c8e3" x="945" y="225" />
+		<entity schema="barcodes" name="pool" color="b7c8e3" x="1140" y="45" />
+		<entity schema="barcodes" name="run_pools" color="b7c8e3" x="1155" y="210" />
+		<entity schema="barcodes" name="instrument" color="b7c8e3" x="1155" y="300" />
 		<group name="Group_samples" color="c4e0f9" >
 			<entity schema="barcodes" name="plates_samples" />
 			<entity schema="barcodes" name="plate" />
@@ -22189,6 +22203,8 @@ AS $function$xpath_exists$function$
 			<entity schema="barcodes" name="pool" />
 			<entity schema="barcodes" name="pool_samples" />
 			<entity schema="barcodes" name="run" />
+			<entity schema="barcodes" name="instrument" />
+			<entity schema="barcodes" name="run_pools" />
 		</group>
 		<group name="Group_settings" color="c4e0f9" >
 			<entity schema="barcodes" name="protocol_settings" />
