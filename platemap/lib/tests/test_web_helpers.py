@@ -46,7 +46,7 @@ class TestWebHelpers(TestCase):
 
     def test_get_instruments(self):
         obs = pm.webhelp.get_instruments()
-        exp = ['454 GS FLX Titanium', '454 GS FLX+', 'Illumina HiSeq 2500',
+        exp = ['454 GS FLX+', '454 GS FLX Titanium', 'Illumina HiSeq 2500',
                'Illumina MiSeq']
         self.assertEqual(obs, exp)
 
