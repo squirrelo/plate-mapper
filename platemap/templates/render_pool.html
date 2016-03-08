@@ -1,13 +1,13 @@
 <h3>Pool {{pool.name}}</h3>
-{% if not pool.finalized %}
+{% if pool.finalized %}
+Finalized on {{pool.finalized_on}}
+{% else %}
 <button id="add-plate">Add PCR plate</button>
 <form method="POST" action="/pool/view/">
   <input type="submit" value="Finalize Pool">
   <input type="hidden" name="action" value="finalize">
   <input type="hidden" name="pool" value="{{pool.id}}">
 </form>
-{% else %}
-Finalized on {{pool.finalized_on}}
 {% end %}
 
 <table class="table pool-table">

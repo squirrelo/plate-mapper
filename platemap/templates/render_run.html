@@ -1,6 +1,7 @@
 <h3>Run {{run.name}}</h3>
 
 {% if run.finalized %}
+Finalized on {{run.finalized_on}}
 <form method="GET" action="/run/gen_prep/{{run.id}}">
   <input type="submit" value="Download Prep Metadata">
 </form>
@@ -10,8 +11,6 @@
   <input type="hidden" name="action" value="finalize">
   <input type="hidden" name="run" value="{{run.id}}">
 </form>
-{% else %}
-Finalized on {{run.finalized_on}}
 {% end %}
 
 <h4>Pools</h4>
