@@ -71,6 +71,11 @@ class TestExtractionProtocol(TestCase):
         with self.assertRaises(pm.exceptions.UnknownIDError):
             pm.protocol.ExtractionProtocol(4)
 
+    def test_protocols(self):
+        obs = pm.protocol.ExtractionProtocol.protocols()
+        exp = [self.extract_protocol1, self.extract_protocol2]
+        self.assertEqual(obs, exp)
+
     def test_create(self):
         obs = pm.protocol.ExtractionProtocol.create(
             pm.person.Person(3), 'exkl004', 'exrb004', 'tm18004',
@@ -157,6 +162,11 @@ class TestPCRProtocol(TestCase):
     def test_instantiate_wrong_subclass(self):
         with self.assertRaises(pm.exceptions.UnknownIDError):
             pm.protocol.PCRProtocol(1)
+
+    def test_protocols(self):
+        obs = pm.protocol.PCRProtocol.protocols()
+        exp = [self.pcr_protocol3, self.pcr_protocol4]
+        self.assertEqual(obs, exp)
 
     def test_create(self):
         obs = pm.protocol.PCRProtocol.create(

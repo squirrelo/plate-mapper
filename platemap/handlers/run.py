@@ -116,4 +116,5 @@ class RenderPoolHandler(BaseHandler):
     @authenticated
     def get(self, pool_id):
         pool = pm.run.Pool(int(pool_id))
-        self.render('render_pool.html', pool=pool)
+        pcr_protocols = pm.protocol.PCRProtocol.protocols()
+        self.render('render_pool.html', pool=pool, protocols=pcr_protocols)

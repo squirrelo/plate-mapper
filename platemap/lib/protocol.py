@@ -12,6 +12,21 @@ class ProtocolBase(pm.base.PMObject):
     _table = 'protocol_settings'
     _subtable = None
 
+    @classmethod
+    def protocols(cls):
+        """Returns list of all protocols available in database
+
+        Returns
+        -------
+        list of *Protocol objects
+            list of all protocols available
+        """
+        sql = "SELECT protocol_settings_id FROM barcodes.{0}".format(
+            cls._subtable)
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql)
+            return [cls(p) for p in pm.sql.TRN.execute_fetchflatten()]
+
     @staticmethod
     def _create_protocol(person, sample=None, plate=None):
         """Creates a new protocol.

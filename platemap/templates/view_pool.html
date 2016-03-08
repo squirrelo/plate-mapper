@@ -48,13 +48,14 @@ function render_pool(pool_id) {
 	<h3>View pool</h3>
 	<div id="msg">{% raw msg %}</div>
 
-	<p>Select Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
+	View Pool: <select style="width:350px;" name="pool" id="pool" class="chosen" onchange="render_pool(this.value)">
 	<option value=""></option>
 	{% for p in pools %}
 		<option value="{{p.id}}">{{p.name}}</option>
 	{% end %}
-	</select></p>
-	<button id="create-pool">Create Pool</button>
+	</select> 
+	Create Pool: <button id="create-pool">Create Pool</button>
+  <hr>
 </div>
 <div id="render"></div>
 

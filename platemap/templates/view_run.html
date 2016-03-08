@@ -44,13 +44,14 @@ function render_run(run_id) {
 	<h3>View run</h3>
 	<div id="msg">{% raw msg %}</div>
 
-	<p>Select Run: <select style="width:350px;" name="run" id="run" onchange="render_run(this.value)">
+  View Run: <select style="width:350px;" name="run" id="run" onchange="render_run(this.value)">
 	<option value=""></option>
 	{% for r in runs %}
 		<option value="{{r.id}}">{{r.name}}</option>
 	{% end %}
-	</select></p>
-	<button id="create-run">Create Run</button>
+	</select>
+	Create Run: <button id="create-run">Create Run</button>
+  <hr>
 </div>
 <div id="render"></div>
 
