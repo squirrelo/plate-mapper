@@ -31,8 +31,9 @@ class RunPageHandler(BaseHandler):
     def get(self):
         runs = pm.run.Run.runs()
         instruments = pm.webhelp.get_instruments()
+        pools = pm.run.Pool.pools(finalized=True)
         self.render('view_run.html', runs=runs, instruments=instruments,
-                    msg='')
+                    pools=pools, msg='')
 
     @authenticated
     def post(self):
@@ -61,8 +62,9 @@ class RunPageHandler(BaseHandler):
 
         runs = pm.run.Run.runs()
         instruments = pm.webhelp.get_instruments()
+        pools = pm.run.Pool.pools(finalized=True)
         self.render('view_run.html', runs=runs, instruments=instruments,
-                    msg=msg)
+                    pools=pools, msg=msg)
 
 
 class RenderRunHandler(BaseHandler):
@@ -78,8 +80,9 @@ class PoolPageHandler(BaseHandler):
         pool_id = self.get_argument('pool_id', None)
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
+        pcr_protocols = pm.protocol.PCRProtocol.protocols()
         self.render('view_pool.html', runs=runs, pools=pools, pool_id=pool_id,
-                    msg='')
+                    protocols=pcr_protocols, msg='')
 
     @authenticated
     def post(self):
@@ -108,13 +111,13 @@ class PoolPageHandler(BaseHandler):
 
         pools = pm.run.Pool.pools()
         runs = pm.run.Run.runs()
+        pcr_protocols = pm.protocol.PCRProtocol.protocols()
         self.render('view_pool.html', runs=runs, pools=pools, msg=msg,
-                    pool_id=None)
+                    protocols=pcr_protocols, pool_id=None)
 
 
 class RenderPoolHandler(BaseHandler):
     @authenticated
     def get(self, pool_id):
         pool = pm.run.Pool(int(pool_id))
-        pcr_protocols = pm.protocol.PCRProtocol.protocols()
-        self.render('render_pool.html', pool=pool, protocols=pcr_protocols)
+        self.render('render_pool.html', pool=pool)

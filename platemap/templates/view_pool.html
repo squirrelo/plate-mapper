@@ -77,4 +77,20 @@ function render_pool(pool_id) {
   </form>
 </div>
 
+<div id="dialog-form-add-proto" title="Create new pool">
+  <form action="/pool/view/" method="POST" id="add-form">
+      <input type="hidden" name="action" value="add">
+      PCR Protocol
+      <select style="width:300px;" name="protocol" id="protocol" class="chosen">
+        <option value=""></option>
+        {% for p in protocols %}
+        <option value="{{p.id}}">{{p.created_on}}</option>
+        {% end %}
+      </select>
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+
 {% end %}

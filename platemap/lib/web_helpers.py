@@ -109,3 +109,24 @@ def get_instruments():
     with pm.sql.TRN:
         pm.sql.TRN.add(sql)
         return pm.sql.TRN.execute_fetchflatten()
+
+
+def get_finalized_pcr_protocols():
+    """Returns a list of finalized PCR protocols
+
+    Returns
+    -------
+    list of list of (int, str)
+        List of list of protocol id and formatted protocol info
+    """
+    sql = """SELECT protocol_settings_id,
+             plate || ' - ' || plate_id || ' - ' || created_on
+             FROM barcodes.pcr_settings
+             JOIN barcodes.protocol_settings USING (protocol_settings_id)
+             LEFT JOIN (SELECT plate_id, plate FROM barcodes.plate) AS P
+                 USING (plate_id)
+             WHERE plate_id IS NOT NULL
+          """
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql)
+        return pm.sql.TRN.execute_fetchindex()

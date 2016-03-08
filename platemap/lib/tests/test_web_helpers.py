@@ -50,6 +50,11 @@ class TestWebHelpers(TestCase):
                'Illumina MiSeq']
         self.assertCountEqual(obs, exp)
 
+    def test_get_finalized_pcr_protocols(self):
+        obs = pm.webhelp.get_finalized_pcr_protocols()
+        exp = [[4, 'Test plate 1 - 000000003 - 2016-02-28 00:00:00']]
+        self.assertEqual(obs, exp)
+
 
 if __name__ == '__main__':
     main()
