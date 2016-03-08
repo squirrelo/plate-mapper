@@ -419,6 +419,10 @@ class Pool(pm.base.PMObject):
     def finalized(self):
         return self._get_property('finalized')
 
+    @property
+    def finalized_on(self):
+        return self._get_property('finalized_on')
+
     def finalize(self, person):
         """Finalize the run so no more pools can be added
 

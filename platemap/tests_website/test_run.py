@@ -8,10 +8,10 @@
 from unittest import main
 
 from platemap.tests_website.tornado_test_base import TestHandlerBase
-from platemap.lib.util import rollback_tests
+import platemap as pm
 
 
-@rollback_tests()
+@pm.lib.util.rollback_tests()
 class TestGeneratePrepTemplate(TestHandlerBase):
     def test_get(self):
         obs = self.get('/run/gen_prep/1')
@@ -56,7 +56,7 @@ class TestGeneratePrepTemplate(TestHandlerBase):
         '\ttm38002\ttm58002\twat002')
 
 
-@rollback_tests()
+@pm.lib.util.rollback_tests()
 class TestRunPageHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/run/view/')
@@ -86,6 +86,7 @@ class TestRunPageHandler(TestHandlerBase):
         self.assertEqual(obs.code, 200)
         self.assertIn('Successfuly finalized run "Non-finalized Run"',
                       obs.body.decode('utf-8'))
+        self.assertTrue(pm.run.Run(2).finalized)
 
     def test_post_finalize_error(self):
         obs = self.post('/run/view/', {'action': 'finalize',
@@ -99,7 +100,7 @@ class TestRunPageHandler(TestHandlerBase):
         self.assertEqual(obs.code, 400)
 
 
-@rollback_tests()
+@pm.lib.util.rollback_tests()
 class TestRenderRunHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/run/render/1')
@@ -118,7 +119,7 @@ class TestRenderRunHandler(TestHandlerBase):
                       obs.body.decode('utf-8'))
 
 
-@rollback_tests()
+@pm.lib.util.rollback_tests()
 class TestPoolPageHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/pool/view/')
@@ -154,6 +155,7 @@ class TestPoolPageHandler(TestHandlerBase):
         self.assertEqual(obs.code, 200)
         self.assertIn('Successfuly finalized pool "Non-finalized Pool"',
                       obs.body.decode('utf-8'))
+        self.assertTrue(pm.run.Pool(2).finalized)
 
     def test_post_finalize_error(self):
         obs = self.post('/pool/view/', {'action': 'finalize',
@@ -167,14 +169,15 @@ class TestPoolPageHandler(TestHandlerBase):
         self.assertEqual(obs.code, 400)
 
 
-@rollback_tests()
+@pm.lib.util.rollback_tests()
 class TestPoolHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/pool/render/2')
         self.assertEqual(obs.code, 200)
         self.assertIn('<td>Test plate 1<br/>000000003<br/><br/>Primer Set 1'
-                      '<br/>pr001</td>', obs.body.decode('utf-8'))
-        self.assertIn('<input type="submit" value="Finalize Run">',
+                      '<br/>pr001<br/>2016-02-28 00:00:00</td>',
+                      obs.body.decode('utf-8'))
+        self.assertIn('<input type="submit" value="Finalize Pool">',
                       obs.body.decode('utf-8'))
 
 if __name__ == '__main__':

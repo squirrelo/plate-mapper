@@ -1,4 +1,6 @@
 from unittest import TestCase, main
+from datetime import datetime
+
 import platemap as pm
 
 
@@ -173,6 +175,10 @@ class TestPool(TestCase):
     def test_finalized(self):
         self.assertTrue(self.pool1.finalized)
         self.assertFalse(self.pool2.finalized)
+
+    def test_finalized_on(self):
+        self.assertEqual(self.pool1.finalized_on, datetime(2016, 3, 2, 1, 21))
+        self.assertEqual(self.pool2.finalized_on, None)
 
     def test_finalize(self):
         self.assertFalse(self.pool2.finalized)
