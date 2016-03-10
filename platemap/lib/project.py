@@ -177,17 +177,19 @@ class Project(pm.base.PMObject):
                      sample_set, array_agg(sample_id ORDER BY sample)
                      AS samps
                  FROM barcodes.sample
-                 LEFT JOIN barcodes.project_sample_sets USING (sample_set_id)
+                 LEFT JOIN barcodes.project_sample_sets P USING (sample_set_id)
                  LEFT JOIN barcodes.project USING (project_id)
                  LEFT JOIN barcodes.sample_set USING (sample_set_id)
-                 WHERE project_id = %s OR sample_set_id IN (
+                 LEFT JOIN barcodes.project_samples PS USING (sample_id)
+                 WHERE PS.project_id = %s OR p.project_id = %s
+                 OR sample_set_id IN (
                    SELECT sample_set_id
                    FROM barcodes.project_sample_sets
                    WHERE project_id = %s)
                  GROUP BY sample_set
               """
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id, self.id])
+            pm.sql.TRN.add(sql, [self.id, self.id, self.id])
             ret = {}
             for row in pm.sql.TRN.execute_fetchindex():
                 ret[row['sample_set']] = [pm.sample.Sample(s)
