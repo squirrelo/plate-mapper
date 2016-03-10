@@ -333,3 +333,24 @@ class Plate(pm.base.PMObject):
         sql = "UPDATE barcodes.plate SET finalized = 'T' WHERE plate_id = %s"
         with pm.sql.TRN:
             pm.sql.TRN.add(sql, [self.id])
+
+    def revert(self, user):
+        """Reverts the plate from finalized to editable
+
+        Parameters
+        ----------
+        user : User object
+            User requesting the revert
+
+        Raises
+        ------
+        AssignError
+            User is not an admin
+        """
+        # Make sure user is admin
+        if not user.check_access('Admin'):
+            raise pm.exceptions.AssignError('User %s is not admin!' % user)
+
+        sql = "UPDATE barcodes.plate SET finalized = 'F' WHERE plate_id = %s"
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [self.id])

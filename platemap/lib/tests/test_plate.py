@@ -192,6 +192,16 @@ class TestPlate(TestCase):
         self.plate.finalize()
         self.assertTrue(self.plate.finalized)
 
+    def test_revert(self):
+        self.plate.finalize()
+        self.assertTrue(self.plate.finalized)
+        self.plate.revert(pm.person.User('User1'))
+        self.assertFalse(self.plate.finalized)
+
+    def test_revert_not_admin(self):
+        with self.assertRaises(pm.exceptions.AssignError):
+            self.plate.revert(pm.person.User('User2'))
+
 
 if __name__ == "__main__":
     main()
