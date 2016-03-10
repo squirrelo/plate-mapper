@@ -31,9 +31,10 @@ class TestSample(TestCase):
     def test_from_file(self):
         file = StringIO('sample_name\tother_col\ntest1\tval1\ntest2\tval2\n')
         self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
-        pm.sample.Sample.from_file(file, 'test', 'freezer', 'Sample Set 1',
-                                   pm.person.Person(1))
+        obs = pm.sample.Sample.from_file(file, 'test', 'freezer',
+                                         'Sample Set 1', pm.person.Person(1))
         self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
+        self.assertEqual(obs, 2)
 
     def test_from_file_comma_sep(self):
         file = StringIO('sample_name,other_col\ntest1,val1\ntest2,val2\n')

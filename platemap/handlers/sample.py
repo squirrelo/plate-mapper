@@ -32,14 +32,15 @@ class SampleCreateHandler(BaseHandler):
             fileinfo = self.request.files['file'][0]
             file = StringIO(fileinfo['body'].decode('utf-8'))
             try:
-                pm.sample.Sample.from_file(
+                count = pm.sample.Sample.from_file(
                     file, sample_type, sample_location, sample_set,
                     self.current_user.person, None)
             except Exception as e:
                 # Catch any error and show to user
                 msg = str(e)
             else:
-                msg = 'Created samples from %s' % fileinfo['filename']
+                msg = 'Created %d samples from %s' % (count,
+                                                      fileinfo['filename'])
         else:
             name = self.get_argument('sample')
             barcode = self.get_argument('barcode', None)

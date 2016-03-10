@@ -78,7 +78,7 @@ class TestSampleCreateHandler(TestHandlerBase):
         obs = self.post('/sample/add/', m.to_string(),
                         headers={'Content-Type': m.content_type})
         self.assertEqual(obs.code, 200)
-        self.assertIn('Created samples from test_bc.txt',
+        self.assertIn('Created 2 samples from test_bc.txt',
                       obs.body.decode('utf-8'))
         self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 2)
 

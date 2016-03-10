@@ -65,6 +65,11 @@ class Sample(pm.base.PMObject):
         sep : str, optional
             Seperator used between the name and barcodes. Default tab
 
+        Returns
+        -------
+        int
+            Number of samples added
+
         Notes
         -----
         File format is a header line first, with first column sample name and,
@@ -81,11 +86,14 @@ class Sample(pm.base.PMObject):
 
         # This just wraps create for each sample so we get all the checks
         # from create but can add multiple samples at a time
+        count = 0
         for line in file:
             line = line.strip()
             info = line.split(sep) if barcodes else [line, None]
             cls.create(info[0], sample_type, sample_location, sample_set,
                        person, projects=None, barcode=info[barcode_pos])
+            count += 1
+        return count
 
     @classmethod
     def search(cls, name=None, biomass_remaining=None, sample_type=None,
