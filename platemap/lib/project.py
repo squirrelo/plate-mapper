@@ -174,7 +174,8 @@ class Project(pm.base.PMObject):
             Samples in the form {sample_set: [samp1, samp2, ...], ...}
         """
         sql = """SELECT
-                     sample_set, array_agg(sample_id ORDER BY sample)
+                     sample_set,
+                     array_agg(DISTINCT sample_id ORDER BY sample_id)
                      AS samps
                  FROM barcodes.sample
                  LEFT JOIN barcodes.project_sample_sets P USING (sample_set_id)
