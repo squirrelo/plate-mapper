@@ -81,6 +81,14 @@ class TestRunPageHandler(TestHandlerBase):
                       'in table \'run\'', obs.body.decode('utf-8'))
 
     def test_post_finalize(self):
+        obs = self.post('/run/view/', {'action': 'add',
+                                       'pool': 1})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Successfuly finalized run "Non-finalized Run"',
+                      obs.body.decode('utf-8'))
+        self.assertTrue(pm.run.Run(2).finalized)
+
+    def test_post_add(self):
         obs = self.post('/run/view/', {'action': 'finalize',
                                        'run': 2})
         self.assertEqual(obs.code, 200)
