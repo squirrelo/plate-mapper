@@ -118,7 +118,7 @@ class TestUser(TestCase):
         obs = pm.person.User.create(
             'NewUser', 'newpass', 'New Person', 'new@foo.bar',
             '111 fake street', 'UCSD', '112-2222',
-            ['Override'])
+            'Override')
 
         self.assertEqual(obs.id, 'NewUser')
         self.assertEqual(obs.access, 3)
@@ -130,6 +130,13 @@ class TestUser(TestCase):
         self.assertEqual(person.address, '111 fake street')
         self.assertEqual(person.affiliation, 'UCSD')
         self.assertEqual(person.phone, '112-2222')
+
+    def test_create_bad_access(self):
+        with self.assertRaises(pm.lib.exceptions.DeveloperError):
+            pm.person.User.create(
+                'NewUser', 'newpass', 'New Person', 'new@foo.bar',
+                '111 fake street', 'UCSD', '112-2222',
+                'Unknown')
 
     def test_create_exists(self):
         with self.assertRaises(pm.exceptions.DuplicateError):

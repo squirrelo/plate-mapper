@@ -62,6 +62,7 @@ class CreateUserHandler(BaseHandler):
             raise HTTPError(403, 'User %s is not admin!' %
                             self.current_user.id)
         levels = pm.webhelp.get_access_levels()
+        levels.remove('Basic access')
         self.render('create_user.html', levels=levels, msg='')
 
     @authenticated
@@ -74,13 +75,15 @@ class CreateUserHandler(BaseHandler):
         password = self.get_argument('password')
         name = self.get_argument('name')
         email = self.get_argument('email')
-        access = self.get_argument('access')
+        access = self.get_argument('access', None)
         try:
             pm.person.User.create(username, password, name, email,
                                   access=access)
-        except Exception as e:
+        except (pm.lib.exceptions.DuplicateError,
+                pm.lib.exceptions.DuplicateError) as e:
             msg = str(e)
             levels = pm.webhelp.get_access_levels()
+            levels.remove('Basic access')
             self.render('create_user.html', levels=levels, msg=msg)
         else:
             self.redirect('/?msg=Successfully+created+user+%s' % username)

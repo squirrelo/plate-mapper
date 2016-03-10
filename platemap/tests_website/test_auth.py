@@ -8,10 +8,10 @@
 from unittest import main
 
 from platemap.tests_website.tornado_test_base import TestHandlerBase
-from platemap.lib.util import rollback_tests
+import platemap as pm
 
 
-@rollback_tests()
+@pm.util.rollback_tests()
 class TestAuthLoginHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/auth/login/')
@@ -39,11 +39,43 @@ class TestAuthLoginHandler(TestHandlerBase):
         self.assertIn('Bad password', obs.body.decode('utf-8'))
 
 
-@rollback_tests()
+@pm.util.rollback_tests()
 class TestAuthLogoutHandler(TestHandlerBase):
     def test_get(self):
         obs = self.get('/auth/logout/')
         self.assertEqual(obs.code, 200)
+
+
+@pm.util.rollback_tests()
+class TestCreateUserHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/user/add/')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Admin', obs.body.decode('utf-8'))
+        self.assertNotIn('Basic access', obs.body.decode('utf-8'))
+
+    def test_post(self):
+        obs = self.post('/user/add/', {'username': 'newUser',
+                                       'password': 'somePass',
+                                       'name': 'New User',
+                                       'email': 'new@user.com',
+                                       'access': 'Override'})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Successfully created user newUser',
+                      obs.body.decode('utf-8'))
+        # Instantiate the user to make sure was added correctly
+        user = pm.person.User('newUser')
+        self.assertTrue(user.authenticate('somePass'))
+
+    def test_post_bad(self):
+        obs = self.post('/user/add/', {'username': 'User1',
+                                       'password': 'somePass',
+                                       'name': 'New User',
+                                       'email': 'new@user.com',
+                                       'access': 'No Idea!'})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with name \'User1\' already exists in table '
+                      '\'user\'', obs.body.decode('utf-8'))
 
 
 if __name__ == '__main__':

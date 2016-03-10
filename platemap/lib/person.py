@@ -191,8 +191,12 @@ class User(pm.base.PMObject):
                 access_int = 1
             else:
                 pm.sql.TRN.add(access_sql, [access])
+                value = pm.sql.TRN.execute_fetchlast()
+                if value is None:
+                    raise pm.exceptions.DeveloperError(
+                        'Unknown access level: %s' % access)
                 # Add 1 so don't have to specify basic access
-                access_int = 1 + pm.sql.TRN.execute_fetchlast()
+                access_int = 1 + value
             encrypt_pass = bcrypt.encrypt(password)
             pm.sql.TRN.add(user_sql, [username, encrypt_pass, access_int,
                            person_id])
