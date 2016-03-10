@@ -80,15 +80,24 @@ class TestRunPageHandler(TestHandlerBase):
         self.assertIn('The object with name \'Finalized Run\' already exists '
                       'in table \'run\'', obs.body.decode('utf-8'))
 
-    def test_post_finalize(self):
+    def test_post_add(self):
         obs = self.post('/run/view/', {'action': 'add',
+                                       'run': 2,
                                        'pool': 1})
         self.assertEqual(obs.code, 200)
-        self.assertIn('Successfuly finalized run "Non-finalized Run"',
-                      obs.body.decode('utf-8'))
-        self.assertTrue(pm.run.Run(2).finalized)
+        self.assertIn('View Run: ', obs.body.decode('utf-8'))
+        self.assertEqual(pm.run.Run(2).pools, [pm.run.Pool(2), pm.run.Pool(1)])
 
-    def test_post_add(self):
+    def test_post_add_error(self):
+        obs = self.post('/run/view/', {'action': 'add',
+                                       'run': 2,
+                                       'pool': 5})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('The object with ID \'5\' does not exist in table '
+                      '\'pool\'', obs.body.decode('utf-8'))
+        self.assertEqual(pm.run.Run(2).pools, [pm.run.Pool(2)])
+
+    def test_post_finalize(self):
         obs = self.post('/run/view/', {'action': 'finalize',
                                        'run': 2})
         self.assertEqual(obs.code, 200)
