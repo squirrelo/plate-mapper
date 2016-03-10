@@ -6,7 +6,7 @@ Finalized on {{run.finalized_on}}
   <input type="submit" value="Download Prep Metadata">
 </form>
 {% else %}
-<button id="add-pool">Add pool</button>
+<button id="add-pool" onclick="dialog_add.dialog('open');">Add pool</button>
 <form method="POST" action="/run/view/">
   <input type="submit" value="Finalize Run">
   <input type="hidden" name="action" value="finalize">

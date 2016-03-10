@@ -148,9 +148,16 @@ class Run(pm.base.PMObject):
         ----------
         pool : Pool object
             The pool to add to the run
+
+        Raises
+        ------
+        AssignError
+            Pool is not finalized
         """
         if pool in self.pools:
             return
+        if not pool.finalized:
+            raise pm.exceptions.AssignError('Pool %d not finalized!' % pool.id)
 
         sql = """INSERT INTO barcodes.run_pools (run_id, pool_id)
                  VALUES (%s, %s)"""

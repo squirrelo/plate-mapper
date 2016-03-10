@@ -74,8 +74,13 @@ class TestRun(TestCase):
         self.run1.add_pool(pool1)
         self.assertEqual(self.run1.pools, [pool1])
 
+        pool2.finalize(pm.person.Person(1))
         self.run1.add_pool(pool2)
         self.assertEqual(self.run1.pools, [pool1, pool2])
+
+    def test_add_pool_not_finalized(self):
+        with self.assertRaises(pm.exceptions.AssignError):
+            self.run1.add_pool(pm.run.Pool(2))
 
     def test_remove_pool(self):
         pool1 = pm.run.Pool(1)

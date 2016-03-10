@@ -48,6 +48,16 @@ class RunPageHandler(BaseHandler):
                 msg = str(e)
             else:
                 msg = 'Successfuly created run "%s"' % name
+        elif action == 'add':
+            pool_id = int(self.get_argument('pool'))
+            run_id = int(self.get_argument('run'))
+            try:
+                run = pm.run.Run(run_id)
+                run.add_pool(pm.run.Pool(pool_id))
+            except Exception as e:
+                msg = str(e)
+            else:
+                msg = ''
         elif action == "finalize":
             run_id = int(self.get_argument('run'))
             try:
