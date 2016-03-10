@@ -5,7 +5,7 @@
 #
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
-from tornado.web import authenticated
+from tornado.web import authenticated, HTTPError
 from tornado.escape import url_escape
 
 from platemap.handlers.base import BaseHandler
@@ -53,3 +53,34 @@ class AuthLogoutHandler(AuthBasehandler):
     def get(self):
         self.set_current_user()
         self.redirect('/')
+
+
+class CreateUserHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        if not self.current_user.check_access('Admin'):
+            raise HTTPError(403, 'User %s is not admin!' %
+                            self.current_user.id)
+        levels = pm.webhelp.get_access_levels()
+        self.render('create_user.html', levels=levels, msg='')
+
+    @authenticated
+    def post(self):
+        if not self.current_user.check_access('Admin'):
+            raise HTTPError(403, 'User %s is not admin!' %
+                            self.current_user.id)
+
+        username = self.get_argument('username')
+        password = self.get_argument('password')
+        name = self.get_argument('name')
+        email = self.get_argument('email')
+        access = self.get_argument('access')
+        try:
+            pm.person.User.create(username, password, name, email,
+                                  access=access)
+        except Exception as e:
+            msg = str(e)
+            levels = pm.webhelp.get_access_levels()
+            self.render('create_user.html', levels=levels, msg=msg)
+        else:
+            self.redirect('/?msg=Successfully+created+user+%s' % username)

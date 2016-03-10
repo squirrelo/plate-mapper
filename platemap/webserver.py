@@ -14,7 +14,8 @@ from tornado.options import define, options, parse_command_line
 
 from platemap.lib.config_manager import pm_config
 from platemap.handlers.base import MainHandler, NoPageHandler
-from platemap.handlers.auth import AuthLoginHandler, AuthLogoutHandler
+from platemap.handlers.auth import (AuthLoginHandler, AuthLogoutHandler,
+                                    CreateUserHandler)
 from platemap.handlers.sample import SampleCreateHandler
 from platemap.handlers.plate import (PlateCreateHandler, PlateEditHandler,
                                      PlateEditableRenderHandler,
@@ -56,6 +57,7 @@ class PMApplication(Application):
             (r'/run/gen_prep/(.*)', GeneratePrepTemplate),
             (r'/pool/view/', PoolPageHandler),
             (r'/pool/render/(.*)', RenderPoolHandler),
+            (r'/user/add/', CreateUserHandler),
             # 404 PAGE MUST BE LAST IN THIS LIST!
             (r".*", NoPageHandler)
         ]

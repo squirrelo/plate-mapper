@@ -55,6 +55,11 @@ class TestWebHelpers(TestCase):
         exp = [[4, 'Test plate 1 - 000000003 - 2016-02-28 00:00:00']]
         self.assertEqual(obs, exp)
 
+    def test_get_access_levels(self):
+        obs = pm.webhelp.get_access_levels()
+        exp = ['Basic access', 'Override', 'Admin']
+        self.assertEqual(obs, exp)
+
 
 if __name__ == '__main__':
     main()

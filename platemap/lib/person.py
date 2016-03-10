@@ -150,8 +150,8 @@ class User(pm.base.PMObject):
             Person's place of work
         phone : str, optional
             Person's phone number
-        access : list of str
-            What functions user has access to. If not given, basic access only
+        access : str
+            What level user has access to. If not given, basic access only
 
         Returns
         -------
@@ -171,9 +171,9 @@ class User(pm.base.PMObject):
                       (user_id, pass, access, person_id)
                       VALUES (%s,%s,%s, %s) RETURNING user_id
                      """
-        access_sql = """SELECT SUM(access_value)
+        access_sql = """SELECT access_value
                         FROM barcodes.access_controls
-                        WHERE access_level IN %s"""
+                        WHERE access_level = %s"""
         with pm.sql.TRN:
             if cls.exists(username, email):
                 if Person.exists(email):
@@ -190,7 +190,7 @@ class User(pm.base.PMObject):
                 # 1 == Basic access
                 access_int = 1
             else:
-                pm.sql.TRN.add(access_sql, [tuple(access)])
+                pm.sql.TRN.add(access_sql, [access])
                 # Add 1 so don't have to specify basic access
                 access_int = 1 + pm.sql.TRN.execute_fetchlast()
             encrypt_pass = bcrypt.encrypt(password)

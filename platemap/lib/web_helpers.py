@@ -130,3 +130,20 @@ def get_finalized_pcr_protocols():
     with pm.sql.TRN:
         pm.sql.TRN.add(sql)
         return pm.sql.TRN.execute_fetchindex()
+
+
+def get_access_levels():
+    """Returns access levels available, in order of increasing access
+
+    Returns
+    -------
+    list of str
+        Available access levels
+    """
+    sql = """SELECT access_level
+             FROM barcodes.access_controls
+             ORDER BY access_value
+          """
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql)
+        return pm.sql.TRN.execute_fetchflatten()
