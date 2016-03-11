@@ -17,6 +17,6 @@ Requirements
  
  2) Copy `platemap_config.txt.example` to `platemap_config.txt` in the same folder. Update settings in the new copy to match your system.
  
- 2) Initialize the database by calling `platemap make`. You can optionallly add a `-t` flag to populate the test database.
+ 2) Initialize the database by calling `platemap make`. You can optionallly add a `-t` flag to set the database to test mode and populate with test data.
  
- 3) Start the webserver by calling `python webserver.py`
+ 3) Start the webserver by calling `python webserver.py`. Navigate to `http://localhost:7778` in your browser to start using the tool. If you have populated with the test data, the username is `User1` and password is `password`. 
