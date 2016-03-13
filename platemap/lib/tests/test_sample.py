@@ -119,6 +119,23 @@ class TestSample(TestCase):
         self.assertTrue(isinstance(obs.created_on, datetime))
         self.assertTrue(isinstance(obs.last_scanned, datetime))
 
+    def test_create_preassigned_barcode(self):
+        obs = pm.sample.Sample.create(
+            'test sample', 'test', 'in the mail', 'Sample Set 3',
+            pm.person.Person(3), barcode='000000004')
+
+        self.assertEqual(obs.name, 'test sample')
+        self.assertEqual(obs.sample_type, 'test')
+        self.assertEqual(obs.location, 'in the mail')
+        self.assertEqual(obs.sample_set, 'Sample Set 3')
+        self.assertEqual(obs.created_by, pm.person.Person(3))
+        self.assertEqual(obs.last_scanned_by, pm.person.Person(3))
+        self.assertEqual(obs.projects, ['Project 3'])
+        self.assertEqual(obs.barcode, '000000004')
+        self.assertTrue(pm.util.check_barcode_assigned('000000004'))
+        self.assertTrue(isinstance(obs.created_on, datetime))
+        self.assertTrue(isinstance(obs.last_scanned, datetime))
+
     def test_create_with_projects(self):
         obs = pm.sample.Sample.create(
             'test sample', 'test', 'in the mail', 'Sample Set 1',
@@ -145,7 +162,7 @@ class TestSample(TestCase):
         with self.assertRaises(ValueError):
             pm.sample.Sample.create(
                 'test sample new', 'test', 'in the mail', 'Sample Set 2',
-                pm.person.Person(3), barcode='000000001')
+                pm.person.Person(3), barcode='000000004')
 
     def test_create_sample_exists(self):
         with self.assertRaises(pm.exceptions.DuplicateError):
