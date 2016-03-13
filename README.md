@@ -7,12 +7,12 @@ plate-mapper
 Knight lab internal sample and protocol tracking. Used to track all wet lab information for prep metadata generation
 
 Requirements
-------------
+============
  - Python 3
  - Postgres 9.3+
 
- Setup
- -----
+Setup
+=====
  1) Install using setup.py
  
  2) Copy `platemap_config.txt.example` to `platemap_config.txt` in the same folder. Update settings in the new copy to match your system.
