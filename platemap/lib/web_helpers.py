@@ -147,3 +147,26 @@ def get_access_levels():
     with pm.sql.TRN:
         pm.sql.TRN.add(sql)
         return pm.sql.TRN.execute_fetchflatten()
+
+
+def revert_plate(user, plate_id):
+    """Reverts a plate back from finalized state. Only available to admins.
+
+    Parameters
+    ----------
+    user : User object
+      User requesting the revert
+    plate_id : int
+      Plate to revert
+
+    Raises
+    ------
+    ValueError
+        User is not admin
+    """
+    if not user.check_access('Admin'):
+        raise ValueError('User %s is not admin!' % user.id)
+
+    sql = "UPDATE barcodes.plate SET finalized = 'F' WHERE plate_id = %s"
+    with pm.sql.TRN:
+        pm.sql.TRN.add(sql, [plate_id])

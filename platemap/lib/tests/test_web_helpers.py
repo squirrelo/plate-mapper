@@ -60,6 +60,25 @@ class TestWebHelpers(TestCase):
         exp = ['Basic access', 'Override', 'Admin']
         self.assertEqual(obs, exp)
 
+    def test_revert_plate(self):
+        user = pm.person.User('User1')
+        plate = pm.plate.Plate('000000003')
+        plate.finalize()
+        self.assertTrue(plate.finalized)
+
+        pm.webhelp.revert_plate(user, plate.id)
+        self.assertFalse(plate.finalized)
+
+    def test_revert_plate_nonadmin(self):
+        user = pm.person.User('User2')
+        plate = pm.plate.Plate('000000003')
+        plate.finalize()
+        self.assertTrue(plate.finalized)
+
+        with self.assertRaises(ValueError):
+            pm.webhelp.revert_plate(user, plate.id)
+        self.assertTrue(plate.finalized)
+
 
 if __name__ == '__main__':
     main()

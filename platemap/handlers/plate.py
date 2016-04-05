@@ -98,3 +98,18 @@ class PlateUpdateHandler(BaseHandler):
             return
         else:
             raise HTTPError(400, 'Unknown action %s' % action)
+
+
+class PlateRevertHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        plates = pm.plate.Plate.plates(finalized=True)
+        self.render('revert_plate.html', plates=plates)
+
+    @authenticated
+    def post(self):
+        plate_id = int(self.get_argument('plate-id'))
+        pm.webhelp.revert_plate(self.current_user, plate_id)
+
+        plates = pm.plate.Plate.plates(finalized=True)
+        self.render('revert_plate.html', plates=plates)
