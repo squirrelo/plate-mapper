@@ -142,5 +142,27 @@ class TestPlateUpdateHandler(TestHandlerBase):
         self.assertEqual(obs.code, 400)
 
 
+@rollback_tests()
+class TestRevertHandler(TestHandlerBase):
+    def test_get(self):
+        pm.plate.Plate('000000003').finalize()
+        self.assertTrue(pm.plate.Plate('000000003').finalized)
+        obs = self.get('/plate/revert/')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<option value="000000003">000000003 - '
+                      'Test plate 1</option>', obs.body.decode('utf-8'))
+
+    def test_post(self):
+        pm.plate.Plate('000000003').finalize()
+        self.assertTrue(pm.plate.Plate('000000003').finalized)
+        obs = self.post('/plate/revert/', {'plate-id': '000000003'})
+        self.assertEqual(obs.code, 200)
+        self.assertNotIn('<option value="000000003">000000003 - '
+                         'Test plate 1</option>', obs.body.decode('utf-8'))
+        self.assertIn('Successfully reverted 000000003',
+                      obs.body.decode('utf-8'))
+        self.assertFalse(pm.plate.Plate('000000003').finalized)
+
+
 if __name__ == '__main__':
     main()

@@ -1,0 +1,40 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+function render_plate(plate_id) {
+	$.get("/plate/html/" + plate_id)
+		.done(function (data) {
+			$("#render").html(data);
+			$("#msg").text("");
+			$("#form-div").show();
+			$("#plate-id").val($("#platemap-select").val());
+		})
+		.fail(function () {
+			$("#msg").text("ERROR: Could not communicate with server. Please try again in a few minutes");
+		});
+}
+
+	$(document).ready(function () {
+		$("#platemap-select").chosen();
+	});
+</script>
+{% end %}
+
+{% block content %}
+<div id="select">
+	<h3>View/Edit Platemap</h3>
+	<div id="msg">{{msg}}</div>
+	Select platemap: <select style="width:350px;" name="platemap-select" id="platemap-select" onchange="render_plate(this.value)">
+	<option value=""></option>
+	{% for p in plates %}
+		<option value="{{p.id}}">{{p.id}} - {{p.name}}</option>
+	{% end %}
+	</select>
+</div>
+<div id="render"></div>
+<div id="form-div" hidden>
+	<form id="revert-form" method="POST" action="/plate/revert/">
+	<input type="hidden" name="plate-id", id="plate-id">
+	<input type="submit" value="Revert Plate">
+</div>
+{% end %}

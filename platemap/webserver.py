@@ -20,7 +20,7 @@ from platemap.handlers.sample import SampleCreateHandler, SampleEditHandler
 from platemap.handlers.plate import (PlateCreateHandler, PlateEditHandler,
                                      PlateEditableRenderHandler,
                                      PlateStaticRenderHandler,
-                                     PlateUpdateHandler)
+                                     PlateUpdateHandler, PlateRevertHandler)
 from platemap.handlers.protocol import LogExtractionHandler, LogPCRHandler
 from platemap.handlers.project import CreateProjectHandler, ViewProjectHandler
 from platemap.handlers.run import (RunPageHandler, RenderRunHandler,
@@ -49,6 +49,7 @@ class PMApplication(Application):
             (r'/plate/render/(.*)', PlateEditableRenderHandler),
             (r'/plate/html/(.*)', PlateStaticRenderHandler),
             (r'/plate/update/', PlateUpdateHandler),
+            (r'/plate/revert/', PlateRevertHandler),
             (r'/project/add/', CreateProjectHandler),
             (r'/project/view/', ViewProjectHandler),
             (r'/log/extraction/', LogExtractionHandler),

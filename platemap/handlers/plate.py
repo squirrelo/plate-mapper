@@ -104,12 +104,16 @@ class PlateRevertHandler(BaseHandler):
     @authenticated
     def get(self):
         plates = pm.plate.Plate.plates(finalized=True)
-        self.render('revert_plate.html', plates=plates)
+        self.render('revert_plate.html', plates=plates, msg='')
 
     @authenticated
     def post(self):
-        plate_id = int(self.get_argument('plate-id'))
-        pm.webhelp.revert_plate(self.current_user, plate_id)
+        plate_id = self.get_argument('plate-id')
+        msg = "Successfully reverted %s" % plate_id
+        try:
+            pm.webhelp.revert_plate(self.current_user, plate_id)
+        except Exception as e:
+            msg = "ERROR: " + str(e)
 
         plates = pm.plate.Plate.plates(finalized=True)
-        self.render('revert_plate.html', plates=plates)
+        self.render('revert_plate.html', plates=plates, msg=msg)
