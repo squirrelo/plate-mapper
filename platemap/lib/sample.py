@@ -379,13 +379,52 @@ class Sample(pm.base.PMObject):
     def sample_type(self):
         return self._get_property('sample_type')
 
+    @sample_type.setter
+    def sample_type(self, sample_type):
+        """Changes type of sample
+
+        location : str
+            New location of sample
+        """
+        sql = """UPDATE barcodes.sample
+                 SET sample_type = %s
+                 WHERE sample_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [sample_type, self.id])
+
     @property
     def location(self):
         return self._get_property('sample_location')
 
+    @location.setter
+    def location(self, location):
+        """Changes location of sample
+
+        location : str
+            New location of sample
+        """
+        sql = """UPDATE barcodes.sample
+                 SET sample_location = %s
+                 WHERE sample_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [location, self.id])
+
     @property
     def biomass_remaining(self):
         return self._get_property('biomass_remaining')
+
+    @biomass_remaining.setter
+    def biomass_remaining(self, remaining):
+        """Changes biomass remaining flag on sample
+
+        remaining : bool
+            Whether biomass remains or not
+        """
+        sql = """UPDATE barcodes.sample
+                 SET biomass_remaining = %s
+                 WHERE sample_id = %s"""
+        with pm.sql.TRN:
+            pm.sql.TRN.add(sql, [remaining, self.id])
 
     @property
     def created_on(self):

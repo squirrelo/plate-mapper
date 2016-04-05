@@ -101,5 +101,70 @@ class TestSampleCreateHandler(TestHandlerBase):
         self.assertEqual(len(pm.sample.Sample.search(sample_type='test')), 0)
 
 
+@rollback_tests()
+class TestSampleEditHandler(TestHandlerBase):
+    def test_get(self):
+        obs = self.get('/sample/edit/?sample-id=1')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<td> 000000001 </td>', obs.body.decode('utf-8'))
+        self.assertIn('<input type="checkbox" checked="True" name="remaining"'
+                      ' id="remaining">', obs.body.decode('utf-8'))
+
+        obs = self.get('/sample/edit/?sample-id=3')
+        self.assertEqual(obs.code, 200)
+        self.assertIn('<input type="text" name="barcode" id="barcode">',
+                      obs.body.decode('utf-8'))
+        self.assertIn('<input type="checkbox" checked="False" name="remaining"'
+                      ' id="remaining">', obs.body.decode('utf-8'))
+
+    def test_get_nosample(self):
+        obs = self.get('/sample/edit/')
+        self.assertEqual(obs.code, 400)
+
+    def test_post(self):
+        data = {
+            'sample-id': 1,
+            'location': 'the other test thing',
+            'type': 'skin'
+        }
+        obs = self.post('/sample/edit/', data)
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Updated successfully', obs.body.decode('utf-8'))
+
+        sample = pm.sample.Sample(1)
+        self.assertFalse(sample.biomass_remaining)
+        self.assertEqual(sample.location, 'the other test thing')
+        self.assertEqual(sample.sample_type, 'skin')
+        self.assertEqual(sample.barcode, '000000001')
+
+        data = {
+            'sample-id': 3,
+            'location': 'the other test thing',
+            'type': 'skin',
+            'barcode': '000000007'
+        }
+        obs = self.post('/sample/edit/', data)
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Updated successfully', obs.body.decode('utf-8'))
+
+        sample = pm.sample.Sample(3)
+        self.assertFalse(sample.biomass_remaining)
+        self.assertEqual(sample.location, 'the other test thing')
+        self.assertEqual(sample.sample_type, 'skin')
+        self.assertEqual(sample.barcode, '000000007')
+
+    def test_post_error(self):
+        data = {
+            'sample-id': 1,
+            'location': 'the other test thing',
+            'type': 'skin',
+            'barcode': '000000001'
+        }
+        obs = self.post('/sample/edit/', data)
+        self.assertEqual(obs.code, 200)
+        self.assertIn('ERROR: Barcode 000000001 already assigned',
+                      obs.body.decode('utf-8'))
+
+
 if __name__ == '__main__':
     main()

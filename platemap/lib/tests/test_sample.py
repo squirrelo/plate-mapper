@@ -216,13 +216,25 @@ class TestSample(TestCase):
     def test_sample_type(self):
         self.assertEqual(self.sample1.sample_type, 'stool')
 
+    def test_sample_type_setter(self):
+        self.sample1.sample_type = 'test type'
+        self.assertEqual(self.sample1.sample_type, 'test type')
+
     def test_sample_location(self):
         self.assertEqual(self.sample1.location, 'the freezer')
         self.assertEqual(self.sample3.location, 'the other freezer')
 
+    def test_sample_location_setter(self):
+        self.sample1.location = 'NEW TEST PLACE!'
+        self.assertEqual(self.sample1.location, 'NEW TEST PLACE!')
+
     def test_biomass_remaining(self):
         self.assertTrue(self.sample1.biomass_remaining)
         self.assertFalse(self.sample3.biomass_remaining)
+
+    def test_biomass_remaining_setter(self):
+        self.sample1.biomass_remaining = False
+        self.assertFalse(self.sample1.biomass_remaining)
 
     def test_created_on(self):
         self.assertEqual(self.sample1.created_on, datetime(2016, 2, 22, 8, 52))

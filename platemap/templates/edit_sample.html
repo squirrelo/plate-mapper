@@ -1,0 +1,25 @@
+{% extends sitebase.html %}
+{% block head %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#sample-form").validate();
+    $("#type").autocomplete({ source: {% raw types %} });
+    $("#location").autocomplete({ source: {% raw locations %} });
+  });
+</script>
+{% end %}
+{% block content %}
+<h3>Edit {{sample.name}} Information</h3>
+<span style="color:red;">{% raw msg %}</span>
+<form method="POST" action="/sample/edit/">
+<input type="hidden" name="sample-id" value="{{sample.id}}">
+<table class="table">
+<tr><td>Sample Barcode</td><td>{% if sample.barcode %} {{sample.barcode}} {% else %}<input type="text" name="barcode" id="barcode">{% end %}</td></tr>
+<tr><td>Sample Type</td><td><input type="text" value="{{sample.sample_type}}" name="type" id="type" required></td></tr>
+<tr><td>Sample Location</td><td><input type="text" value="{{sample.location}}" name="location" id="location" required></td></tr>
+<tr><td>Sample Remaining</td><td><input type="checkbox" checked="{{sample.biomass_remaining}}" name="remaining" id="remaining"></td></tr>
+</table>
+<hr>
+<input type="submit" value="Update sample">
+</form>
+{% end %}

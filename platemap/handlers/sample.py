@@ -61,3 +61,41 @@ class SampleCreateHandler(BaseHandler):
         locations = pm.sample.Sample.locations()
         self.render('add_sample.html', sets=sets, types=types,
                     locations=locations, msg=msg)
+
+
+class SampleEditHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        sample_id = int(self.get_argument('sample-id'))
+        sample = pm.sample.Sample(sample_id)
+        types = pm.sample.Sample.types()
+        locations = pm.sample.Sample.locations()
+        sample = pm.sample.Sample(sample_id)
+        self.render('edit_sample.html', types=types, locations=locations,
+                    sample=sample, msg='')
+
+    @authenticated
+    def post(self):
+        sample_id = int(self.get_argument('sample-id'))
+        sample = pm.sample.Sample(sample_id)
+        sample_type = self.get_argument('type').strip()
+        sample_location = self.get_argument('location').strip()
+        remaining = self.get_argument('remaining', False)
+        remaining = bool(remaining)
+        barcode = self.get_argument('barcode', '').strip()
+        msg = 'Updated successfully'
+
+        try:
+            sample.sample_type = sample_type
+            sample.location = sample_location
+            sample.biomass_remaining = remaining
+            if barcode:
+                sample.barcode = barcode
+        except Exception as e:
+            # Show any error to the user
+            msg = 'ERROR: ' + str(e)
+
+        types = pm.sample.Sample.types()
+        locations = pm.sample.Sample.locations()
+        self.render('edit_sample.html', types=types, locations=locations,
+                    sample=sample, msg=msg)
