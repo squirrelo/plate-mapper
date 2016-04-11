@@ -59,7 +59,7 @@ class TestSample(TestCase):
         self.assertEqual(obs, exp)
 
         obs = pm.sample.Sample.search(biomass_remaining=True)
-        exp = [pm.sample.Sample(1), pm.sample.Sample(4)]
+        exp = [pm.sample.Sample(1), pm.sample.Sample(4), pm.sample.Sample(5)]
         self.assertEqual(obs, exp)
 
         obs = pm.sample.Sample.search(sample_type='stool')
@@ -75,19 +75,16 @@ class TestSample(TestCase):
         self.assertEqual(obs, exp)
 
         obs = pm.sample.Sample.search(project='Project 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(2)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
         obs = pm.sample.Sample.search(sample_set='Sample Set 2')
-        exp = [pm.sample.Sample(2), pm.sample.Sample(5)]
-        self.assertEqual(obs, exp)
-
-        obs = pm.sample.Sample.search(protocol='Protocol 2')
-        exp = [pm.sample.Sample(2), pm.sample.Sample(5)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5)]
         self.assertEqual(obs, exp)
 
         # TODO: finish these tests as objects are made
         # pm.sample.Sample.search(primer_set=)
+        # pm.sample.Sample.search(protocol=)
 
     def test_search_no_parameters(self):
         with self.assertRaises(pm.exceptions.DeveloperError):
@@ -261,24 +258,25 @@ class TestSample(TestCase):
 
     def test_add_project(self):
         obs = pm.sample.Sample.search(project='Project 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(2)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
         self.sample3.add_project('Project 2')
         obs = pm.sample.Sample.search(project='Project 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(2), pm.sample.Sample(3)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5), pm.sample.Sample(2),
+               pm.sample.Sample(3)]
         self.assertEqual(obs, exp)
 
     def test_add_project_already_in(self):
         sample = pm.sample.Sample(2)
         obs = pm.sample.Sample.search(project='Project 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(2)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
         #
         sample.add_project('Project 2')
         obs = pm.sample.Sample.search(project='Project 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(2)]
+        exp = [pm.sample.Sample(4), pm.sample.Sample(5), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
     def test_remove_project(self):
