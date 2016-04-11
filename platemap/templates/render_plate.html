@@ -13,6 +13,22 @@
   </tr>
 {% end %}
 </table>
+
+<div id="select-sample-modal" title="Multiple samples found. Select Sample Set.">
+  <h4>Multiple samples with that name. Select sample set.</h4>
+  <form id="select-sample-form">
+      <input type="hidden" name="sample" id="sample-name-multi">
+      <input type="hidden" name="rowcol" id="rowcol-multi">
+      <input type="hidden" name="plate_id" value="{{plate_id}}">
+      <input type="hidden" name="action" value="update">
+      <table class="Table">
+        <tr><td>Sample Name</td><td id='view-sample-name-multi'></td></tr>
+        <tr><td>Sample Set</td><td>
+        <select name="sample-set" id="sample-set-multi" required></select></td></tr>
+    </table>
+  </form>
+</div>
+
 {% if override %}
 <p><input type="checkbox" name="override" id="override"> <label for="override"> Override Sample Check</label></p>
 
@@ -58,43 +74,71 @@
   }
 {% end %}
 
-  var rowcol = null;
   function update(elem) {
     var obj = $("#" + elem.id);
     if(obj.val() === "") { return; }
-    rowcol = elem.id;
-    $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: elem.id, sample: obj.val()})
+    data = {rowcol: elem.id, sample: obj.val()}
+    post_sample_update(data, obj);
+  }
+
+  function update_with_sample_set() {
+    var elem = $("#" + $("#rowcol-multi").val());
+    data = $("#select-sample-form").serialize();
+    post_sample_update(data, elem);
+  }
+
+  function post_sample_update(data, elem) {
+    data.action = "update";
+    data.plate_id = "{{plate_id}}";
+    $.post('/plate/update/', data)
         .done(function (data) {
-          if(data !== "") {
-            if($("#override") != null && $("#override").prop('checked')) {
-              obj.css("background-color", "yellow");
+          if(data.msg !== "") {
+            if(data.hasOwnProperty('sample_sets')) {
+              //Multiple samples with that name, pick which sample set you want
+              $("#sample-name-multi").val(elem.val());
+              $("#view-sample-name-multi").text(elem.val());
+              $("#rowcol-multi").val(elem.attr('id'));
+              select = $("#sample-set-multi");
+              select.html('');
+              var o = new Option("", "");
+              //Fix for IE8+
+              $(o).html("");
+              select.append(o);
+              for(var i=0;i<data.sample_sets.length;i++) {
+                var o = new Option(data.sample_sets[i], data.sample_sets[i]);
+                //Fix for IE8+
+                $(o).html(data.sample_sets[i]);
+                select.append(o);
+              }
+              select_sample.dialog( "open" );
+            } else if($("#override") != null && $("#override").prop('checked')) {
+              elem.css("background-color", "yellow");
               clear_override();
               dialog.dialog( "open" );
-              $("#sample-name").val(obj.val());
-              $("#view-sample-name").text(obj.val());
+              $("#sample-name").val(elem.val());
+              $("#view-sample-name").text(elem.val());
               $("#message").text("");
             } else {
-              fade(obj, "red");
-              obj.val("");
+              fade(elem, "red");
+              elem.val("");
               $("#message").css("color", "red");
-              $("#message").text(data);
+              $("#message").text(data.msg);
             }
           } else {
-            fade(obj, "green");
+            fade(elem, "green");
             $("#message").css("color", "green");
-            $("#message").text("Successfully edited " + obj.val());
+            $("#message").text("Successfully edited " + elem.val());
           }
-        });
-    }
+      });
+  }
 
-
-    function fade(obj, color) {
-      obj.css("background", color);
-      setTimeout(function(){
-          obj.css("background-color", "white"); // reset background
-          obj.effect("highlight", {color: color}, 200); // animate
-      },200);
-    }
+  function fade(obj, color) {
+    obj.css("background", color);
+    setTimeout(function(){
+        obj.css("background-color", "white"); // reset background
+        obj.effect("highlight", {color: color}, 200); // animate
+    },200);
+  }
 
   {% if override %}
   function clear_override() {
@@ -108,21 +152,7 @@
   function add_sample(elem) {
     $.post('/sample/add/', $("#create-sample-form").serialize())
       .done(function (data) {
-        console.log({ action: 'update', plate_id: "{{plate_id}}", rowcol: rowcol, sample: $("#sample-name").val()});
-        $.post('/plate/update/', { action: 'update', plate_id: "{{plate_id}}", rowcol: rowcol, sample: $("#sample-name").val()})
-          .done(function(data){
-            if(data != "") {
-              $("#message").css("color", "red");
-              $("#message").text(data);
-            } else {
-              $("#message").css("color", "green");
-              $("#message").text("Added sample " + $("#sample-name").val());
-            }
-            $("#" + rowcol).css("background-color", "white");
-          })
-          .fail(function() {
-            $("#message").text("Could not add sample " + $("#sample-name").val() + " to plate {{plate_id}}");
-          });
+        post_sample_update({rowcol: rowcol, sample: $("#sample-name").val()});
       })
       .fail(function () {
         $("#message").text("Could not add sample " + $("#sample-name").val());
@@ -143,7 +173,26 @@
       },
       Cancel: function() {
         dialog.dialog( "close" );
+      }
+    },
+    close: function() {
+    }
+  });
 
+select_sample = $( "#select-sample-modal" ).dialog({
+    autoOpen: false,
+    height: 200,
+    width: 600,
+    modal: true,
+    buttons: {
+      "Add Sample": function () {
+        if($("#select-sample-form").valid()) {
+          update_with_sample_set();
+          select_sample.dialog( "close" );
+          }
+      },
+      Cancel: function() {
+        select_sample.dialog( "close" );
       }
     },
     close: function() {

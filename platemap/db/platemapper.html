@@ -303,38 +303,6 @@ pool_samples ref protocol_settings ( protocol_settings_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 915 90 L 907,90 Q 900,90 900,97 L 900,502 Q 900,510 907,510 L 990,510' ></path>
 <text x='806' y='85' transform='rotate(0 806,85)' title='Fk fk_pool_samples_0
 pool_samples ref protocol_settings ( protocol_settings_id )' style='fill:#cfc391;'>protocol_settings_id</text>
-<!-- ============= Fk 'sample_fk_samples' ============= -->
-<path id='sample_fk_samples'  onmouseover="hghl(['sample_fk_samples','barcodes.sample.barcode','barcodes.barcode.barcode'])" onmouseout="uhghl(['sample_fk_samples','barcodes.sample.barcode','barcodes.barcode.barcode'])" transform='translate(7,0)' class='scene' d='M 165 180 L 22,180 Q 15,180 15,187 L 15,195' >
-	<title>Fk fk_samples
-sample ref barcode ( barcode )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot01)'     d='M 165 180 L 22,180 Q 15,180 15,187 L 15,195' ></path>
-<text x='123' y='175' transform='rotate(0 123,175)' title='Fk fk_samples
-sample ref barcode ( barcode )' style='fill:#cfc391;'>barcode</text>
-<!-- ============= Fk 'sample_fk_samples_1' ============= -->
-<path id='sample_fk_samples_1'  onmouseover="hghl(['sample_fk_samples_1','barcodes.sample.last_scanned_by','barcodes.person.person_id'])" onmouseout="uhghl(['sample_fk_samples_1','barcodes.sample.last_scanned_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 345 300 L 472,300 Q 480,300 480,307 L 480,397 Q 480,405 487,405 L 495,405' >
-	<title>Fk fk_samples_1
-sample ref person ( last_scanned_by -&gt; person_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 345 300 L 472,300 Q 480,300 480,307 L 480,397 Q 480,405 487,405 L 495,405' ></path>
-<text x='352' y='295' transform='rotate(0 352,295)' title='Fk fk_samples_1
-sample ref person ( last_scanned_by -&gt; person_id )' style='fill:#cfc391;'>last_scanned_by</text>
-<!-- ============= Fk 'sample_fk_samples_2' ============= -->
-<path id='sample_fk_samples_2'  onmouseover="hghl(['sample_fk_samples_2','barcodes.sample.created_by','barcodes.person.person_id'])" onmouseout="uhghl(['sample_fk_samples_2','barcodes.sample.created_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 345 270 L 352,270 Q 360,270 360,277 L 360,292 Q 360,300 367,300 L 375,300' >
-	<title>Fk fk_samples_2
-sample ref person ( created_by -&gt; person_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 345 270 L 352,270 Q 360,270 360,277 L 360,292 Q 360,300 367,300 L 375,300' ></path>
-<text x='352' y='265' transform='rotate(0 352,265)' title='Fk fk_samples_2
-sample ref person ( created_by -&gt; person_id )' style='fill:#cfc391;'>created_by</text>
-<!-- ============= Fk 'sample_fk_samples_0' ============= -->
-<path id='sample_fk_samples_0'  onmouseover="hghl(['sample_fk_samples_0','barcodes.sample.sample_set_id','barcodes.sample_set.sample_set_id'])" onmouseout="uhghl(['sample_fk_samples_0','barcodes.sample.sample_set_id','barcodes.sample_set.sample_set_id'])" transform='translate(7,0)' class='scene' d='M 345 195 L 367,195 Q 375,195 375,202 L 375,367 Q 375,375 367,375 L 277,375 Q 270,375 270,382 L 270,427 Q 270,435 277,435 L 285,435' >
-	<title>Fk fk_samples_0
-sample ref sample_set ( sample_set_id )</title>
-</path>
-<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 345 195 L 367,195 Q 375,195 375,202 L 375,367 Q 375,375 367,375 L 277,375 Q 270,375 270,382 L 270,427 Q 270,435 277,435 L 285,435' ></path>
-<text x='352' y='190' transform='rotate(0 352,190)' title='Fk fk_samples_0
-sample ref sample_set ( sample_set_id )' style='fill:#cfc391;'>sample_set_id</text>
 <!-- ============= Fk 'user_fk_users' ============= -->
 <path id='user_fk_users'  onmouseover="hghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" onmouseout="uhghl(['user_fk_users','barcodes.user.person_id','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 705 435 L 682,435 Q 675,435 675,427 L 675,412 Q 675,405 667,405 L 660,405' >
 	<title>Fk fk_users
@@ -535,6 +503,38 @@ run ref instrument ( instrument_id )</title>
 <path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 1110 360 L 1117,360 Q 1125,360 1125,352 L 1125,337 Q 1125,330 1132,330 L 1140,330' ></path>
 <text x='1117' y='355' transform='rotate(0 1117,355)' title='Fk fk_run_1
 run ref instrument ( instrument_id )' style='fill:#cfc391;'>instrument_id</text>
+<!-- ============= Fk 'sample_fk_samples' ============= -->
+<path id='sample_fk_samples'  onmouseover="hghl(['sample_fk_samples','barcodes.sample.barcode','barcodes.barcode.barcode'])" onmouseout="uhghl(['sample_fk_samples','barcodes.sample.barcode','barcodes.barcode.barcode'])" transform='translate(7,0)' class='scene' d='M 165 180 L 22,180 Q 15,180 15,187 L 15,195' >
+	<title>Fk fk_samples
+sample ref barcode ( barcode )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot01)'     d='M 165 180 L 22,180 Q 15,180 15,187 L 15,195' ></path>
+<text x='123' y='175' transform='rotate(0 123,175)' title='Fk fk_samples
+sample ref barcode ( barcode )' style='fill:#cfc391;'>barcode</text>
+<!-- ============= Fk 'sample_fk_samples_1' ============= -->
+<path id='sample_fk_samples_1'  onmouseover="hghl(['sample_fk_samples_1','barcodes.sample.last_scanned_by','barcodes.person.person_id'])" onmouseout="uhghl(['sample_fk_samples_1','barcodes.sample.last_scanned_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 345 300 L 472,300 Q 480,300 480,307 L 480,397 Q 480,405 487,405 L 495,405' >
+	<title>Fk fk_samples_1
+sample ref person ( last_scanned_by -&gt; person_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)' marker-end='url(#arrow1)'    d='M 345 300 L 472,300 Q 480,300 480,307 L 480,397 Q 480,405 487,405 L 495,405' ></path>
+<text x='352' y='295' transform='rotate(0 352,295)' title='Fk fk_samples_1
+sample ref person ( last_scanned_by -&gt; person_id )' style='fill:#cfc391;'>last_scanned_by</text>
+<!-- ============= Fk 'sample_fk_samples_2' ============= -->
+<path id='sample_fk_samples_2'  onmouseover="hghl(['sample_fk_samples_2','barcodes.sample.created_by','barcodes.person.person_id'])" onmouseout="uhghl(['sample_fk_samples_2','barcodes.sample.created_by','barcodes.person.person_id'])" transform='translate(7,0)' class='scene' d='M 345 270 L 352,270 Q 360,270 360,277 L 360,292 Q 360,300 367,300 L 375,300' >
+	<title>Fk fk_samples_2
+sample ref person ( created_by -&gt; person_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 345 270 L 352,270 Q 360,270 360,277 L 360,292 Q 360,300 367,300 L 375,300' ></path>
+<text x='352' y='265' transform='rotate(0 352,265)' title='Fk fk_samples_2
+sample ref person ( created_by -&gt; person_id )' style='fill:#cfc391;'>created_by</text>
+<!-- ============= Fk 'sample_fk_samples_0' ============= -->
+<path id='sample_fk_samples_0'  onmouseover="hghl(['sample_fk_samples_0','barcodes.sample.sample_set_id','barcodes.sample_set.sample_set_id'])" onmouseout="uhghl(['sample_fk_samples_0','barcodes.sample.sample_set_id','barcodes.sample_set.sample_set_id'])" transform='translate(7,0)' class='scene' d='M 345 195 L 367,195 Q 375,195 375,202 L 375,367 Q 375,375 367,375 L 277,375 Q 270,375 270,382 L 270,427 Q 270,435 277,435 L 285,435' >
+	<title>Fk fk_samples_0
+sample ref sample_set ( sample_set_id )</title>
+</path>
+<path class='defo' transform='translate(7,0)' marker-start='url(#foot1p)'     d='M 345 195 L 367,195 Q 375,195 375,202 L 375,367 Q 375,375 367,375 L 277,375 Q 270,375 270,382 L 270,427 Q 270,435 277,435 L 285,435' ></path>
+<text x='352' y='190' transform='rotate(0 352,190)' title='Fk fk_samples_0
+sample ref sample_set ( sample_set_id )' style='fill:#cfc391;'>sample_set_id</text>
 <!-- ============= Table 'pool_samples' ============= -->
 <rect class='table' x='930' y='38' width='180' height='90' rx='7' ry='7' />
 <line class='delim' x1='930.500000' y1='64.500000' x2='1109.500000' y2='64.500000'/>
@@ -628,53 +628,6 @@ Referred by sample_set_barcodes ( sample_set_id ) </title></a>
 timestamp default current_timestamp</title></a>
   <use id='nn' x='302' y='477' xlink:href='#nn'/><a xlink:href='#sample_set.created_by'><text id='barcodes.sample_set.created_by' x='318' y='487'>created_by</text><text x='450' y='487' text-anchor='end' class='colType'>bigint</text><title>created_by
 * bigint</title></a>
-
-<!-- ============= Table 'sample' ============= -->
-<rect class='table' x='180' y='113' width='165' height='210' rx='7' ry='7' />
-<line class='delim' x1='180.500000' y1='139.500000' x2='344.500000' y2='139.500000'/>
-<line class='delim' x1='195.500000' y1='139.500000' x2='195.500000' y2='322.500000'/>
-<line class='delim' x1='333.500000' y1='139.500000' x2='333.500000' y2='322.500000'/>
-<path d='M 180.50 139.50 L 180.50 120.50 Q 180.50 113.50 187.50 113.50 L 337.50 113.50 Q 344.50 113.50 344.50 120.50 L 344.50 139.50 L180.50 139.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
-<a xlink:href='#sample'><text x='240' y='131'>sample</text><title>Table barcodes.sample</title></a>
-  <use id='nn' x='182' y='147' xlink:href='#nn'/><a xlink:href='#sample.sample_id'><use id='pk' x='182' y='146' xlink:href='#pk'/><title>Pk pk_samples ( sample_id ) </title></a>
-<a xlink:href='#sample.sample_id'><text id='barcodes.sample.sample_id' x='198' y='157' onmouseover="hghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='330' y='157' text-anchor='end' class='colType'>bigserial</text><title>sample_id
-* bigserial</title></a>
-<a xlink:href='#sample.sample_id'><use id='ref' x='333' y='146' xlink:href='#ref'/><title>Referred by plates_samples ( sample_id ) 
-Referred by project_samples ( sample_id ) 
-Referred by protocol_settings ( sample_id ) </title></a>
-  <use id='nn' x='182' y='162' xlink:href='#nn'/><a xlink:href='#sample.sample'><use id='unq' x='182' y='161' xlink:href='#unq'/><title>Unq pk_samples_0 ( sample ) Unq idx_sample ( sample_set_id, sample ) </title></a>
-<a xlink:href='#sample.sample'><text id='barcodes.sample.sample' x='198' y='172'>sample</text><text x='330' y='172' text-anchor='end' class='colType'>varchar(100)</text><title>sample
-* varchar(100)
-External name of the sample</title></a>
-  <a xlink:href='#sample.barcode'><use id='unq' x='182' y='176' xlink:href='#unq'/><title>Unq idx_samples ( barcode ) </title></a>
-<a xlink:href='#sample.barcode'><text id='barcodes.sample.barcode' x='198' y='187' onmouseover="hghl(['sample_fk_samples'])" onmouseout="uhghl(['sample_fk_samples'])">barcode</text><text x='330' y='187' text-anchor='end' class='colType'>varchar</text><title>barcode
-varchar</title></a>
-<a xlink:href='#sample.barcode'><use id='fk' x='333' y='176' xlink:href='#fk'/><title>References barcode ( barcode ) </title></a>
-  <use id='nn' x='182' y='192' xlink:href='#nn'/><a xlink:href='#sample.sample_set_id'><use id='unq' x='182' y='191' xlink:href='#unq'/><title>idx_samples_0 ( sample_set_id ) Unq idx_sample ( sample_set_id, sample ) </title></a>
-<a xlink:href='#sample.sample_set_id'><text id='barcodes.sample.sample_set_id' x='198' y='202' onmouseover="hghl(['sample_fk_samples_0'])" onmouseout="uhghl(['sample_fk_samples_0'])">sample_set_id</text><text x='330' y='202' text-anchor='end' class='colType'>bigint</text><title>sample_set_id
-* bigint</title></a>
-<a xlink:href='#sample.sample_set_id'><use id='fk' x='333' y='191' xlink:href='#fk'/><title>References sample_set ( sample_set_id ) </title></a>
-  <use id='nn' x='182' y='207' xlink:href='#nn'/><a xlink:href='#sample.sample_type'><text id='barcodes.sample.sample_type' x='198' y='217'>sample_type</text><text x='330' y='217' text-anchor='end' class='colType'>varchar</text><title>sample_type
-* varchar
-The type of sample collected (stool, soil, etc)</title></a>
-  <a xlink:href='#sample.sample_location'><text id='barcodes.sample.sample_location' x='198' y='232'>sample_location</text><text x='330' y='232' text-anchor='end' class='colType'>varchar</text><title>sample_location
-varchar
-Physical location of sample tube</title></a>
-  <use id='nn' x='182' y='237' xlink:href='#nn'/><a xlink:href='#sample.biomass_remaining'><text id='barcodes.sample.biomass_remaining' x='198' y='247'>biomass_remaining</text><text x='330' y='247' text-anchor='end' class='colType'>bool</text><title>biomass_remaining
-* bool default 'T'</title></a>
-  <use id='nn' x='182' y='252' xlink:href='#nn'/><a xlink:href='#sample.created_on'><text id='barcodes.sample.created_on' x='198' y='262'>created_on</text><text x='330' y='262' text-anchor='end' class='colType'>timestamp</text><title>created_on
-* timestamp default current_timestamp</title></a>
-  <use id='nn' x='182' y='267' xlink:href='#nn'/><a xlink:href='#sample.created_by'><use id='idx' x='182' y='266' xlink:href='#idx'/><title>idx_samples_2 ( created_by ) </title></a>
-<a xlink:href='#sample.created_by'><text id='barcodes.sample.created_by' x='198' y='277' onmouseover="hghl(['sample_fk_samples_2'])" onmouseout="uhghl(['sample_fk_samples_2'])">created_by</text><text x='330' y='277' text-anchor='end' class='colType'>bigint</text><title>created_by
-* bigint</title></a>
-<a xlink:href='#sample.created_by'><use id='fk' x='333' y='266' xlink:href='#fk'/><title>References person ( created_by -&gt; person_id ) </title></a>
-  <use id='nn' x='182' y='282' xlink:href='#nn'/><a xlink:href='#sample.last_scanned'><text id='barcodes.sample.last_scanned' x='198' y='292'>last_scanned</text><text x='330' y='292' text-anchor='end' class='colType'>timestamp</text><title>last_scanned
-* timestamp default current_timestamp</title></a>
-  <use id='nn' x='182' y='297' xlink:href='#nn'/><a xlink:href='#sample.last_scanned_by'><use id='idx' x='182' y='296' xlink:href='#idx'/><title>idx_samples_1 ( last_scanned_by ) </title></a>
-<a xlink:href='#sample.last_scanned_by'><text id='barcodes.sample.last_scanned_by' x='198' y='307' onmouseover="hghl(['sample_fk_samples_1'])" onmouseout="uhghl(['sample_fk_samples_1'])">last_scanned_by</text><text x='330' y='307' text-anchor='end' class='colType'>bigint</text><title>last_scanned_by
-* bigint
-Pereson who last scanned the barcode</title></a>
-<a xlink:href='#sample.last_scanned_by'><use id='fk' x='333' y='296' xlink:href='#fk'/><title>References person ( last_scanned_by -&gt; person_id ) </title></a>
 
 <!-- ============= Table 'user' ============= -->
 <rect class='table' x='720' y='368' width='150' height='120' rx='7' ry='7' />
@@ -1093,6 +1046,53 @@ When the sequencing happened</title></a>
 varchar
 Where the sequencing results are.</title></a>
 
+<!-- ============= Table 'sample' ============= -->
+<rect class='table' x='180' y='113' width='165' height='210' rx='7' ry='7' />
+<line class='delim' x1='180.500000' y1='139.500000' x2='344.500000' y2='139.500000'/>
+<line class='delim' x1='195.500000' y1='139.500000' x2='195.500000' y2='322.500000'/>
+<line class='delim' x1='333.500000' y1='139.500000' x2='333.500000' y2='322.500000'/>
+<path d='M 180.50 139.50 L 180.50 120.50 Q 180.50 113.50 187.50 113.50 L 337.50 113.50 Q 344.50 113.50 344.50 120.50 L 344.50 139.50 L180.50 139.50 ' style='fill:url(#tableHeaderGradient0); stroke:none;' />
+<a xlink:href='#sample'><text x='240' y='131'>sample</text><title>Table barcodes.sample</title></a>
+  <use id='nn' x='182' y='147' xlink:href='#nn'/><a xlink:href='#sample.sample_id'><use id='pk' x='182' y='146' xlink:href='#pk'/><title>Pk pk_samples ( sample_id ) </title></a>
+<a xlink:href='#sample.sample_id'><text id='barcodes.sample.sample_id' x='198' y='157' onmouseover="hghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])" onmouseout="uhghl(['plates_samples_fk_plates_samples','project_samples_fk_project_samples','protocol_settings_fk_protocol_runs_2'])">sample_id</text><text x='330' y='157' text-anchor='end' class='colType'>bigserial</text><title>sample_id
+* bigserial</title></a>
+<a xlink:href='#sample.sample_id'><use id='ref' x='333' y='146' xlink:href='#ref'/><title>Referred by plates_samples ( sample_id ) 
+Referred by project_samples ( sample_id ) 
+Referred by protocol_settings ( sample_id ) </title></a>
+  <use id='nn' x='182' y='162' xlink:href='#nn'/><a xlink:href='#sample.sample'><use id='unq' x='182' y='161' xlink:href='#unq'/><title>Unq idx_sample ( sample_set_id, sample ) </title></a>
+<a xlink:href='#sample.sample'><text id='barcodes.sample.sample' x='198' y='172'>sample</text><text x='330' y='172' text-anchor='end' class='colType'>varchar(100)</text><title>sample
+* varchar(100)
+External name of the sample</title></a>
+  <a xlink:href='#sample.barcode'><use id='unq' x='182' y='176' xlink:href='#unq'/><title>Unq idx_samples ( barcode ) </title></a>
+<a xlink:href='#sample.barcode'><text id='barcodes.sample.barcode' x='198' y='187' onmouseover="hghl(['sample_fk_samples'])" onmouseout="uhghl(['sample_fk_samples'])">barcode</text><text x='330' y='187' text-anchor='end' class='colType'>varchar</text><title>barcode
+varchar</title></a>
+<a xlink:href='#sample.barcode'><use id='fk' x='333' y='176' xlink:href='#fk'/><title>References barcode ( barcode ) </title></a>
+  <use id='nn' x='182' y='192' xlink:href='#nn'/><a xlink:href='#sample.sample_set_id'><use id='unq' x='182' y='191' xlink:href='#unq'/><title>idx_samples_0 ( sample_set_id ) Unq idx_sample ( sample_set_id, sample ) </title></a>
+<a xlink:href='#sample.sample_set_id'><text id='barcodes.sample.sample_set_id' x='198' y='202' onmouseover="hghl(['sample_fk_samples_0'])" onmouseout="uhghl(['sample_fk_samples_0'])">sample_set_id</text><text x='330' y='202' text-anchor='end' class='colType'>bigint</text><title>sample_set_id
+* bigint</title></a>
+<a xlink:href='#sample.sample_set_id'><use id='fk' x='333' y='191' xlink:href='#fk'/><title>References sample_set ( sample_set_id ) </title></a>
+  <use id='nn' x='182' y='207' xlink:href='#nn'/><a xlink:href='#sample.sample_type'><text id='barcodes.sample.sample_type' x='198' y='217'>sample_type</text><text x='330' y='217' text-anchor='end' class='colType'>varchar</text><title>sample_type
+* varchar
+The type of sample collected (stool, soil, etc)</title></a>
+  <a xlink:href='#sample.sample_location'><text id='barcodes.sample.sample_location' x='198' y='232'>sample_location</text><text x='330' y='232' text-anchor='end' class='colType'>varchar</text><title>sample_location
+varchar
+Physical location of sample tube</title></a>
+  <use id='nn' x='182' y='237' xlink:href='#nn'/><a xlink:href='#sample.biomass_remaining'><text id='barcodes.sample.biomass_remaining' x='198' y='247'>biomass_remaining</text><text x='330' y='247' text-anchor='end' class='colType'>bool</text><title>biomass_remaining
+* bool default 'T'</title></a>
+  <use id='nn' x='182' y='252' xlink:href='#nn'/><a xlink:href='#sample.created_on'><text id='barcodes.sample.created_on' x='198' y='262'>created_on</text><text x='330' y='262' text-anchor='end' class='colType'>timestamp</text><title>created_on
+* timestamp default current_timestamp</title></a>
+  <use id='nn' x='182' y='267' xlink:href='#nn'/><a xlink:href='#sample.created_by'><use id='idx' x='182' y='266' xlink:href='#idx'/><title>idx_samples_2 ( created_by ) </title></a>
+<a xlink:href='#sample.created_by'><text id='barcodes.sample.created_by' x='198' y='277' onmouseover="hghl(['sample_fk_samples_2'])" onmouseout="uhghl(['sample_fk_samples_2'])">created_by</text><text x='330' y='277' text-anchor='end' class='colType'>bigint</text><title>created_by
+* bigint</title></a>
+<a xlink:href='#sample.created_by'><use id='fk' x='333' y='266' xlink:href='#fk'/><title>References person ( created_by -&gt; person_id ) </title></a>
+  <use id='nn' x='182' y='282' xlink:href='#nn'/><a xlink:href='#sample.last_scanned'><text id='barcodes.sample.last_scanned' x='198' y='292'>last_scanned</text><text x='330' y='292' text-anchor='end' class='colType'>timestamp</text><title>last_scanned
+* timestamp default current_timestamp</title></a>
+  <use id='nn' x='182' y='297' xlink:href='#nn'/><a xlink:href='#sample.last_scanned_by'><use id='idx' x='182' y='296' xlink:href='#idx'/><title>idx_samples_1 ( last_scanned_by ) </title></a>
+<a xlink:href='#sample.last_scanned_by'><text id='barcodes.sample.last_scanned_by' x='198' y='307' onmouseover="hghl(['sample_fk_samples_1'])" onmouseout="uhghl(['sample_fk_samples_1'])">last_scanned_by</text><text x='330' y='307' text-anchor='end' class='colType'>bigint</text><title>last_scanned_by
+* bigint
+Pereson who last scanned the barcode</title></a>
+<a xlink:href='#sample.last_scanned_by'><use id='fk' x='333' y='296' xlink:href='#fk'/><title>References person ( last_scanned_by -&gt; person_id ) </title></a>
+
 </g></svg>
 
 <br/><br/>
@@ -1264,131 +1264,6 @@ Where the sequencing results are.</title></a>
 <tr><th colspan='4'><b>Indexes</b></th></tr>
 	<tr>		<td>Pk</td><td>pk&#95;sample&#95;set</td>
 		<td> ON sample&#95;set&#95;id</td>
-		<td>  </td>
-	</tr>
-</tbody>
-</table>
-
-<br/><br/>
-<table class='bordered'>
-<thead>
-<tr><th colspan='4'><a name='sample'>Table sample</a></th></tr>
-</thead>
-<tbody>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.sample_id'>sample&#95;id</a></td>
-		<td> bigserial   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.sample'>sample</a></td>
-		<td> varchar&#40; 100 &#41;   </td>
-		<td> External name of the sample </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='sample.barcode'>barcode</a></td>
-		<td> varchar   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.sample_set_id'>sample&#95;set&#95;id</a></td>
-		<td> bigint   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.sample_type'>sample&#95;type</a></td>
-		<td> varchar   </td>
-		<td> The type of sample collected &#40;stool&#44; soil&#44; etc&#41; </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><a name='sample.sample_location'>sample&#95;location</a></td>
-		<td> varchar   </td>
-		<td> Physical location of sample tube </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.biomass_remaining'>biomass&#95;remaining</a></td>
-		<td> bool   DEFO 'T' </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.created_on'>created&#95;on</a></td>
-		<td> timestamp   DEFO current_timestamp </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.created_by'>created&#95;by</a></td>
-		<td> bigint   </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.last_scanned'>last&#95;scanned</a></td>
-		<td> timestamp   DEFO current_timestamp </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>*</td>
-		<td><a name='sample.last_scanned_by'>last&#95;scanned&#95;by</a></td>
-		<td> bigint   </td>
-		<td> Pereson who last scanned the barcode </td>
-	</tr>
-<tr><th colspan='4'><b>Indexes</b></th></tr>
-	<tr>		<td>U</td><td>idx&#95;samples</td>
-		<td> ON barcode</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>Pk</td><td>pk&#95;samples</td>
-		<td> ON sample&#95;id</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;1</td>
-		<td> ON last&#95;scanned&#95;by</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;2</td>
-		<td> ON created&#95;by</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>U</td><td>pk&#95;samples&#95;0</td>
-		<td> ON sample</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;0</td>
-		<td> ON sample&#95;set&#95;id</td>
-		<td>  </td>
-	</tr>
-	<tr>		<td>U</td><td>idx&#95;sample</td>
-		<td> ON sample&#95;set&#95;id&#44; sample</td>
-		<td>  </td>
-	</tr>
-<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_samples</td>
-		<td > ( barcode ) ref <a href='#barcode'>barcode</a> (barcode) </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_samples_1</td>
-		<td > ( last&#95;scanned&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_samples_2</td>
-		<td > ( created&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
-		<td>  </td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td><td>fk_samples_0</td>
-		<td > ( sample&#95;set&#95;id ) ref <a href='#sample&#95;set'>sample&#95;set</a> (sample&#95;set&#95;id) </td>
 		<td>  </td>
 	</tr>
 </tbody>
@@ -2412,6 +2287,127 @@ Where the sequencing results are.</title></a>
 	<tr>
 		<td>&nbsp;</td><td>fk_run_1</td>
 		<td > ( instrument&#95;id ) ref <a href='#instrument'>instrument</a> (instrument&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table>
+
+<br/><br/>
+<table class='bordered'>
+<thead>
+<tr><th colspan='4'><a name='sample'>Table sample</a></th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.sample_id'>sample&#95;id</a></td>
+		<td> bigserial   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.sample'>sample</a></td>
+		<td> varchar&#40; 100 &#41;   </td>
+		<td> External name of the sample </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='sample.barcode'>barcode</a></td>
+		<td> varchar   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.sample_set_id'>sample&#95;set&#95;id</a></td>
+		<td> bigint   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.sample_type'>sample&#95;type</a></td>
+		<td> varchar   </td>
+		<td> The type of sample collected &#40;stool&#44; soil&#44; etc&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='sample.sample_location'>sample&#95;location</a></td>
+		<td> varchar   </td>
+		<td> Physical location of sample tube </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.biomass_remaining'>biomass&#95;remaining</a></td>
+		<td> bool   DEFO 'T' </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.created_on'>created&#95;on</a></td>
+		<td> timestamp   DEFO current_timestamp </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.created_by'>created&#95;by</a></td>
+		<td> bigint   </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.last_scanned'>last&#95;scanned</a></td>
+		<td> timestamp   DEFO current_timestamp </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='sample.last_scanned_by'>last&#95;scanned&#95;by</a></td>
+		<td> bigint   </td>
+		<td> Pereson who last scanned the barcode </td>
+	</tr>
+<tr><th colspan='4'><b>Indexes</b></th></tr>
+	<tr>		<td>U</td><td>idx&#95;samples</td>
+		<td> ON barcode</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>Pk</td><td>pk&#95;samples</td>
+		<td> ON sample&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;1</td>
+		<td> ON last&#95;scanned&#95;by</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;2</td>
+		<td> ON created&#95;by</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>&nbsp;</td><td>idx&#95;samples&#95;0</td>
+		<td> ON sample&#95;set&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td>U</td><td>idx&#95;sample</td>
+		<td> ON sample&#95;set&#95;id&#44; sample</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'><b>Foreign Keys</b></th></tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_samples</td>
+		<td > ( barcode ) ref <a href='#barcode'>barcode</a> (barcode) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_samples_1</td>
+		<td > ( last&#95;scanned&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_samples_2</td>
+		<td > ( created&#95;by ) ref <a href='#person'>person</a> (person&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td>fk_samples_0</td>
+		<td > ( sample&#95;set&#95;id ) ref <a href='#sample&#95;set'>sample&#95;set</a> (sample&#95;set&#95;id) </td>
 		<td>  </td>
 	</tr>
 </tbody>

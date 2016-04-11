@@ -250,7 +250,6 @@ CREATE TABLE barcodes.sample (
   last_scanned_by      bigint  NOT NULL,
   CONSTRAINT idx_samples UNIQUE ( barcode ) ,
   CONSTRAINT pk_samples PRIMARY KEY ( sample_id ),
-  CONSTRAINT pk_samples_0 UNIQUE ( sample ) ,
   CONSTRAINT idx_sample UNIQUE ( sample_set_id, sample ) ,
   CONSTRAINT fk_samples FOREIGN KEY ( barcode ) REFERENCES barcodes.barcode( barcode )    ,
   CONSTRAINT fk_samples_1 FOREIGN KEY ( last_scanned_by ) REFERENCES barcodes.person( person_id )    ,

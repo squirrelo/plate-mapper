@@ -97,7 +97,8 @@ class Sample(pm.base.PMObject):
 
     @classmethod
     def search(cls, name=None, biomass_remaining=None, sample_type=None,
-               barcode=None, project=None, primer_set=None, protocol=None):
+               barcode=None, project=None, primer_set=None, sample_set=None,
+               protocol=None):
         """Searches over all given parameters for matching samples
 
         Parameters
@@ -114,6 +115,8 @@ class Sample(pm.base.PMObject):
             project to search over
         primer_set : str, optional
             What primers were used for sample amplification
+        sample_set : str, optional
+            What sample set the samples are attached to
         protocol : str
             What protocol was run on the samples
 
@@ -133,7 +136,8 @@ class Sample(pm.base.PMObject):
         """
         # Make sure at least one argument passed
         if all([x is None for x in [name, biomass_remaining, sample_type,
-                                    barcode, project, primer_set, protocol]]):
+                                    barcode, project, primer_set, sample_set,
+                                    protocol]]):
             raise pm.exceptions.DeveloperError(
                 'Must pass at least one parameter')
 
@@ -153,6 +157,10 @@ class Sample(pm.base.PMObject):
         if barcode is not None:
             wheres.append('barcode = %s')
             sql_args.append(barcode)
+        if sample_set is not None:
+            sample_set_id = pm.util.convert_to_id(sample_set, 'sample_set')
+            wheres.append('sample_set_id = %s')
+            sql_args.append(sample_set_id)
         if project is not None:
             joins.append('JOIN barcodes.project_samples USING (sample_id)')
             joins.append('JOIN barcodes.project USING (project_id)')

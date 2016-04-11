@@ -30,11 +30,12 @@ INSERT INTO barcodes.sample (sample, barcode, sample_type, sample_location, crea
 ('Sample 1', '000000001', 'stool', 'the freezer', '2016-02-22 8:52:00', 1, '2016-02-22 8:52:00', 1, 1, 'T'),
 ('Sample 2', '000000002', 'stool', 'the freezer', '2016-02-22 8:53:00', 1, '2016-02-22 8:53:00', 1, 1, 'F'),
 ('Sample 3', NULL, 'skin', 'the other freezer', '2016-02-22 8:54:00', 1, '2016-02-22 8:54:00', 1, 1, 'F'),
-('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T');
+('Sample 4', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T'),
+('Sample 3', NULL, 'oral', 'the freezer', '2016-02-22 8:55:00', 1, '2016-02-22 8:55:00', 1, 2, 'T');
 
 INSERT INTO barcodes.project_sample_sets (project_id, sample_set_id) VALUES (1, 1), (2, 2), (3, 3);
 
-INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (3, 1), (4, 2), (2, 2);
+INSERT INTO barcodes.project_samples (sample_id, project_id) VALUES (1, 1), (2, 1), (3, 1), (4, 2), (5, 2), (2, 2);
 
 INSERT INTO barcodes.sample_set_barcodes (sample_set_id, barcode) VALUES (3, '000000004');
 

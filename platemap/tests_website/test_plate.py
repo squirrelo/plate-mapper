@@ -6,6 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # -----------------------------------------------------------------------------
 from unittest import main
+from json import loads
 
 from platemap.tests_website.tornado_test_base import TestHandlerBase
 from platemap.lib.util import rollback_tests
@@ -101,9 +102,33 @@ class TestPlateUpdateHandler(TestHandlerBase):
         obs = self.post('/plate/update/', {'plate_id': '000000003',
                                            'action': 'update',
                                            'rowcol': '6-10',
+                                           'sample': 'Sample 2'})
+        self.assertEqual(obs.code, 200)
+        self.assertEqual(loads(obs.body.decode('utf-8')), {'msg': ''})
+        self.assertEqual(self.plate[6, 10], pm.sample.Sample(2))
+
+    def test_post_update_multi(self):
+        self.assertEqual(self.plate[6, 10], None)
+
+        obs = self.post('/plate/update/', {'plate_id': '000000003',
+                                           'action': 'update',
+                                           'rowcol': '6-10',
                                            'sample': 'Sample 3'})
         self.assertEqual(obs.code, 200)
-        self.assertEqual(obs.body.decode('utf-8'), '')
+        self.assertEqual(
+            loads(obs.body.decode('utf-8')),
+            {'msg': 'Multiple samples with that name. Please select which you '
+                    'want to add.',
+             'sample_sets': ['Sample Set 1', 'Sample Set 2']})
+        self.assertEqual(self.plate[6, 10], None)
+
+        obs = self.post('/plate/update/', {'plate_id': '000000003',
+                                           'action': 'update',
+                                           'rowcol': '6-10',
+                                           'sample': 'Sample 3',
+                                           'sample-set': 'Sample Set 1'})
+        self.assertEqual(obs.code, 200)
+        self.assertEqual(loads(obs.body.decode('utf-8')), {'msg': ''})
         self.assertEqual(self.plate[6, 10], pm.sample.Sample(3))
 
     def test_post_update_unknown_sample(self):
@@ -114,8 +139,8 @@ class TestPlateUpdateHandler(TestHandlerBase):
                                            'rowcol': '6-10',
                                            'sample': 'UNKNOWN'})
         self.assertEqual(obs.code, 200)
-        self.assertEqual(obs.body.decode('utf-8'),
-                         'Could not find sample "UNKNOWN"')
+        self.assertEqual(loads(obs.body.decode('utf-8')),
+                         {'msg': 'Could not find sample "UNKNOWN"'})
         self.assertEqual(self.plate[6, 10], None)
 
     def test_post_update_bad_well(self):
@@ -124,8 +149,8 @@ class TestPlateUpdateHandler(TestHandlerBase):
                                            'rowcol': '25-100',
                                            'sample': 'Sample 2'})
         self.assertEqual(obs.code, 200)
-        self.assertEqual(obs.body.decode('utf-8'),
-                         'Position 25, 100 not on plate')
+        self.assertEqual(loads(obs.body.decode('utf-8')),
+                         {'msg': 'Position 25, 100 not on plate'})
 
     def test_post_finalize(self):
         self.assertEqual(self.plate.finalized, False)

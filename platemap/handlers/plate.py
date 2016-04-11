@@ -84,18 +84,26 @@ class PlateUpdateHandler(BaseHandler):
         elif action == 'update':
             row, col = map(int, self.get_argument('rowcol').split('-', 1))
             samp_name = self.get_argument('sample')
+            sample_set = self.get_argument('sample-set', None)
 
-            sample = pm.sample.Sample.search(name=samp_name)
+            sample = pm.sample.Sample.search(name=samp_name,
+                                             sample_set=sample_set)
             if not sample:
-                self.write('Could not find sample "%s"' % samp_name)
+                self.write({'msg': 'Could not find sample "%s"' % samp_name})
                 return
-            try:
-                pm.plate.Plate(plate_id)[row, col] = sample[0]
-                self.write('')
-            except Exception as e:
-                # Catch any error and show to user
-                self.write(str(e))
-            return
+            if len(sample) > 1:
+                self.write({'msg': 'Multiple samples with that name. Please '
+                                   'select which you want to add.',
+                            'sample_sets': [s.sample_set for s in sample]})
+                return
+            else:
+                try:
+                    pm.plate.Plate(plate_id)[row, col] = sample[0]
+                    self.write({'msg': ''})
+                except Exception as e:
+                    # Catch any error and show to user
+                    self.write({'msg': str(e)})
+                return
         else:
             raise HTTPError(400, 'Unknown action %s' % action)
 

@@ -78,9 +78,16 @@ class TestSample(TestCase):
         exp = [pm.sample.Sample(4), pm.sample.Sample(2)]
         self.assertEqual(obs, exp)
 
+        obs = pm.sample.Sample.search(sample_set='Sample Set 2')
+        exp = [pm.sample.Sample(2), pm.sample.Sample(5)]
+        self.assertEqual(obs, exp)
+
+        obs = pm.sample.Sample.search(protocol='Protocol 2')
+        exp = [pm.sample.Sample(2), pm.sample.Sample(5)]
+        self.assertEqual(obs, exp)
+
         # TODO: finish these tests as objects are made
         # pm.sample.Sample.search(primer_set=)
-        # pm.sample.Sample.search(protocol=)
 
     def test_search_no_parameters(self):
         with self.assertRaises(pm.exceptions.DeveloperError):
