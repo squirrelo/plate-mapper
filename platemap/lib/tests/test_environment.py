@@ -15,8 +15,9 @@ class TestEnvironment(TestCase):
         pm.environment.rebuilt_test_env()
 
     def test_make_database_exists(self):
-        with self.assertRaises(OSError):
+        with self.assertRaises(OSError) as e:
             pm.environment.make_database()
+            self.assertEqual('fdsfqwefqe', e.args[0])
 
     def test_make_environment(self):
         pm.environment._drop_env()
@@ -40,7 +41,7 @@ class TestEnvironment(TestCase):
         with self.assertRaises(ValueError) as e:
             pm.webhelp.get_primer_sets()
             self.assertIn('relation "barcodes.primer_set" does not exist',
-                          e.message)
+                          e.args[0])
 
 
 if __name__ == '__main__':
