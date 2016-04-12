@@ -35,7 +35,6 @@ def make_database():
 
         # Create the database
         c.execute('CREATE DATABASE %s' % pm_config.database)
-
     connection.close()
 
 
@@ -66,7 +65,13 @@ def make_environment(test=False):
 def rebuilt_test_env():
     """Deletes the schema and rebuilds the test database"""
     with TRN:
-        print('Dropping barcodes schema')
-        TRN.add('DROP SCHEMA barcodes CASCADE')
+        _drop_env()
         print('Rebuilding test environment')
         make_environment(test=True)
+
+
+def _drop_env():
+    """Drops the barcodes schema"""
+    with TRN:
+        print('Dropping barcodes schema')
+        TRN.add('DROP SCHEMA IF EXISTS barcodes CASCADE')
