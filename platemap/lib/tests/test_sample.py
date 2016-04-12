@@ -79,7 +79,7 @@ class TestSample(TestCase):
         self.assertEqual(obs, exp)
 
         obs = pm.sample.Sample.search(sample_set='Sample Set 2')
-        exp = [pm.sample.Sample(4), pm.sample.Sample(5)]
+        exp = [pm.sample.Sample(5), pm.sample.Sample(4)]
         self.assertEqual(obs, exp)
 
         # TODO: finish these tests as objects are made
