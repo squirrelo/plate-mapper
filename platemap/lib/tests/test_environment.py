@@ -7,6 +7,7 @@
 # -----------------------------------------------------------------------------
 from unittest import TestCase, main
 
+from platemap.lib.config_manager import pm_config
 import platemap as pm
 
 
@@ -16,8 +17,12 @@ class TestEnvironment(TestCase):
 
     def test_make_database_exists(self):
         with self.assertRaises(OSError) as e:
-            pm.environment.make_database()
-            self.assertEqual('fdsfqwefqe', e.args[0])
+            try:
+                pm.environment.make_database()
+            except OSError as e:
+                self.assertEqual('Database %s already present on the system' %
+                                 pm_config.database, str(e))
+                raise
 
     def test_make_environment(self):
         pm.environment._drop_env()
@@ -39,9 +44,12 @@ class TestEnvironment(TestCase):
     def test_drop_env(self):
         pm.environment._drop_env()
         with self.assertRaises(ValueError) as e:
-            pm.webhelp.get_primer_sets()
-            self.assertIn('relation "barcodes.primer_set" does not exist',
-                          e.args[0])
+            try:
+                pm.webhelp.get_primer_sets()
+            except ValueError as e:
+                self.assertIn('relation "barcodes.primer_set" does not exist',
+                              str(e))
+                raise
 
 
 if __name__ == '__main__':
