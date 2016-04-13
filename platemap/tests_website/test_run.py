@@ -188,6 +188,14 @@ class TestPoolPageHandler(TestHandlerBase):
         self.assertEqual(obs.code, 200)
         self.assertIn('Test plate 1', obs.body.decode('utf-8'))
 
+    def test_post_add_duplicate_barcodes(self):
+        obs = self.post('/pool/view/', {'action': 'add',
+                                        'pool': 2,
+                                        'protocol': 5})
+        self.assertEqual(obs.code, 200)
+        self.assertIn('Primer set "Primer Set 1" already represented in this '
+                      'pool', obs.body.decode('utf-8'))
+
     def test_post_add_error(self):
         obs = self.post('/pool/view/', {'action': 'add',
                                         'pool': 2,

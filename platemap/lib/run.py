@@ -481,7 +481,7 @@ class Pool(pm.base.PMObject):
             pm.sql.TRN.add(check_sql, [self.id])
             pool_primers = pm.sql.TRN.execute_fetchflatten()
             if pcr_protocol.primer_set in pool_primers:
-                raise ValueError('Primer set %s already represented in this '
+                raise ValueError('Primer set "%s" already represented in this '
                                  'pool' % pcr_protocol.primer_set)
             pm.sql.TRN.add(insert_sql, [self.id, pcr_protocol.id])
 
