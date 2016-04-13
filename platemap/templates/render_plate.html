@@ -140,6 +140,26 @@
     },200);
   }
 
+  select_sample = $( "#select-sample-modal" ).dialog({
+    autoOpen: false,
+    height: 200,
+    width: 600,
+    modal: true,
+    buttons: {
+      "Add Sample": function () {
+        if($("#select-sample-form").valid()) {
+          update_with_sample_set();
+          select_sample.dialog( "close" );
+          }
+      },
+      Cancel: function() {
+        select_sample.dialog( "close" );
+      }
+    },
+    close: function() {
+    }
+  });
+
   {% if override %}
   function clear_override() {
     $("#sample-name").val("");
@@ -173,26 +193,6 @@
       },
       Cancel: function() {
         dialog.dialog( "close" );
-      }
-    },
-    close: function() {
-    }
-  });
-
-select_sample = $( "#select-sample-modal" ).dialog({
-    autoOpen: false,
-    height: 200,
-    width: 600,
-    modal: true,
-    buttons: {
-      "Add Sample": function () {
-        if($("#select-sample-form").valid()) {
-          update_with_sample_set();
-          select_sample.dialog( "close" );
-          }
-      },
-      Cancel: function() {
-        select_sample.dialog( "close" );
       }
     },
     close: function() {
