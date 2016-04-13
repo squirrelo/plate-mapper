@@ -165,7 +165,8 @@ class TestPCRProtocol(TestCase):
 
     def test_protocols(self):
         obs = pm.protocol.PCRProtocol.protocols()
-        exp = [self.pcr_protocol3, self.pcr_protocol4]
+        exp = [self.pcr_protocol3, self.pcr_protocol4,
+               pm.protocol.PCRProtocol(5)]
         self.assertEqual(obs, exp)
 
     def test_create(self):

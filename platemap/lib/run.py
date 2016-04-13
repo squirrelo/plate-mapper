@@ -457,6 +457,8 @@ class Pool(pm.base.PMObject):
         ------
         EditError
             Pool object is finalized so can't edit
+        ValueError
+            Sequencing barcodes are already used in this protocol
         """
         if self.finalized:
             raise pm.exceptions.EditError('Pool %s already finalized!' %
@@ -464,12 +466,24 @@ class Pool(pm.base.PMObject):
         if pcr_protocol in self.protocols:
             return
 
-        sql = """INSERT INTO barcodes.pool_samples
-                 (pool_id, protocol_settings_id)
-                 VALUES (%s, %s)
-              """
+        check_sql = """SELECT DISTINCT primer_set
+                       FROM barcodes.pool_samples
+                       JOIN barcodes.pcr_settings USING (protocol_settings_id)
+                       JOIN barcodes.primer_set_lots USING (primer_lot)
+                       JOIN barcodes.primer_set USING (primer_set_id)
+                       WHERE pool_id = %s
+                    """
+        insert_sql = """INSERT INTO barcodes.pool_samples
+                        (pool_id, protocol_settings_id)
+                        VALUES (%s, %s)
+                     """
         with pm.sql.TRN:
-            pm.sql.TRN.add(sql, [self.id, pcr_protocol.id])
+            pm.sql.TRN.add(check_sql, [self.id])
+            pool_primers = pm.sql.TRN.execute_fetchflatten()
+            if pcr_protocol.primer_set in pool_primers:
+                raise ValueError('Primer set %s already represented in this '
+                                 'pool' % pcr_protocol.primer_set)
+            pm.sql.TRN.add(insert_sql, [self.id, pcr_protocol.id])
 
     def remove_protocol(self, pcr_protocol):
         """Adds a PCR protocol run to the pool

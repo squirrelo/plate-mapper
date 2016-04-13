@@ -57,7 +57,8 @@ INSERT INTO barcodes.protocol_settings (protocol_id, sample_id, plate_id, create
 (1, 1, NULL, '02/28/2016', 1),
 (1, NULL,'000000003', '02/28/2016', 2),
 (1, 1, NULL, '02/28/2016', 1),
-(1, NULL, '000000003', '02/28/2016', 2);
+(1, NULL, '000000003', '02/28/2016', 2),
+(1, NULL, '000000003', '03/01/2016', 1);
 
 INSERT INTO barcodes.extraction_settings (protocol_settings_id, extractionkit_lot, extraction_robot, tm1000_8_tool) VALUES
 (1, 'exkl001', 'exrb001', 'tm18001'),
@@ -65,7 +66,8 @@ INSERT INTO barcodes.extraction_settings (protocol_settings_id, extractionkit_lo
 
 INSERT INTO barcodes.pcr_settings (protocol_settings_id, extraction_protocol_settings_id, primer_lot, mastermix_lot, water_lot, processing_robot, tm300_8_tool, tm50_8_tool) VALUES
 (3, 1, 'pr002', 'mm001', 'wat001', 'prrb001', 'tm38001', 'tm58001'),
-(4, 2, 'pr001', 'mm002', 'wat002', 'prrb002', 'tm38002', 'tm58002');
+(4, 2, 'pr001', 'mm002', 'wat002', 'prrb002', 'tm38002', 'tm58002'),
+(5, 2, 'pr001', 'mm002', 'wat002', 'prrb002', 'tm38002', 'tm58002');
 
 INSERT INTO barcodes.run (run, created_on, created_by, finalized, finalized_on, finalized_by, instrument_id) VALUES
 ('Finalized Run', '2016-03-02 1:25:00', 1, 'T', '2016-03-02 1:26:00', 1, 1),

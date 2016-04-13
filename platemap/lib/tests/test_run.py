@@ -200,6 +200,14 @@ class TestPool(TestCase):
         self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4),
                                                 pm.protocol.PCRProtocol(3)])
 
+    def test_add_protocol_existing_primer_set(self):
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+
+        with self.assertRaises(ValueError):
+            self.pool2.add_protocol(pm.protocol.PCRProtocol(5))
+
+        self.assertEqual(self.pool2.protocols, [pm.protocol.PCRProtocol(4)])
+
     def test_add_protocol_finalized(self):
         self.assertTrue(self.pool1.finalized)
         with self.assertRaises(pm.exceptions.EditError):
